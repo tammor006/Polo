@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Polo.Infrastructure;
+using Polo.Injector;
 using System;
 
 var builder = WebApplication.CreateBuilder(args);
-
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<PoloDBContext>(options =>
@@ -14,7 +14,8 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<PoloDBContext>();
 builder.Services.AddRazorPages();
-
+var servies = builder.Services;
+DependencyInjector.RegisterServices(servies);
 builder.Services.Configure<IdentityOptions>(options =>
 {
     // Password settings.

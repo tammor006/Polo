@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Polo.Infrastructure\Polo.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>

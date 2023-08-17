@@ -6,13 +6,24 @@
     <title>@ViewData["Title"] - Polo</title>
     <!-- App favicon -->
     <link rel="shortcut icon" href="~/assets/images/favicon.ico">
-   
     <!-- Bootstrap Css -->
-    <link href="~/assets/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css"/>
+    <link href="~/assets/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css" />
     <!-- Icons Css -->
     <link href="~/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
     <!-- App Css-->
-    <link href="~/assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css"/>
+    <link href="~/assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
+    <!-- DataTables -->
+    <link href="~/assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+    <!-- Responsive datatable examples -->
+    <link href="~/assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+    <!-- select2 css -->
+    <link href="~/assets/libs/select2/css/select2.min.css" rel="stylesheet" type="text/css" />
+
+    <!-- dropzone css -->
+    <link href="~/assets/libs/dropzone/min/dropzone.min.css" rel="stylesheet" type="text/css" />
+    <script src="~/assets/libs/jquery/jquery.min.js"></script>
+    <script src="~/assets/js/method.js"></script>
 </head>
 <body data-topbar="dark" data-layout="horizontal">
     <header id="page-topbar">
@@ -423,9 +434,10 @@
                             </a>
                             <div class="dropdown-menu" aria-labelledby="topnav-dashboard">
 
-                                <a href="index.html" class="dropdown-item">Default</a>
-                                <a href="dashboard-saas.html" class="dropdown-item">Saas</a>
+                                <a asp-controller="Home" asp-action="Index" class="dropdown-item">Dashboards</a>
+                                <a asp-controller="Product" asp-action="Index" class="dropdown-item">Product</a>
                                 <a href="dashboard-crypto.html" class="dropdown-item">Crypto</a>
+                                <a asp-controller="Categories" asp-action="Index" class="dropdown-item">Categories</a>
                             </div>
                         </li>
 
@@ -758,18 +770,39 @@
     <!-- Right bar overlay-->
     <div class="rightbar-overlay"></div>
     <!-- JAVASCRIPT -->
-    <script src="~/assets/libs/jquery/jquery.min.js"></script>
     <script src="~/assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="~/assets/libs/metismenu/metisMenu.min.js"></script>
     <script src="~/assets/libs/simplebar/simplebar.min.js"></script>
     <script src="~/assets/libs/node-waves/waves.min.js"></script>
-
-    <!-- apexcharts -->
     <script src="~/assets/libs/apexcharts/apexcharts.min.js"></script>
-
     <script src="~/assets/js/pages/dashboard.init.js"></script>
+    <!-- Required datatable js -->
+    <script src="~/assets/libs/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="~/assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <!-- apexcharts -->
+    
+    <!-- Buttons examples -->
+    <script src="~/assets/libs/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="~/assets/libs/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js"></script>
+    <script src="~/assets/libs/jszip/jszip.min.js"></script>
+    <script src="~/assets/libs/pdfmake/build/pdfmake.min.js"></script>
+    <script src="~/assets/libs/pdfmake/build/vfs_fonts.js"></script>
+    <script src="~/assets/libs/datatables.net-buttons/js/buttons.html5.min.js"></script>
+    <script src="~/assets/libs/datatables.net-buttons/js/buttons.print.min.js"></script>
+    <script src="~/assets/libs/datatables.net-buttons/js/buttons.colVis.min.js"></script>
 
+    <!-- Responsive examples -->
+    <script src="~/assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/assets/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
+    <!-- select 2 plugin -->
+    <script src="~/assets/libs/select2/js/select2.min.js"></script>
+    <!-- dropzone plugin -->
+    <script src="~/assets/libs/dropzone/min/dropzone.min.js"></script>
+
+    <!-- init js -->
+    <script src="~/assets/js/pages/ecommerce-select2.init.js"></script>
     <!-- App js -->
+    <script src="~/assets/js/pages/datatables.init.js"></script>
     <script src="~/assets/js/app.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
