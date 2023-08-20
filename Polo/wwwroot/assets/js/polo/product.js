@@ -122,6 +122,7 @@ function saveProduct() {
         if (d.success) {
             ClearModel();
             $(".modal").modal('hide');
+            $("#productsDatatable").dataTable().fnDestroy();
             LoadTable();
             toastr["success"](d.detail);
 
