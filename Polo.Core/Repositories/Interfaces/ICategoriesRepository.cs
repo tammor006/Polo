@@ -9,6 +9,6 @@ namespace Polo.Core.Repositories.Interfaces
 {
 	public interface ICategoriesRepository
 	{
-        Task<Response> GetAllCategories();
+        Response GetAllCategories();
     }
 }

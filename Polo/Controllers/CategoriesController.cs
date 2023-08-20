@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿
 using System.Net;
 using Polo.Infrastructure.Utilities;
 using Polo.Core.Repositories.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Polo.Controllers
 {
@@ -17,19 +18,20 @@ namespace Polo.Controllers
 			return View();
 		}
        
-        public async Task<JsonResult> GetAllCategories()
+        public JsonResult GetAllCategories()
         {
             Response response = new Response();
-            try
-            {
-                response = await _categoriesRepository.GetAllCategories();
+            try {
+                response = _categoriesRepository.GetAllCategories();
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
-                response.httpCode = HttpStatusCode.InternalServerError;
-                response.message = Message.errorMessage;
+                response.Success = false;
+                response.Detail = Message.ErrorMessage;
             }
-            return Json(response.data);
+            response = _categoriesRepository.GetAllCategories();
+            return Json(response);
+            
         }
     }
 }

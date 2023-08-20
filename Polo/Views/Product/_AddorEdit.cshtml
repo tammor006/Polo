@@ -1,46 +1,57 @@
-﻿<div id="part" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+﻿<style>
+    #imagePreview {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+        #imagePreview img {
+            max-width: 100px;
+            max-height: 100px;
+        }
+</style>
+<div id="modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title mt-0" id="myLargeModalLabel">Add Product</h5>
+                <h5 class="modal-title mt-0" id="myLargeModalLabel"></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
+            <form method="post" id="createProduct" name="createProduct" data-parsley-validate data-parsley-error-message>
             <div class="modal-body">
                 <div class="row">
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label for="productname">Product Name</label>
-                            <input id="productname" name="productname" type="text" class="form-control">
+                                <input id="productname" type="text" class="form-control" required data-parsley-error-message="Please enter Product">
                         </div>
                         <div class="form-group">
-                            <label class="control-label">Category</label>
-                            <select class="form-control select2" id="productselect">
-                                <option>Select</option>
-                                <option value="AK">Alaska</option>
-                                <option value="HI">Hawaii</option>
+                            <label for="category" class="control-label">Category</label>
+                                <select class=" form-control select" id="categoryselect" required data-parsley-error-message="Please enter Category">
+                                    <option value="" selected hidden>Select Category</option>
                             </select>
                         </div>
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label for="barcode">BarCode</label>
-                            <input id="barcode" name="barcode" type="text" class="form-control">
+                                <input id="barcode" type="number" class="form-control" required data-parsley-error-message="Please enter Barcode">
                         </div>
                         <div class="form-group">
                             <label for="price">Price</label>
-                            <input id="price" name="price" type="text" class="form-control">
+                                <input id="price" type="number" class="form-control" required data-parsley-error-message="Please enter Price">
                         </div>
                     </div>
                     <div class="col-sm-12">
                         <div class="form-group">
                             <label for="productdesc">Product Description</label>
-                            <textarea class="form-control" id="productdesc" rows="3"></textarea>
+                            <textarea   class="form-control" id="productdesc" rows="3" required></textarea>
                         </div>
-                        <div action="https://themesbrand.com/" class="dropzone">
+                            @*<div action="https://themesbrand.com/" class="dropzone">
                             <div class="fallback">
-                                <input name="file" type="file" multiple />
+                                    <input name="...." onchange="addFiles()" id="file" type="file" multiple />
                             </div>
 
                             <div class="dz-message needsclick" style="margin:0px">
@@ -50,20 +61,28 @@
 
                                 <h4>Drop files here or click to upload.</h4>
                             </div>
-                        </div>
+                        </div>*@
+                            
+                            <form id="imageForm" enctype="multipart/form-data">
+                                
+                                    <label for="images">Images</label>
+                                <div class="form-group" style="border: 1px solid #ced4da">
+                                    <input type="file" id="imageInput" style="margin:10px 0px 0px 10px" onchange="addFiles()" multiple>
+                                    <div style="margin:10px 0px 10px 10px" id="imagePreview"></div>
+                                </div>
+                            </form>
+
+                            
+                        
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="submit" class="btn btn-primary mr-1 waves-effect waves-light">Save Changes</button>
-                <button type="submit" class="btn btn-secondary waves-effect">Cancel</button>
+                    <button type="submit" onclick="saveProduct()" class="btn btn-primary mr-1 waves-effect waves-light">Save Changes</button>
+                <button class="btn btn-secondary waves-effect" data-dismiss="modal" aria-label="Close">Cancel</button>
             </div>
+            </form>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div>
-<script>
-    $('#productselect').select2({
-        dropdownParent: $('.modal')
-    });
-</script>
 

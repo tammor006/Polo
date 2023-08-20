@@ -17,10 +17,9 @@ namespace Polo.Core.Repositories
         {
             _db = db;
         }
-        public async Task<Response> GetAllCategories()
+        public Response GetAllCategories()
         {
             Response response = new Response();
-            response.httpCode = System.Net.HttpStatusCode.OK;
             List<Categories> getallcategories = new List<Categories>();
             getallcategories = _db.Categories.Where(x => x.IsActive == true).ToList(); ;
             response.data = getallcategories;

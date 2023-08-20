@@ -30,7 +30,7 @@
                                     <div class="search-box mr-2 mb-2 d-inline-block">
                                         <div class="position-relative">
                                             @*asp-controller="Product" asp-action="CreateOrEdit"*@
-                                            <a onclick="HideTable()"   class="btn btn-success btn-rounded waves-effect waves-light mb-2 mr-2"><i class="mdi mdi-plus mr-1"></i> Add New Product</a>
+                                            <a onclick="ShowModal(0)"   class="btn btn-success btn-rounded waves-effect waves-light mb-2 mr-2"><i class="mdi mdi-plus mr-1"></i> Add New Product</a>
                                         </div>
                                     </div>
                                 </div>
@@ -44,7 +44,7 @@
                                     <tr>
                                         <th>BarCode</th>
                                         <th>Name</th>
-                                        <th>Status</th>
+                                        <th>Category</th>
                                         <th>Price</th>
                                         <th>Action</th>
                                     </tr>
@@ -62,31 +62,5 @@
     <!-- End Page-content -->
 </div>
 @Html.Partial("~/Views/Product/_AddorEdit.cshtml")
-<script>
-    $(document).ready(function () {
-        
-        //$("#productsDatatable").DataTable({
-        //    "ajax": {
-        //        'url': '@Url.Action("GetAllCategories", "Categories")',
-        //        "type": "GET",
-        //        "dataType": 'json',
-        //        "dataSrc": ""
-        //    },
-        //    "columns": [
-        //        { "data": "name" },
-        //        { "data": "isActive" },
-        //        {
-        //            "data": "isActive"
-        //            //"render": function (data, row) { return "<a href='#' class='btn btn-danger' onclick=DeleteCustomer('" + row.id + "'); >Delete</a>"; }
-        //        },
-        //    ]
-        //});
-    });
-    function HideTable(){
-        debugger
-        
-        $("#part").modal('show');
-        
-    }
-</script>
+<script src="~/assets/js/polo/product.js?vs=@DateTime.Now.Ticks"></script>
 

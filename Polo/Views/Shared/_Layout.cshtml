@@ -8,6 +8,11 @@
     <link rel="shortcut icon" href="~/assets/images/favicon.ico">
     <!-- Bootstrap Css -->
     <link href="~/assets/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="~/assets/libs/select2/css/select2.min.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="~/assets/libs/toastr/build/toastr.min.css">
+    <link href="~/assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
+
     <!-- Icons Css -->
     <link href="~/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
     <!-- App Css-->
@@ -17,13 +22,12 @@
     <link href="~/assets/libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css" />
     <!-- Responsive datatable examples -->
     <link href="~/assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" />
-    <!-- select2 css -->
-    <link href="~/assets/libs/select2/css/select2.min.css" rel="stylesheet" type="text/css" />
-
-    <!-- dropzone css -->
+    <link href="~/assets/libs/parsleyjs/css/parsley.css" rel="stylesheet" />
     <link href="~/assets/libs/dropzone/min/dropzone.min.css" rel="stylesheet" type="text/css" />
     <script src="~/assets/libs/jquery/jquery.min.js"></script>
+    <script src="~/assets/js/bootstrap-notify.js"></script>
     <script src="~/assets/js/method.js"></script>
+    <script src="~/assets/js/generic.js?vs=@DateTime.Now.Ticks"></script>
 </head>
 <body data-topbar="dark" data-layout="horizontal">
     <header id="page-topbar">
@@ -776,12 +780,8 @@
     <script src="~/assets/libs/node-waves/waves.min.js"></script>
     <script src="~/assets/libs/apexcharts/apexcharts.min.js"></script>
     <script src="~/assets/js/pages/dashboard.init.js"></script>
-    <!-- Required datatable js -->
     <script src="~/assets/libs/datatables.net/js/jquery.dataTables.min.js"></script>
     <script src="~/assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
-    <!-- apexcharts -->
-    
-    <!-- Buttons examples -->
     <script src="~/assets/libs/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
     <script src="~/assets/libs/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js"></script>
     <script src="~/assets/libs/jszip/jszip.min.js"></script>
@@ -790,19 +790,20 @@
     <script src="~/assets/libs/datatables.net-buttons/js/buttons.html5.min.js"></script>
     <script src="~/assets/libs/datatables.net-buttons/js/buttons.print.min.js"></script>
     <script src="~/assets/libs/datatables.net-buttons/js/buttons.colVis.min.js"></script>
-
-    <!-- Responsive examples -->
     <script src="~/assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
     <script src="~/assets/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
-    <!-- select 2 plugin -->
     <script src="~/assets/libs/select2/js/select2.min.js"></script>
-    <!-- dropzone plugin -->
+    <script src="~/assets/libs/toastr/build/toastr.min.js"></script>
+    <script src="~/assets/libs/sweetalert2/sweetalert2.min.js"></script>
     <script src="~/assets/libs/dropzone/min/dropzone.min.js"></script>
+    <script src="~/assets/libs/parsleyjs/js/parsley.min.js"></script>
 
     <!-- init js -->
     <script src="~/assets/js/pages/ecommerce-select2.init.js"></script>
-    <!-- App js -->
+    <script src="~/assets/js/pages/toastr.init.js"></script>
+    <script src="~/assets/js/pages/sweet-alerts.init.js"></script>
     <script src="~/assets/js/pages/datatables.init.js"></script>
+    <!-- App js -->
     <script src="~/assets/js/app.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>

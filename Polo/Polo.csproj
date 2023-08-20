@@ -18,9 +18,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Cors" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="7.0.10" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.10" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="7.0.10" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="7.0.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.10">
       <PrivateAssets>all</PrivateAssets>
@@ -47,6 +49,7 @@
   <ItemGroup>
     <Folder Include="Data\" />
     <Folder Include="Models\" />
+    <Folder Include="wwwroot\uploads\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -172,7 +175,8 @@
     <None Include="wwwroot\assets\libs\moment\min\moment.min.js" />
     <None Include="wwwroot\assets\libs\node-waves\waves.min.js" />
     <None Include="wwwroot\assets\libs\owl.carousel\owl.carousel.min.js" />
-    <None Include="wwwroot\assets\libs\parsleyjs\parsley.min.js" />
+    <None Include="wwwroot\assets\libs\parsleyjs\js\parsley.js" />
+    <None Include="wwwroot\assets\libs\parsleyjs\js\parsley.min.js" />
     <None Include="wwwroot\assets\libs\pdfmake\build\pdfmake.min.js" />
     <None Include="wwwroot\assets\libs\pdfmake\build\vfs_fonts.js" />
     <None Include="wwwroot\assets\libs\select2\js\select2.min.js" />

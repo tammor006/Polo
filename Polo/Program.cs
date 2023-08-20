@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Net.Http.Headers;
 using Polo.Infrastructure;
 using Polo.Injector;
 using System;
@@ -11,11 +13,25 @@ builder.Services.AddDbContext<PoloDBContext>(options =>
 		options.UseSqlServer(
 			builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddEntityFrameworkStores<PoloDBContext>();
 builder.Services.AddRazorPages();
-var servies = builder.Services;
-DependencyInjector.RegisterServices(servies);
+var services = builder.Services;
+services.AddControllersWithViews()
+    .AddNewtonsoftJson(options =>
+    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+);
+services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigins",
+        builder =>
+        {
+            builder.WithOrigins() // Replace with your client's domain
+                   .AllowAnyMethod()
+                   .AllowAnyHeader();
+        });
+});
+DependencyInjector.RegisterServices(services);
 builder.Services.Configure<IdentityOptions>(options =>
 {
     // Password settings.
@@ -27,7 +43,7 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Password.RequiredUniqueChars = 1;
 
     // Lockout settings.
-    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
     options.Lockout.MaxFailedAccessAttempts = 5;
     options.Lockout.AllowedForNewUsers = true;
 
@@ -49,13 +65,8 @@ builder.Services.ConfigureApplicationCookie(options =>
 });
 
 var app = builder.Build();
-// Configure the HTTP request pipeline.
-//if (!app.Environment.IsDevelopment())
-//{
-//	app.UseExceptionHandler("/Home/Error");
-//	// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-//	app.UseHsts();
-//}
+//IConfiguration configuration = app.Configuration;
+//IWebHostEnvironment environment = app.Environment;
 if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
@@ -65,17 +76,20 @@ else
     app.UseExceptionHandler("/Error");
     app.UseHsts();
 }
-
-app.UseHttpsRedirection();
-app.UseStaticFiles();
-
 app.UseRouting();
+
+
+//app.UseCors(x => x
+//               .AllowAnyMethod()
+//               .AllowAnyHeader()
+//               .SetIsOriginAllowed(origin => true) // allow any origin
+//               .AllowCredentials());
+
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapRazorPages();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-
+app.UseStaticFiles();
 app.Run();

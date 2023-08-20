@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualStudio.Web.CodeGeneration.EntityFrameworkCore;
 using Polo.Infrastructure.Entities;
 using System;
 using System.Collections.Generic;
@@ -17,5 +18,6 @@ namespace Polo.Infrastructure
 		}
 		public DbSet<Categories> Categories { get; set; }
 		public DbSet<Product> Product { get; set; }
+		public DbSet<ProductImages> ProductImages { get; set; }
 	}
 }

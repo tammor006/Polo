@@ -1,42 +1,32 @@
-﻿function Post(url, data, isBlockUI, e) {
-    BlockUI(isBlockUI, e); 
+﻿function Post(url, data) { 
     return $.ajax({
         method: "Post",
         url: url,
         // contentType: 'application/json',
         data: data,//JSON.stringify(data),
         success: function (d) {
-              UnBlockUI(e);
             if ($.type(d) == "string" && d == "")
                 LoginNow()
             else if ($.type(d) == "string")
                 AccessDenied();
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
-            UnBlockUI(e);
             ErrorMessage(errorMsg);
         }
     });
 }
-
-function Get(url, isBlockUI, e) {
-   BlockUI(isBlockUI, e);
+function Get(url) {
     return $.ajax({
         method: "Get",
         url: url,
         cache: false,
         success: function (d) {
-            UnBlockUI(e);
             if ($.type(d) == "string" && d == "")
                 LoginNow()
             else if ($.type(d) == "string")
                 AccessDenied();
-
         },
-        error: function (XMLHttpRequest, textStatus, errorThrown) {  
-          
-           
-            UnBlockUI(e);
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
             ErrorMessage(errorMsg);
         }
     });
@@ -45,8 +35,7 @@ function Get(url, isBlockUI, e) {
 
 
 
-function SaveAndUpload(url, formData, isBlockUI, e) {
-     BlockUI(isBlockUI, e);
+function SaveAndUpload(url, formData) {
     return $.ajax({
         data: formData,
         method: "Post",
@@ -56,14 +45,12 @@ function SaveAndUpload(url, formData, isBlockUI, e) {
         contentType: false,
         success: function (d) {
             debugger
-            UnBlockUI(e);
             if ($.type(d) == "string" && d == "")
                 LoginNow()
             else if ($.type(d) == "string")
                 AccessDenied();
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
-            UnBlockUI(e);
             ErrorMessage(errorMsg);
         }
     });

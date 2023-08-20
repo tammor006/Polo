@@ -28,7 +28,7 @@ namespace Polo.Injector
         {
             Services = services;
             Services.AddScoped<ICategoriesRepository,CategoriesRepository>();
-           
+            Services.AddScoped<IProductRepository, ProductRepository>();
             return Services;
         }
     }
