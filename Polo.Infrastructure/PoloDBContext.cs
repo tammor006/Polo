@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Polo.Infrastructure
 {
-	public class PoloDBContext:IdentityDbContext<IdentityUser, IdentityRole, string>
+	public class PoloDBContext : IdentityDbContext<IdentityUser, IdentityRole, string>
 	{
 		public PoloDBContext(DbContextOptions<PoloDBContext> options) : base(options)
 		{
@@ -19,5 +19,7 @@ namespace Polo.Infrastructure
 		public DbSet<Categories> Categories { get; set; }
 		public DbSet<Product> Product { get; set; }
 		public DbSet<ProductImages> ProductImages { get; set; }
+		public DbSet<Supplier> Supplier { get; set; }
+		public DbSet<Stock> Stock{get;set;}
 	}
 }
