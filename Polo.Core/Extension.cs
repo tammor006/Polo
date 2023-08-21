@@ -7,6 +7,7 @@ using Mono.TextTemplating;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -95,6 +96,105 @@ namespace Polo.Infrastructure.Utilities
         public static double? ZeroToNullReplace(this double? value)
         {
             return (value != 0) ? value : null;
+        }
+        public static DateTime? DbDate(this string date, bool toUtc = false)
+        {
+
+            if (!string.IsNullOrEmpty(date))
+            {
+                try
+                {
+                    if (!string.IsNullOrEmpty(date))
+                    {
+                        //DateTime dt = Convert.ToDateTime(date);
+                        DateTime dt = DateTime.Parse(date, CultureInfo.GetCultureInfo("en-GB"));
+                        //dt = DateTimeOffset.Parse(string.Format("{0:MM/dd/yyyy HH:mm}", dt)).DateTime;
+                        if (toUtc)
+                            return DateTimeOffset.Parse(string.Format("{0:MM/dd/yyyy HH:mm}", dt)).DateTime;
+
+                        else
+                            return dt;// DateTime.Parse(date, CultureInfo.GetCultureInfo("en-GB"));
+                    }
+                    else
+                        return null;
+
+                }
+                catch (Exception)
+                {
+
+                }
+            }
+            else
+            {
+                return null;
+            }
+            return null;
+        }
+        public static string DbDate(this DateTime date, bool viewTimewithDate = false)
+        {
+            if (date == DateTime.MinValue)
+            {
+                return String.Empty;
+            }
+            else if (!ReferenceEquals(date, null))
+            {
+                if (((DateTime)date).Hour != 0)
+                {
+                    date = TimeZoneInfo.ConvertTime((DateTime)date, TimeZoneInfo.Utc, TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time"));
+                    // date = ((DateTime)date).AddHours(Convert.ToDouble(WebConfigurationManager.AppSettings["TimeDifference"]));
+
+                }
+            }
+            if (viewTimewithDate)
+                return string.Format("{0:MM/dd/yyyy HH:mm}", date);
+
+            return string.Format("{0:MM/dd/yyyy}", date);
+        }
+        public static string ViewDate(this DateTime date, bool viewTimewithDate = false, string format = "dd/MM/yyyy")
+        {
+            if (date == DateTime.MinValue)
+            {
+                return String.Empty;
+            }
+            else if (!ReferenceEquals(date, null))
+            {
+                if (((DateTime)date).Hour != 0)
+                {
+                    date = TimeZoneInfo.ConvertTime(date, TimeZoneInfo.Utc, TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time"));
+                    // date = ((DateTime)date).AddHours(Convert.ToDouble(WebConfigurationManager.AppSettings["TimeDifference"]));
+
+                }
+            }
+            else
+                return string.Empty;
+
+            if (viewTimewithDate)
+                return string.Format("{0:" + format + " HH:mm}", date);
+
+            return string.Format("{0:" + format + "}", date);
+        }
+        public static string ViewDate(this DateTime? date, bool viewTimewithDate = false, string format = "dd/MM/yyyy")
+        {
+            if (date == DateTime.MinValue)
+            {
+                return String.Empty;
+            }
+            else if (!ReferenceEquals(date, null))
+            {
+                if (((DateTime)date).Hour != 0)
+                {
+                    // date = TimeZoneInfo.ConvertTime((DateTime)date, TimeZoneInfo.Utc, TimeZoneInfo.FindSystemTimeZoneById("Pakistan Standard Time"));
+                    //date = ((DateTime)date).AddHours(Convert.ToDouble(WebConfigurationManager.AppSettings["TimeDifference"]));
+
+                }
+            }
+            else
+                return string.Empty;
+
+            if (viewTimewithDate)
+                return string.Format("{0:" + format + " HH:mm}", date);
+
+            return string.Format("{0:" + format + "}", date);
         }
         //    public static IActionResult responseFormat(this Response response, Controller controller)
         //        => controller.StatusCode((int)((HttpStatusCode)response.httpCode), response);

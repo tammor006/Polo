@@ -36,6 +36,7 @@ function Get(url) {
 
 
 function SaveAndUpload(url, formData) {
+   /* BlockUI(isBlockUI, e);*/
     return $.ajax({
         data: formData,
         method: "Post",
@@ -44,13 +45,14 @@ function SaveAndUpload(url, formData) {
         processData: false,
         contentType: false,
         success: function (d) {
-            debugger
+           /* UnBlockUI(e);*/
             if ($.type(d) == "string" && d == "")
                 LoginNow()
             else if ($.type(d) == "string")
                 AccessDenied();
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
+           /* UnBlockUI(e);*/
             ErrorMessage(errorMsg);
         }
     });
