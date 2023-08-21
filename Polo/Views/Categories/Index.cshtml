@@ -29,7 +29,7 @@
                                 <div class="col-sm-4">
                                     <div class="search-box mr-2 mb-2 d-inline-block">
                                         <div class="position-relative">
-                                            <button type="button" class="btn btn-success btn-rounded waves-effect waves-light mb-2 mr-2"><i class="mdi mdi-plus mr-1"></i> Add New Categories</button>
+                                            <button onclick ="ShowModal(0)" type="button" class="btn btn-success btn-rounded waves-effect waves-light mb-2 mr-2"><i class="mdi mdi-plus mr-1"></i> Add New Categories</button>
                                         </div>
                                     </div>
                                 </div>
@@ -59,23 +59,7 @@
     </div>
     <!-- End Page-content -->
 </div>
-<script>
-    $(document).ready(function () {
-        $("#categoriesDatatable").DataTable({
-            "ajax": {
-                'url': '@Url.Action("GetAllCategories", "Categories")',
-                "type": "GET",
-                "dataType": 'json',
-                
-            },
-            "columns": [
-                {  "data": "name"  },
-                {  "data": "isActive" },
-                {
-                    "data": "isActive"
-                    //"render": function (data, row) { return "<a href='#' class='btn btn-danger' onclick=DeleteCustomer('" + row.id + "'); >Delete</a>"; }
-                },
-            ]
-        });
-    });
-</script>
+@Html.Partial("~/Views/Categories/_AddorEdit.cshtml")
+<script src="~/assets/js/polo/category.js?vs=@DateTime.Now.Ticks"></script>
+
+
