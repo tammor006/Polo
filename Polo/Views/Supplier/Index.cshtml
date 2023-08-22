@@ -1,0 +1,76 @@
+﻿@{
+    ViewData["Title"] = "Suppliers";
+}
+
+<!-- ============================================================== -->
+<div class="main-content">
+    <div class="page-content">
+        <div class="container-fluid">
+            <!-- start page title -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="page-title-box d-flex align-items-center justify-content-between">
+                        <h4 class="mb-0 font-size-18">Suppliers</h4>
+                        <div class="page-title-right">
+                            <ol class="breadcrumb m-0">
+                                <li class="breadcrumb-item"><a href="javascript: void(0);">Ecommerce</a></li>
+                                <li class="breadcrumb-item active">Suppliers</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- end page title -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row mb-2">
+                                <div class="col-sm-4">
+                                    <div class="search-box mr-2 mb-2 d-inline-block">
+                                        <div class="position-relative">
+                                            <button onclick="ShowModal(0)" type="button" class="btn btn-success btn-rounded waves-effect waves-light mb-2 mr-2">
+                                                <i class="mdi mdi-plus mr-1"></i> Add New Supplier
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-8">
+                                    <div class="text-sm-right">
+                                    </div>
+                                </div><!-- end col-->
+                            </div>
+                            <table id="suppliersDatatable" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Father's Name</th>
+                                        <th>CNIC</th>
+                                        <th>City</th>
+                                        <th>Country</th>
+                                        <th>Mobile</th>
+                                        <th>Email</th>
+                                        <th>Company Name</th>
+                                        <th>Company Number</th>
+                                        <th>Address</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- end row -->
+        </div> <!-- container-fluid -->
+    </div>
+    <!-- End Page-content -->
+</div>
+
+@Html.Partial("~/Views/Supplier/_AddorEdit.cshtml")
+<script src="~/assets/js/polo/supplier.js?vs=@DateTime.Now.Ticks"></script>
+
+

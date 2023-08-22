@@ -8,13 +8,13 @@ using Polo.Infrastructure.Entities;
 
 namespace Polo.Controllers
 {
-    public class CategoriesController : Controller
+    public class SupplierController : Controller
     {
-        private readonly ICategoriesRepository _categoriesRepository;
+        private readonly ISupplierRepository _supplierRepository;
         private readonly UserManager<IdentityUser> _userManager;
-        public CategoriesController(UserManager<IdentityUser> userManager, ICategoriesRepository categoriesRepository)
+        public SupplierController(UserManager<IdentityUser> userManager, ISupplierRepository supplierRepository)
         {
-            _categoriesRepository = categoriesRepository;
+            _supplierRepository = supplierRepository;
             _userManager = userManager;
         }
         public IActionResult Index()
@@ -22,12 +22,12 @@ namespace Polo.Controllers
             return View();
         }
 
-        public JsonResult GetAllCategories()
+        public JsonResult GetAllSuppliers()
         {
             Response response = new Response();
             try
             {
-                response = _categoriesRepository.GetAllCategories();
+                response = _supplierRepository.GetAllSupplier();
             }
             catch (Exception ex)
             {
@@ -37,7 +37,7 @@ namespace Polo.Controllers
 
             return Json(response);
         }
-        public JsonResult SaveCategory(Categories categories)
+        public JsonResult SaveSupplier(Supplier supplier)
         {
             Response response = new Response();
 
@@ -46,8 +46,8 @@ namespace Polo.Controllers
                 if (User.Identity.IsAuthenticated)
                 {
                     string userId = _userManager.GetUserId(User);
-                    categories = Request.Form["category"].ToString().deserialize<Categories>();
-                    response = _categoriesRepository.SaveProduct(categories, userId);
+                    supplier = Request.Form["supplier"].ToString().deserialize<Supplier>();
+                    response = _supplierRepository.SaveSupplier(supplier, userId);
                 }
                 else
                 {
@@ -63,12 +63,12 @@ namespace Polo.Controllers
             }
             return Json(response);
         }
-        public JsonResult GetCategoryById(int id)
+        public JsonResult GetSupplierById(int id)
         {
             Response response = new Response();
             try
             {
-                response = _categoriesRepository.GetCategoryById(id);
+                response = _supplierRepository.GetSupplierById(id);
             }
             catch (Exception ex)
             {
@@ -77,12 +77,12 @@ namespace Polo.Controllers
             }
             return Json(response);
         }
-        public JsonResult DeleteCategory(int id)
+        public JsonResult DeleteSupplier(int id)
         {
             Response response = new Response();
             try
             {
-                response = _categoriesRepository.DeleteCategory(id);
+                response = _supplierRepository.DeleteSupplier(id);
             }
             catch (Exception ex)
             {
