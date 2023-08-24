@@ -46,7 +46,6 @@ namespace Polo.Controllers
                 if (User.Identity.IsAuthenticated)
                 {
                     string userId = _userManager.GetUserId(User);
-                    categories = Request.Form["category"].ToString().deserialize<Categories>();
                     response = _categoriesRepository.SaveProduct(categories, userId);
                 }
                 else

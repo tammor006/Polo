@@ -35,7 +35,7 @@ function ShowModal(Id) {
         $("#myLargeModalLabel").text("Add Supplier");
     }
     else {
-        Get("/Suppliers/GetSupplierById?id=" + Id).then(function (d) {
+        Get("/Supplier/GetSupplierById?id=" + Id).then(function (d) {
             debugger
             if (d.success) {
                 Supplier.id = d.data.supplier.id;
@@ -101,10 +101,8 @@ function saveSupplier() {
     Supplier.address = $("#address").val();
     Supplier.isActive = $("#isActive").is(":checked");
 
-    var formData = new FormData();
-    formData.append("supplier", JSON.stringify(Supplier));
 
-    SaveAndSubmit("/Suppliers/SaveSupplier", formData).then(function (d) {
+    Post("/Supplier/SaveSupplier", { supplier: Supplier }).then(function (d) {
         debugger;
         if (d.success) {
             ClearModel();
@@ -121,29 +119,19 @@ function saveSupplier() {
 function LoadTable() {
     $("#suppliersDatatable").DataTable({
         'ajax': {
-            'url': '/Supplier/GetAllSuppliers',
+            'url': '/Supplier/GetAllSupplier',
             "type": "GET",
             "dataType": 'json',
         },
         "columns": [
             { "data": "name" },
-            { "data": "fatherName" },
-            { "data": "cnic" },
             { "data": "city" },
-            { "data": "country" },
             { "data": "number" },
             { "data": "email" },
             { "data": "companyName" },
             { "data": "companyNumber" },
-            { "data": "address" },
-            { "data": "isActive" },
             {
                 "data": "id",
-                "render": function (data) {
-                    return data ? '<span class="badge badge-success">Active</span>' : '<span class="badge badge-danger">Inactive</span>';
-                }
-            },
-            {
                 "render": function (data, type, row) {
                     return '<td>' +
                         '<a href="javascript:void(0);" class="mr-3 text-primary" data-toggle="tooltip" data-placement="top" title="Edit" data-original-title="Edit" onclick="ShowModal(' + row.id + ')">' +
@@ -170,7 +158,7 @@ function DeleteModal(id) {
     }).then(function (isConfirm) {
         debugger;
         if (isConfirm) {
-            Get('/Suppliers/DeleteSupplier?id=' + id).then(function (d) {
+            Get('/Supplier/DeleteSupplier?id=' + id).then(function (d) {
                 if (d.success) {
                     toastr["success"](d.detail);
                     $("#suppliersDatatable").dataTable().fnDestroy();

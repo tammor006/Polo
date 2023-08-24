@@ -61,23 +61,4 @@ function SaveAndUpload(url, formData) {
         }
     });
 }
-function SaveAndSubmit(url, formData) {
-    return $.ajax({
-        data: formData,
-        method: "Post",
-        url: url,
-        cache: false,
-        processData: false,
-        contentType: false,
-        success: function (d) {
-            debugger
-            if ($.type(d) == "string" && d == "")
-                LoginNow()
-            else if ($.type(d) == "string")
-                AccessDenied();
-        },
-        error: function (XMLHttpRequest, textStatus, errorThrown) {
-            ErrorMessage(errorMsg);
-        }
-    });
-}
+

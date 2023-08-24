@@ -22,7 +22,7 @@ namespace Polo.Controllers
             return View();
         }
 
-        public JsonResult GetAllSuppliers()
+        public JsonResult GetAllSupplier()
         {
             Response response = new Response();
             try
@@ -46,7 +46,6 @@ namespace Polo.Controllers
                 if (User.Identity.IsAuthenticated)
                 {
                     string userId = _userManager.GetUserId(User);
-                    supplier = Request.Form["supplier"].ToString().deserialize<Supplier>();
                     response = _supplierRepository.SaveSupplier(supplier, userId);
                 }
                 else

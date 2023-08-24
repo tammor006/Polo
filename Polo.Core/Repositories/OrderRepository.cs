@@ -21,7 +21,7 @@ namespace Polo.Core.Repositories
         {
             Response response = new Response();
             List<OrderVM> orderVM = new List< OrderVM>();
-            var Categories = _db.Categories.Where(x => x.IsActive).ToList();
+            var Categories = _db.Categories.Where(x => x.IsActive==true).ToList();
             foreach(var cat in Categories)
             {
                 OrderVM vM = new OrderVM();

@@ -40,7 +40,7 @@ function ShowModal(Id) {
                 Stock.productId = d.data.stock.productId;
                 Stock.quantity = d.data.stock.quantity;
                 Stock.strLastUpdate = d.data.stock.strLastUpdate;
-                $("#date").val(Stock.strLastUpdateDate);
+                $("#date").val(Stock.strLastUpdate);
                 $("#quantity").val(Stock.quantity);
                 $('#productselect').val(Stock.productId);
                 $("#modal").modal('show');

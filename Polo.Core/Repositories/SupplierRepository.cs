@@ -38,6 +38,15 @@ namespace Polo.Core.Repositories
                     Supplier foundsupplier = _db.Supplier.Where(x => x.Id == supplier.Id).FirstOrDefault();
                     foundsupplier.Name = supplier.Name;
                     foundsupplier.IsActive = supplier.IsActive;
+                    foundsupplier.Address = supplier.Address;
+                    foundsupplier.Number = foundsupplier.Number;
+                    foundsupplier.CompanyNumber = supplier.CompanyNumber;
+                    foundsupplier.CNIC = supplier.CNIC;
+                    foundsupplier.Country = supplier.Country;
+                    foundsupplier.City = supplier.City;
+                    foundsupplier.Email = supplier.Email;
+                    foundsupplier.FatherName = supplier.FatherName;
+                    foundsupplier.CompanyName = supplier.CompanyName;
                     foundsupplier.UpdatedDate = DateTime.Now;
                     foundsupplier.UpdatedBy = userId.ToString();
                     _db.Entry(foundsupplier).State = EntityState.Modified;
