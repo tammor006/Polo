@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace Polo.Core.Repositories.Interfaces
 {
-	public interface ICategoriesRepository
-	{
-        Response GetAllCategories();
-        Response SaveProduct(Categories categories, string userId);
-        Response GetCategoryById(int id);
-        Response DeleteCategory(int id);
+	public interface ISupplierRepository
+    {
+        Response GetAllSupplier();
+        Response SaveSupplier(Supplier supplier, string userId);
+        Response GetSupplierById(int id);
+        Response DeleteSupplier(int id);
     }
 }

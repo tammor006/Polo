@@ -1,0 +1,72 @@
+﻿<div id="modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title mt-0" id="myLargeModalLabel"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form method="post" id="createSupplier" name="createSupplier" data-parsley-validate data-parsley-error-message>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="supplierName">Name</label>
+                                <input id="supplierName" type="text" class="form-control" required data-parsley-error-message="Please enter Name">
+                            </div>
+                            <div class="form-group">
+                                <label for="fatherName">Father's Name</label>
+                                <input id="fatherName" type="text" class="form-control" required data-parsley-error-message="Please enter Father's Name">
+                            </div>
+                            <div class="form-group">
+                                <label for="cnic">CNIC</label>
+                                <input id="cnic" type="text" class="form-control" required data-parsley-error-message="Please enter CNIC">
+                            </div>
+                            <div class="form-group">
+                                <label for="city">City</label>
+                                <input id="city" type="text" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="country">Country</label>
+                                <input id="country" type="text" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="number">Phone Number</label>
+                                <input id="number" type="text" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input id="email" type="email" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="companyName">Company Name</label>
+                                <input id="companyName" type="text" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="companyNumber">Company Number</label>
+                                <input id="companyNumber" type="text" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="address">Address</label>
+                                <textarea id="address" class="form-control"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-check">
+                                    <input id="isActive" type="checkbox" class="form-check-input">
+                                    <label class="form-check-label" for="isActive">Is Active</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" onclick="saveSupplier()" class="btn btn-primary mr-1 waves-effect waves-light">Save Changes</button>
+                    <button class="btn btn-secondary waves-effect" data-dismiss="modal" aria-label="Close">Cancel</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>

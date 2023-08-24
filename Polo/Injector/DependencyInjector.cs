@@ -29,6 +29,7 @@ namespace Polo.Injector
             Services = services;
             Services.AddScoped<ICategoriesRepository,CategoriesRepository>();
             Services.AddScoped<IProductRepository, ProductRepository>();
+            Services.AddScoped<ISupplierRepository, SupplierRepository>();
             Services.AddScoped<IStockRepository, StockRepository>();
             Services.AddScoped<IOrderRepository, OrderRepository>();
             return Services;

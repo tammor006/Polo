@@ -36,7 +36,7 @@ namespace Polo.Core.Repositories
             Response response = new Response();
             response.data = new
             {
-                Categories = _db.Categories.Where(x => x.IsActive).ToList(),
+                Categories = _db.Categories.Where(x => x.IsActive == true).ToList(),
             };
             response.Success = true;
             return response;

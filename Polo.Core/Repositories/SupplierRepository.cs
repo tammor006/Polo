@@ -13,46 +13,46 @@ using System.Threading.Tasks;
 
 namespace Polo.Core.Repositories
 {
-	public class CategoriesRepository:ICategoriesRepository
+	public class SupplierRepository : ISupplierRepository
 	{
         private PoloDBContext _db;
-        public CategoriesRepository(PoloDBContext db)
+        public SupplierRepository(PoloDBContext db)
         {
             _db = db;
         }
-        public Response GetAllCategories()
+        public Response GetAllSupplier()
         {
             Response response = new Response();
-            List<Categories> getallcategories = new List<Categories>();
-            getallcategories = _db.Categories.ToList(); ;
-            response.data = getallcategories;
+            List<Supplier> suppliers = new List<Supplier>();
+            suppliers = _db.Supplier.ToList(); ;
+            response.data = suppliers;
             return response;
         }
-        public Response SaveProduct(Categories category, string userId)
+        public Response SaveSupplier(Supplier supplier, string userId)
         {
             Response response = new Response();
             try
             {
-                if (!category.Id.IsNullOrZero())
+                if (!supplier.Id.IsNullOrZero())
                 {
-                    Categories foundCategories = _db.Categories.Where(x => x.Id == category.Id).FirstOrDefault();
-                    foundCategories.Name = category.Name;
-                    foundCategories.IsActive = category.IsActive;
-                    foundCategories.UpdatedDate = DateTime.Now;
-                    foundCategories.UpdatedBy = userId.ToString();
-                    _db.Entry(foundCategories).State = EntityState.Modified;
+                    Supplier foundsupplier = _db.Supplier.Where(x => x.Id == supplier.Id).FirstOrDefault();
+                    foundsupplier.Name = supplier.Name;
+                    foundsupplier.IsActive = supplier.IsActive;
+                    foundsupplier.UpdatedDate = DateTime.Now;
+                    foundsupplier.UpdatedBy = userId.ToString();
+                    _db.Entry(foundsupplier).State = EntityState.Modified;
                     _db.SaveChanges();
                     response.Success = true;
-                    response.Detail = " Category is updated Successfully";
+                    response.Detail = " Supplier is updated Successfully";
                 }
                 else
                 {
-                    category.CreatedDate = DateTime.Now;
-                    category.CreatedBy = userId.ToString();
-                    _db.Add(category);
+                    supplier.CreatedDate = DateTime.Now;
+                    supplier.CreatedBy = userId.ToString();
+                    _db.Add(supplier);
                     _db.SaveChanges();
                     response.Success = true;
-                    response.Detail = " Category is added Successfully";
+                    response.Detail = " Supplier is added Successfully";
                 }
             }
             catch (Exception ex)
@@ -62,29 +62,29 @@ namespace Polo.Core.Repositories
             }
             return response;
         }
-        public Response GetCategoryById(int id)
+        public Response GetSupplierById(int id)
         {
             Response response = new Response();
             if (!id.IsNullOrZero())
             {
-                Categories categories = _db.Categories.FirstOrDefault(x => x.Id == id);
+                Supplier supplier = _db.Supplier.FirstOrDefault(x => x.Id == id);
                 response.data = new
                 {
-                    Category = categories,
+                    Supplier = supplier,
                 };
                 response.Success = true;
             }
             return response;
         }
-        public Response DeleteCategory(int id)
+        public Response DeleteSupplier(int id)
         {
             Response response = new Response();
             if (!id.IsNullOrZero())
             {
-                Categories categories = _db.Categories.FirstOrDefault(x => x.Id == id);
-                _db.Categories.Remove(categories);
+                Supplier suplier = _db.Supplier.FirstOrDefault(x => x.Id == id);
+                _db.Supplier.Remove(suplier);
                 _db.SaveChanges();
-                response.Detail = "Category has been deleted";
+                response.Detail = "Supplier has been deleted";
                 response.Success = true;
             }
             return response;
