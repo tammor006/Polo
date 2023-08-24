@@ -24,7 +24,8 @@ namespace Polo.Infrastructure.Entities
         public DateTime CreatedDate { get; set; }
         public string? UpdatedBy { get; set; }
         public DateTime UpdatedDate { get; set; }
-        public virtual List<ProductImages> ProductImages { get; set; }
+        public string? ImageUrl { get; set; }
+        public string? ImageName { get; set; }
         
     }
 }

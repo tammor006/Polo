@@ -5,12 +5,14 @@
         // contentType: 'application/json',
         data: data,//JSON.stringify(data),
         success: function (d) {
+            debugger
             if ($.type(d) == "string" && d == "")
                 LoginNow()
             else if ($.type(d) == "string")
                 AccessDenied();
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
+            debugger
             ErrorMessage(errorMsg);
         }
     });
@@ -45,6 +47,7 @@ function SaveAndUpload(url, formData) {
         processData: false,
         contentType: false,
         success: function (d) {
+            debugger
            /* UnBlockUI(e);*/
             if ($.type(d) == "string" && d == "")
                 LoginNow()
@@ -52,6 +55,7 @@ function SaveAndUpload(url, formData) {
                 AccessDenied();
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
+            debugger
            /* UnBlockUI(e);*/
             ErrorMessage(errorMsg);
         }

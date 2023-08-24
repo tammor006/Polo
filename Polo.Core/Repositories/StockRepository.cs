@@ -99,7 +99,11 @@ namespace Polo.Core.Repositories
             if (!id.IsNullOrZero())
             {
                 Stock stock = _db.Stock.FirstOrDefault(x => x.Id == id);
-                response.data = new
+                if (!ReferenceEquals(stock, null))
+                {
+                    stock.StrLastUpdate = stock.LastUpdate.ViewDate();
+                }
+                    response.data = new
                 {
                     Stock = stock,
                 };

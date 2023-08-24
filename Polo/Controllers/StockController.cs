@@ -41,7 +41,7 @@ namespace Polo.Controllers
             string userId = _userManager.GetUserId(User);
             try
             {
-                stock = Request.Form["stock"].ToString().deserialize<Stock>();
+                
                 response = _stockRepository.SaveStock(stock, userId);
             }
             catch (Exception ex)

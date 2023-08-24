@@ -9,6 +9,11 @@
             max-width: 100px;
             max-height: 100px;
         }
+
+    .file {
+        visibility: hidden;
+        position: absolute;
+    }
 </style>
 <div id="modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -19,7 +24,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form method="post" id="createProduct" name="createProduct" data-parsley-validate data-parsley-error-message>
+            <form method="post" enctype="multipart/form-data" onSubmit="return false;" id="createProduct" name="createProduct" data-parsley-validate data-parsley-error-message>
             <div class="modal-body">
                 <div class="row">
                     <div class="col-sm-6">
@@ -44,36 +49,24 @@
                                 <input id="price" type="number" class="form-control" required data-parsley-error-message="Please enter Price">
                         </div>
                     </div>
-                    <div class="col-sm-12">
+                    <div class="col-sm-6">
                         <div class="form-group">
                             <label for="productdesc">Product Description</label>
-                            <textarea   class="form-control" id="productdesc" rows="3" required></textarea>
+                            <textarea   class="form-control" id="productdesc" rows="6" required></textarea>
                         </div>
-                            @*<div action="https://themesbrand.com/" class="dropzone">
-                            <div class="fallback">
-                                    <input name="...." onchange="addFiles()" id="file" type="file" multiple />
-                            </div>
-
-                            <div class="dz-message needsclick" style="margin:0px">
-                                <div class="mb-3">
-                                    <i class="display-4 text-muted bx bxs-cloud-upload"></i>
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="image">Image</label>
+                                <input type="file" name="file" class="file">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" disabled placeholder="Upload File" id="file">
+                                    <div class="input-group-append">
+                                        <button type="button" class="browse btn btn-primary" onchange="addFiles()">Browse...</button>
+                                    </div>
                                 </div>
-
-                                <h4>Drop files here or click to upload.</h4>
+                            <div class="form-group" style="text-align: center">
+                                <img src="https://placehold.it/120x80" id="preview" class="img-thumbnail">
                             </div>
-                        </div>*@
-                            
-                            <form id="imageForm" enctype="multipart/form-data">
-                                
-                                    <label for="images">Images</label>
-                                <div class="form-group" style="border: 1px solid #ced4da">
-                                    <input type="file" id="imageInput" style="margin:10px 0px 0px 10px" onchange="addFiles()" multiple>
-                                    <div style="margin:10px 0px 10px 10px" id="imagePreview"></div>
-                                </div>
-                            </form>
-
-                            
-                        
                     </div>
                 </div>
             </div>

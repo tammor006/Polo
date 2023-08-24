@@ -6,9 +6,9 @@
     description: "",
     price: 0.00,
     categoryId: 0,
-    productImages: [],
+    imageUrl: "",
+    imageName:""
 }
-var imageList = [];
 function PreBind() {
     Get('/Product/PreBind').then(function (d) {
         if (d.success) {
@@ -21,7 +21,7 @@ function PreBind() {
 
         }
         else
-            showToast(d.detail);
+            toastr["error"](d.detail);
     });
 }
 function ClearModel() {
@@ -31,7 +31,9 @@ function ClearModel() {
     $("#price").val("");
     $('#categoryselect').val("");
     $('input[type=file]').val('');
-    $("#imagePreview").empty();
+    document.getElementById("preview").src = 'https://placehold.it/120x80';
+    $('#createProduct').parsley().reset();
+    $(".form-group").removeClass('has-error');
 }
 function ShowModal(Id) {
     ClearModel();
@@ -51,18 +53,19 @@ function ShowModal(Id) {
                 Product.categoryId = d.data.product.categoryId;
                 Product.description = d.data.product.description;
                 Product.price = d.data.product.price;
-                imageList = d.data.productImages;
-                for (var i = 0; i < d.data.productImages.length; i++) {
-                    $('#imagePreview').append('<img src="uploads/' + d.data.productImages[i].url + '" alt="Image Preview">');
-                    const fileInput = document.querySelector('input[type="file"]');
-                    const myFile = new File(['Hello World!'], d.data.productImages[i].name, {
-                        type: 'text/plain',
-                        lastModified: new Date(),
-                    });
-                    const dataTransfer = new DataTransfer();
-                    dataTransfer.items.add(myFile);
-                    fileInput.files = dataTransfer.files;
-                }
+                Product.imageUrl = d.data.product.imageUrl;
+                Product.imageName = d.data.product.imageName;
+                document.getElementById("preview").src = "uploads/" + Product.imageUrl;
+                document.querySelector('input[type="file"]').val = Product.imageName;
+                //    const fileInput = document.querySelector('input[type="file"]');
+                //const myFile = new File(['Hello World!'], Product.imageName , {
+                //        type: 'text/plain',
+                //        lastModified: new Date(),
+                //    });
+                //    const dataTransfer = new DataTransfer();
+                //    dataTransfer.items.add(myFile);
+                //    fileInput.files = dataTransfer.files;
+                
                 $("#barcode").val(Product.barCode);
                 $("#productname").val(Product.name);
                 $("#productdesc").val(Product.description);
@@ -79,6 +82,7 @@ function ShowModal(Id) {
 }
 
 function saveProduct() {
+    debugger
     var parsleyForm = $('#createProduct').parsley();
     parsleyForm.validate();
     if (!parsleyForm.isValid()) {
@@ -96,29 +100,13 @@ function saveProduct() {
     Product.price = $("#price").val();
     Product.categoryId = $('#categoryselect option:selected').val()
     var formData = new FormData();
-    if (imageList.length > 0) {
-        $.each(imageList, function (x, key) {
-            if (Product.productImages == null || Product.productImages == undefined) {
-                Product.productImages = [];
-
-            }
-            if (imageList[x].IsAdd) {
-                formData.append(imageList[x].files.name, imageList[x].files);
-                Product.productImages.push({
-                    Name: imageList[x].Name, IsAdd: imageList[x].IsAdd
-                })
-
-            }
-            else {
-                Product.productImages.push({
-                    Name: imageList[x].Name, IsAdd: imageList[x].IsAdd, Url: imageList[x].Url
-                })
-            }
-
-        });
+    var file = $(".file")[0].files;
+    if (file.length != 0) {
+        formData.append(file[0].name, file[0]);
     }
     formData.append("product", JSON.stringify(Product));
     SaveAndUpload("/Product/SaveProduct", formData).then(function (d) {
+        debugger
         if (d.success) {
             ClearModel();
             $(".modal").modal('hide');
@@ -136,13 +124,21 @@ function saveProduct() {
     });
 
 }
-function addFiles() {
+$(document).on("click", ".browse", function () {
+    var file = $(this)
+        .parent()
+        .parent()
+        .parent()
+        .find(".file");
+    file.trigger("click");
+});
+$('input[type="file"]').change(function (e) {
     debugger
-    var file = $("#imageInput")[0].files;
-    if (file && file.length) {
-        var file1 = file[0];
-        var fileSize = file[0].size;
-        var fileType = (file[0].name.split('.')[file[0].name.split('.').length - 1]).toLowerCase();
+    var file = e.target.files[0];
+    if (file && file.size) {
+        var file1 = file;
+        var fileSize = file.size;
+        var fileType = (file.name.split('.')[file.name.split('.').length - 1]).toLowerCase();
         var ValidImageTypes = ["gif", "jpg", "png"];
         if ($.inArray(fileType, ValidImageTypes) < 0) {
             //NewuploadMode();
@@ -153,9 +149,9 @@ function addFiles() {
             toastr["error"]("Image max size should be 1 MB. Please select again.");
         }
         else {
-            var fileName = file[0].name;
-            var FullName = file[0].name;
-            var fileType = file[0].type;
+            var fileName = file.name;
+            var FullName = file.name;
+            var fileType = file.type;
             if (fileName !== null && fileName != "") {
                 if (fileName.length > 20) {
                     fileName = fileName.substring(0, 15) + "...";
@@ -165,25 +161,39 @@ function addFiles() {
             if (file1) {
                 var reader = new FileReader();
                 reader.onload = function (readerEvt) {
-                    if (!readerEvt) {
-                        binaryString = reader.content;
-                    }
-                    else {
-                        binaryString = reader.result;
+                    var img = new Image();
+                    debugger
+                    img.src = readerEvt.target.result;
 
-                    }
-                    $('#imagePreview').append('<img src="' + readerEvt.target.result + '" alt="Image Preview">')
-                    // binaryString = readerEvt.target.result;
-                    imageList.push({
-                        // DocId: file1,
-                        Name: fileName,
-                        files: file1,
-                        IsAdd: true,
-                        fileLink: binaryString,
-                        fileType: fileType,
-                        FileName: FullName
+                    img.onload = function () {
+                        var w = this.width;
+                        var h = this.height;
+                        if (this.width == 120 && this.height == 80) {
+                            if (!readerEvt) {
+                                binaryString = reader.content;
+                            }
+                            else {
+                                binaryString = reader.result;
 
-                    });
+                            }
+                            document.getElementById("preview").src = readerEvt.target.result;
+                            Product.imageUrl=""
+                            // binaryString = readerEvt.target.result;
+                            //imageList.push({
+                            //    // DocId: file1,
+                            //    Name: fileName,
+                            //    files: file1,
+                            //    IsAdd: true,
+                            //    fileLink: binaryString,
+                            //    fileType: fileType,
+                            //    FileName: FullName
+
+                            //});
+                        } else {
+                            toastr["error"]("Plese select 120x80 Image")
+                        }
+                    }
+
                     //$scope.$apply();
                     //uploadMode();
                 };
@@ -201,7 +211,7 @@ function addFiles() {
 
     }
 
-}
+});
 /*var table = $('#productsDatatable').DataTable();*/
 function LoadTable() {
     $("#productsDatatable").DataTable({
