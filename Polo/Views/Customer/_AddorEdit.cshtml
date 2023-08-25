@@ -1,0 +1,110 @@
+﻿@using Polo.Core.Enum;
+@{
+    var paymentTypes = Enum.GetValues(typeof(PaymentType)).Cast<PaymentType>();
+    var orderTypes = Enum.GetValues(typeof(OrderType)).Cast<OrderType>();
+    var deliverytypes = Enum.GetValues(typeof(DeliveryType)).Cast<DeliveryType>();
+}
+
+<div id="modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title mt-0" id="myLargeModalLabel">Create Customer</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form method="post" id="createCustomer" onSubmit="return false;" name="createCustomer" data-parsley-validate data-parsley-error-message>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="FirstName">First Name</label>
+                                <input id="FirstName" type="text" class="form-control" required data-parsley-error-message="Please enter First Name">
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="LastName">Last Name</label>
+                                <input id="LastName" type="text" class="form-control" required data-parsley-error-message="Please enter Last Name">
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="Email">Email</label>
+                                <input id="Email" type="email" class="form-control">
+                            </div>
+                        </div>
+                       @*  <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="DeliveryType">Delivery Type</label>
+                                <select id="DeliveryType" class="form-control">
+                                    @foreach (var deliveryType in deliverytypes)
+                                    {
+                                        <option value="@((int)deliveryType)">@deliveryType</option>
+                                    }
+                                </select>
+                            </div>
+                        </div> *@
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="Street">Street</label>
+                                <input id="Street" type="text" class="form-control" placeholder="enter street number or name">
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="City">City</label>
+                                <input id="City" type="text" class="form-control"placeholder="enter city">
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="Address">Address</label>
+                                <input id="Address" type="text" class="form-control" placeholder="enter postal code,block,area">
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="Number">Number</label>
+                                <input id="Number" type="text" class="form-control" placeholder="e.g +9230983293">
+                            </div>
+                        </div>
+                      @*   <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="OrderType">Order Type</label>
+                                <select id="OrderType" class="form-control">
+                                    @foreach (var orderType in orderTypes)
+                                    {
+                                        <option value="@((int)orderType)">@orderType</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="DeliveryTime">Delivery Time</label>
+                                <input id="DeliveryTime" type="datetime-local" class="form-control">
+                            </div>
+                        </div>*@
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="PaymentType">Payment Type</label>
+                                <select id="PaymentType" class="form-control">
+                                    @foreach (var paymentType in paymentTypes)
+                                    {
+                                        <option value="@((int)paymentType)">@paymentType</option>
+                                    }
+                                </select>
+                            </div>
+                        </div> 
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" onclick="saveCustomer()" class="btn btn-primary mr-1 waves-effect waves-light">Save Changes</button>
+                    <button class="btn btn-secondary waves-effect" data-dismiss="modal" aria-label="Close">Cancel</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
