@@ -1,4 +1,5 @@
-﻿using Polo.Infrastructure.Utilities;
+﻿using Polo.Infrastructure.Entities;
+using Polo.Infrastructure.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,5 +11,7 @@ namespace Polo.Core.Repositories.Interfaces
     public interface IOrderRepository
     {
         Response PreBind();
+        Response SaveOrder(List<SaleOrder> orders, string userId);
+        Response GetCustomerById(double number);
     }
 }

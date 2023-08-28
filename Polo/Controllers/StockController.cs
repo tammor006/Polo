@@ -4,9 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 using Polo.Core.Repositories.Interfaces;
 using Polo.Infrastructure.Entities;
 using Polo.Infrastructure.Utilities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Polo.Controllers
 {
+    [Authorize]
     public class StockController : Controller
     {
         private readonly IStockRepository _stockRepository;

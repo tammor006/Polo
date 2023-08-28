@@ -5,9 +5,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using Polo.Core.Repositories;
 using Polo.Infrastructure.Entities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Polo.Controllers
 {
+    [Authorize]
     public class SupplierController : Controller
     {
         private readonly ISupplierRepository _supplierRepository;
