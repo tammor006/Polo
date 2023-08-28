@@ -1,6 +1,9 @@
-﻿using Polo.Core.Repositories.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using Polo.Core.Repositories.Interfaces;
 using Polo.Core.ViewModels;
 using Polo.Infrastructure;
+using Polo.Infrastructure.Entities;
+using Polo.Infrastructure.Migrations;
 using Polo.Infrastructure.Utilities;
 using System;
 using System.Collections.Generic;
@@ -34,6 +37,45 @@ namespace Polo.Core.Repositories
                 Product = orderVM
             };
             response.Success = true;
+            return response;
+        }
+
+        public Response GetCustomerById(double number)
+        {
+            Response response = new Response();
+            var cust = _db.Customer.FirstOrDefault(x => x.Number == number.ToString());
+            CustomerVM customer = new CustomerVM();
+            customer.CustId = cust.Id;
+            customer.Address = cust.Address;
+            customer.Name = cust.FirstName + " " + cust.LastName;
+            customer.Number = cust.Number;
+            response.Success = true;
+            response.data = customer;
+            return response;
+        }
+        public Response SaveOrder(List<SaleOrder> orders, string userId)
+        {
+            Response response = new Response();
+            try
+            {
+                if (orders.Count > 0)
+                {
+                    orders.ForEach(x =>
+                    {
+                        x.CreatedDate = DateTime.Now;
+                        x.CreatedBy = userId.ToString();
+                    });
+                   
+                    _db.SaleOrder.AddRange(orders);
+                    _db.SaveChanges();
+                    response.Success = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Detail = Message.ErrorMessage;
+            }
             return response;
         }
     }

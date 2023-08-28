@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Polo.Infrastructure.Entities
 {
-    public class Customers
+    public class Customer
     {
         [Key]
         public int Id { get; set; }

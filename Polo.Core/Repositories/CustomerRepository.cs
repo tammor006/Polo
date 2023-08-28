@@ -15,48 +15,19 @@ namespace Polo.Core.Repositories
         {
             _db = db;
         }
-        public List<Customers> GetAllCustomers()
+        public List<Customer> GetAllCustomers()
         {
-            try
-            {
-                var customers = _db.Customer
-                    .Select(c => new Customers
-                    {
-                        Id = c.Id,
-                        FirstName = c.FirstName,
-                        LastName = c.LastName,
-                        Email = c.Email,
-                        Street = c.Street,
-                        City = c.City,
-                        Address = c.Address,
-                        Number = c.Number,
-                        OrderType = c.OrderType,
-                        DeliveryType = c.DeliveryType,
-                        AvailableTime = c.AvailableTime,
-                        PaymentType = c.PaymentType,
-                        CreatedBy = c.CreatedBy,
-                        CreatedDate = c.CreatedDate,
-                        UpdatedBy = c.UpdatedBy,
-                        UpdatedDate = c.UpdatedDate
-                    })
-                    .ToList();
-
-                return customers;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            var customers = _db.Customer.ToList();
+            return customers;
         }
-
-        public Response SaveCustomer(Customers customer, string userId)
+        public Response SaveCustomer(Customer customer, string userId)
         {
             Response response = new Response();
             try
             {
                 if (!customer.Id.IsNullOrZero())
                 {
-                    Customers foundCustomer = _db.Customer.FirstOrDefault(x => x.Id == customer.Id);
+                    Customer foundCustomer = _db.Customer.FirstOrDefault(x => x.Id == customer.Id);
                     if (foundCustomer != null)
                     {
                         foundCustomer.FirstName = customer.FirstName;
@@ -109,7 +80,7 @@ namespace Polo.Core.Repositories
             Response response = new Response();
             if (!id.IsNullOrZero())
             {
-                Customers customers = _db.Customer.FirstOrDefault(x => x.Id == id);
+                Customer customers = _db.Customer.FirstOrDefault(x => x.Id == id);
                 response.data = new
                 {
                     Customers = customers,
@@ -123,7 +94,7 @@ namespace Polo.Core.Repositories
             Response response = new Response();
             if (!id.IsNullOrZero())
             {
-                Customers customers = _db.Customer.FirstOrDefault(x => x.Id == id);
+                Customer customers = _db.Customer.FirstOrDefault(x => x.Id == id);
                 _db.Customer.Remove(customers);
                 _db.SaveChanges();
                 response.Detail = "Customer has been deleted";

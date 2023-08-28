@@ -1,0 +1,97 @@
+﻿<style>
+    /*form {
+           width:390px;
+           margin:50px auto;
+           background:#fff;
+           padding:35px 25px;
+           text-align:center;
+           box-shadow:0px 5px 5px -0px rgba(0,0,0,0.3);
+           border-radius:5px;
+    }*/
+    .keyinput {
+         padding:10px 10px;
+         border-radius:5px;
+         width:160px;
+         border:1px solid rgb(228,220,220);
+         outline:none;
+         color:transparent;
+         text-shadow:0 0 0 rgb(71,71,71);
+         text-align:center;
+        margin-bottom: 10px
+    }
+    input:focus {
+         outline:none;
+
+    }
+    .pinButton {
+         border:none;
+         background:none;
+         font-size:1.5em;
+         border-radius:50%;
+         height:30px;
+         font-weight:550;
+         width:50px;
+         color:transparent;
+         text-shadow:0 0 0 rgb(102,101,101);
+        
+    }
+    .clear,
+    .enter {
+         font-size:1em !important;
+    }
+    .pinButton:hover {
+         box-shadow:#506ce8 0 0 1px 1px;
+    }
+
+    .pinButton:active {
+         background:#506ce8;
+         color:#fff;
+        
+    }
+    .clear:hover {
+         box-shadow:#ff3c41 0 0 1px 1px;
+    }
+    .clear:active {
+         background:#ff3c41;
+           color:#fff;
+
+    }
+    .enter:hover {
+         box-shadow:#47cf73 0 0 1px 1px;
+    }
+    .enter:active {
+           background:#47cf73;
+           color:#fff;
+    }
+
+</style>
+<div id="keypad" class="modal fade bs-example-modal-sm" style="top:200px !important;left:290px !important" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm" style="max-width: 200px !important;">
+        <div class="modal-content">
+           @* <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>*@
+            <div class="modal-body">
+
+
+                <input type="number" id="qty" class="keyinput" /><br>
+                        <input type="button" value="1" id="1" class="pinButton calc" />
+                        <input type="button" value="2" id="2" class="pinButton calc" />
+                        <input type="button" value="3" id="3" class="pinButton calc" /><br>
+                        <input type="button" value="4" id="4" class="pinButton calc" />
+                        <input type="button" value="5" id="5" class="pinButton calc" />
+                        <input type="button" value="6" id="6" class="pinButton calc" /><br>
+                        <input type="button" value="7" id="7" class="pinButton calc" />
+                        <input type="button" value="8" id="8" class="pinButton calc" />
+                        <input type="button" value="9" id="9" class="pinButton calc" /><br>
+                        <input type="button" value="clear" id="clear" class="pinButton clear" />
+                        <input type="button" value="0" id="0 " class="pinButton calc" />
+                        <input type="button" value="enter" id="enter" class="pinButton enter" />
+                    
+                </div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>

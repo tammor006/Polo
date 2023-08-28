@@ -20,6 +20,7 @@ namespace Polo.Infrastructure
 		public DbSet<Product> Product { get; set; }
 		public DbSet<Supplier> Supplier { get; set; }
 		public DbSet<Stock> Stock {get;set;}
-		public DbSet<Customers> Customer {get;set;}
+		public DbSet<Customer> Customer {get;set;}
+		public DbSet<SaleOrder> SaleOrder { get; set; }
 	}
 }

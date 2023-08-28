@@ -114,109 +114,109 @@ function UnBlockUI(e) {
     //    $("#divLoader").fadeOut("slow");
 }
 $(function ($) {
-    $('.DateDOB').datetimepicker(
-        {
-            format: 'DD/MM/YYYY',
-            showTodayButton: true,
-            showClear: true,
-            showClose: true,
-            maxDate: new Date()
-        });
+    //$('.DateDOB').datetimepicker(
+    //    {
+    //        format: 'DD/MM/YYYY',
+    //        showTodayButton: true,
+    //        showClear: true,
+    //        showClose: true,
+    //        maxDate: new Date()
+    //    });
 
-    $('.datepicker').datetimepicker({ format: 'DD/MM/YYYY', showTodayButton: true, showClear: true, showClose: true });
-    $('.timepicker').datetimepicker({ format: 'H:mm', showClear: true, showClose: true });
-    $('.timepickerInMin').datetimepicker({ format: 'mm', showClear: true, showClose: true });
-    $('.datetimepicker').datetimepicker({ format: 'DD/MM/YYYY H:mm', showTodayButton: true, showClear: true, showClose: true });
-    $('.datetimepicker-current').datetimepicker({ format: 'DD/MM/YYYY H:mm', defaultDate: new Date(), showTodayButton: true, showClear: true, showClose: true });
-    $(".datepicker-current").datetimepicker({ format: 'DD/MM/YYYY', defaultDate: new Date(), showTodayButton: true, showClear: true, showClose: true, });
-    $(".datepicker-minToday").datetimepicker({ format: 'DD/MM/YYYY', minDate: new Date(), showTodayButton: true, showClear: true, showClose: true });
-    $(".datetimepicker-minToday").datetimepicker({ format: 'DD/MM/YYYY H:mm', minDate: new Date(), showTodayButton: true, showClear: true, showClose: true });
-    $('.DateTo').datetimepicker({ format: 'DD/MM/YYYY H:mm', showTodayButton: true, showClear: true, showClose: true });
-    $('.DateFrom').datetimepicker(
-        {
-            format: 'DD/MM/YYYY H:mm',
-            showTodayButton: true,
-            showClear: true,
-            showClose: true,
-            //minDate: new Date()
-        }).on("dp.change", function (e) {
-            var minDate = new Date(e.date._d);
-            var val = $('.DateTo').val();
-            $('.DateTo').datetimepicker('destroy').datetimepicker({
-                format: 'DD/MM/YYYY H:mm',
-                showTodayButton: true,
-                showClear: true,
-                showClose: true,
-                minDate: minDate
-            });
-            if (val == "")
-                $('.DateTo').val("")
-        });
+    //$('.datepicker').datetimepicker({ format: 'DD/MM/YYYY', showTodayButton: true, showClear: true, showClose: true });
+   // $('.timepicker').datetimepicker({ format: 'H:mm', showClear: true, showClose: true });
+   // $('.timepickerInMin').datetimepicker({ format: 'mm', showClear: true, showClose: true });
+  //  $('.datetimepicker').datetimepicker({ format: 'DD/MM/YYYY H:mm', showTodayButton: true, showClear: true, showClose: true });*/
+   // $('.datetimepicker-current').datetimepicker({ format: 'DD/MM/YYYY H:mm', defaultDate: new Date(), showTodayButton: true, showClear: true, showClose: true });*/
+  //  $(".datepicker-current").datepicker({ format: 'DD/MM/YYYY', defaultDate: new Date(), showTodayButton: true, showClear: true, showClose: true, });
+    $(".datepicker-minToday").datepicker({ format: 'DD/MM/YYYY', minDate: new Date(), showTodayButton: true, showClear: true, showClose: true });
+   // $(".datetimepicker-minToday").datetimepicker({ format: 'DD/MM/YYYY H:mm', minDate: new Date(), showTodayButton: true, showClear: true, showClose: true });
+  // $('.DateTo').datetimepicker({ format: 'DD/MM/YYYY H:mm', showTodayButton: true, showClear: true, showClose: true });
+    //$('.DateFrom').datetimepicker(
+    //    {
+    //        format: 'DD/MM/YYYY H:mm',
+    //        showTodayButton: true,
+    //        showClear: true,
+    //        showClose: true,
+    //        //minDate: new Date()
+    //    }).on("dp.change", function (e) {
+    //        var minDate = new Date(e.date._d);
+    //        var val = $('.DateTo').val();
+    //        $('.DateTo').datetimepicker('destroy').datetimepicker({
+    //            format: 'DD/MM/YYYY H:mm',
+    //            showTodayButton: true,
+    //            showClear: true,
+    //            showClose: true,
+    //            minDate: minDate
+    //        });
+    //        if (val == "")
+    //            $('.DateTo').val("")
+    //    });
 
-    $('.EndDate').datetimepicker({ format: 'DD/MM/YYYY', showTodayButton: true, showClear: true, showClose: true });
-    $('.StartDate').datetimepicker(
-        {
-            format: 'DD/MM/YYYY',
-            showTodayButton: true,
-            showClear: true,
-            showClose: true,
-            //minDate: new Date()
-        }).on("dp.change", function (e) {
-            var minDate = new Date(e.date._d);
-            var val = $('.EndDate').val();
-            $('.EndDate').datetimepicker('destroy').datetimepicker({
-                format: 'DD/MM/YYYY',
-                showTodayButton: true,
-                showClear: true,
-                showClose: true,
-                minDate: minDate
-            });
-            if (val == "")
-                $('.EndDate').val("")
-        });
-    $('.StrDateTo').datetimepicker({ format: 'DD/MM/YYYY ', showTodayButton: true, showClear: true, showClose: true });
-    $('.StrDateFrom').datetimepicker(
-        {
-            format: 'DD/MM/YYYY ',
-            showTodayButton: true,
-            showClear: true,
-            minDate: new Date(),
-            showClose: true,
-            //minDate: new Date()
-        }).on("dp.change", function (e) {
-            var minDate = new Date(e.date._d);
-            var val = $('.StrDateTo').val();
-            $('.StrDateTo').datetimepicker('destroy').datetimepicker({
-                format: 'DD/MM/YYYY ',
-                showTodayButton: true,
-                showClear: true,
-                showClose: true,
-                minDate: minDate
-            });
-            if (val == "")
-                $('.StrDateTo').val("")
-        });
-    $('.TimeTo').datetimepicker({ format: ' h:mm A', showTodayButton: true, showClear: true, showClose: true });
-    $('.TimeFrom').datetimepicker(
-        {
-            format: ' h:mm A',
-            showTodayButton: true,
-            showClear: true,
-            showClose: true,
-            //minDate: new Date()
-        }).on("dp.change", function (e) {
-            var minDate = new Date(e.date._d);
-            var val = $('.TimeTo').val();
-            $('.TimeTo').datetimepicker('destroy').datetimepicker({
-                format: ' h:mm A',
-                showTodayButton: true,
-                showClear: true,
-                showClose: true,
-                minDate: minDate
-            });
-            if (val == "")
-                $('.TimeTo').val("")
-        });
+    //$('.EndDate').datetimepicker({ format: 'DD/MM/YYYY', showTodayButton: true, showClear: true, showClose: true });
+    //$('.StartDate').datetimepicker(
+    //    {
+    //        format: 'DD/MM/YYYY',
+    //        showTodayButton: true,
+    //        showClear: true,
+    //        showClose: true,
+    //        //minDate: new Date()
+    //    }).on("dp.change", function (e) {
+    //        var minDate = new Date(e.date._d);
+    //        var val = $('.EndDate').val();
+    //        $('.EndDate').datetimepicker('destroy').datetimepicker({
+    //            format: 'DD/MM/YYYY',
+    //            showTodayButton: true,
+    //            showClear: true,
+    //            showClose: true,
+    //            minDate: minDate
+    //        });
+    //        if (val == "")
+    //            $('.EndDate').val("")
+    //    });
+    //$('.StrDateTo').datetimepicker({ format: 'DD/MM/YYYY ', showTodayButton: true, showClear: true, showClose: true });
+    //$('.StrDateFrom').datetimepicker(
+    //    {
+    //        format: 'DD/MM/YYYY ',
+    //        showTodayButton: true,
+    //        showClear: true,
+    //        minDate: new Date(),
+    //        showClose: true,
+    //        //minDate: new Date()
+    //    }).on("dp.change", function (e) {
+    //        var minDate = new Date(e.date._d);
+    //        var val = $('.StrDateTo').val();
+    //        $('.StrDateTo').datetimepicker('destroy').datetimepicker({
+    //            format: 'DD/MM/YYYY ',
+    //            showTodayButton: true,
+    //            showClear: true,
+    //            showClose: true,
+    //            minDate: minDate
+    //        });
+    //        if (val == "")
+    //            $('.StrDateTo').val("")
+    //    });
+    //$('.TimeTo').datetimepicker({ format: ' h:mm A', showTodayButton: true, showClear: true, showClose: true });
+    //$('.TimeFrom').datetimepicker(
+    //    {
+    //        format: ' h:mm A',
+    //        showTodayButton: true,
+    //        showClear: true,
+    //        showClose: true,
+    //        //minDate: new Date()
+    //    }).on("dp.change", function (e) {
+    //        var minDate = new Date(e.date._d);
+    //        var val = $('.TimeTo').val();
+    //        $('.TimeTo').datetimepicker('destroy').datetimepicker({
+    //            format: ' h:mm A',
+    //            showTodayButton: true,
+    //            showClear: true,
+    //            showClose: true,
+    //            minDate: minDate
+    //        });
+    //        if (val == "")
+    //            $('.TimeTo').val("")
+    //    });
     // #EndRegion of Date Range
   //  $('.select').select2();
 });

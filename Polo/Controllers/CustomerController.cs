@@ -7,9 +7,12 @@ using Polo.Core.Repositories;
 using Polo.Infrastructure.Entities;
 using Polo.Infrastructure.DTO;
 using Polo.Core.Enum;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Polo.Controllers
 {
+    [Authorize]
+
     public class CustomerController : Controller
     {
         private readonly ICustomerRepository _customerRepository;
@@ -81,7 +84,8 @@ namespace Polo.Controllers
             return Json(response);
         }
 
-        public JsonResult SaveCustomer(Customers customer)
+
+        public JsonResult SaveCustomer(Customer customer)
         {
             Response response = new Response();
 
