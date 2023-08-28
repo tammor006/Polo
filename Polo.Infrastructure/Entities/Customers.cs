@@ -18,9 +18,9 @@ namespace Polo.Infrastructure.Entities
         public string City { get; set; }
         public string Address { get; set; }
         public string Number { get; set; }
-        public int? OrderType { get; set; }
-        public int? DeliveryType { get; set; }
-        public DateTime? DeliveryTime { get; set; }
+        public int OrderType { get; set; }
+        public int DeliveryType { get; set; }
+        public DateTime? AvailableTime { get; set; }
         public int PaymentType { get; set; }
         public string? CreatedBy { get; set; }
         public DateTime CreatedDate { get; set; }

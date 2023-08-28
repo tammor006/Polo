@@ -17,9 +17,38 @@ namespace Polo.Core.Repositories
         }
         public List<Customers> GetAllCustomers()
         {
-            var customers = _db.Customer.ToList();
-            return customers;
+            try
+            {
+                var customers = _db.Customer
+                    .Select(c => new Customers
+                    {
+                        Id = c.Id,
+                        FirstName = c.FirstName,
+                        LastName = c.LastName,
+                        Email = c.Email,
+                        Street = c.Street,
+                        City = c.City,
+                        Address = c.Address,
+                        Number = c.Number,
+                        OrderType = c.OrderType,
+                        DeliveryType = c.DeliveryType,
+                        AvailableTime = c.AvailableTime,
+                        PaymentType = c.PaymentType,
+                        CreatedBy = c.CreatedBy,
+                        CreatedDate = c.CreatedDate,
+                        UpdatedBy = c.UpdatedBy,
+                        UpdatedDate = c.UpdatedDate
+                    })
+                    .ToList();
+
+                return customers;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
+
         public Response SaveCustomer(Customers customer, string userId)
         {
             Response response = new Response();
@@ -37,9 +66,10 @@ namespace Polo.Core.Repositories
                         foundCustomer.City = customer.City;
                         foundCustomer.Number = customer.Number;
                         foundCustomer.Email = customer.Email;
-                        //foundCustomer.OrderType = customer.OrderType;
+                        foundCustomer.OrderType = customer.OrderType;
+                        foundCustomer.DeliveryType = customer.DeliveryType;
+                        foundCustomer.AvailableTime = customer.AvailableTime;
                         foundCustomer.PaymentType = customer.PaymentType;
-                       // foundCustomer.DeliveryTime = customer.DeliveryTime;
                         foundCustomer.UpdatedDate = DateTime.Now;
                         foundCustomer.UpdatedBy = userId.ToString();
 
@@ -52,7 +82,7 @@ namespace Polo.Core.Repositories
                     else
                     {
                         response.Success = false;
-                        response.Detail = "Customer not found"; // Handle not found scenario
+                        response.Detail = "Customer not found"; 
                     }
                 }
                 else

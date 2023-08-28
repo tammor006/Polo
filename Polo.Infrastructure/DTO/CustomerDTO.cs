@@ -17,9 +17,9 @@ namespace Polo.Infrastructure.DTO
         public string City { get; set; }
         public string Address { get; set; }
         public string Number { get; set; }
-        public int? OrderType { get; set; }
-        public int? DeliveryType { get; set; }
-        public DateTime? DeliveryTime { get; set; }
+        public string OrderType { get; set; }
+        public string DeliveryType { get; set; }
+        public DateTime? AvailableTime { get; set; }
         public string PaymentType { get; set; }
         public string? CreatedBy { get; set; }
         public DateTime CreatedDate { get; set; }

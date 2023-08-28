@@ -7,7 +7,7 @@
     }
     public enum OrderType
     {
-        PickUp = 1,
+        Pickup = 1,
         Delivery = 2
     }
     public enum DeliveryType
