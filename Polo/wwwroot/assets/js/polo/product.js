@@ -139,7 +139,7 @@ $('input[type="file"]').change(function (e) {
         var file1 = file;
         var fileSize = file.size;
         var fileType = (file.name.split('.')[file.name.split('.').length - 1]).toLowerCase();
-        var ValidImageTypes = ["gif", "jpg", "png"];
+        var ValidImageTypes = ["gif", "jpg", "png", "jpeg"];
         if ($.inArray(fileType, ValidImageTypes) < 0) {
             //NewuploadMode();
             toastr["error"]("Only images are allowed.");
