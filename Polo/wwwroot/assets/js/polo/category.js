@@ -37,6 +37,7 @@ function ShowModal(Id) {
 }
 
 function saveCategory() {
+    debugger;
     var parsleyForm = $('#createCategory').parsley();
     parsleyForm.validate();
     if (!parsleyForm.isValid()) {
@@ -50,9 +51,7 @@ function saveCategory() {
     }
     Category.name = $("#categoryname").val();
     Category.isActive = $("#isActive").is(":checked")
-    var formData = new FormData();
-    formData.append("category", JSON.stringify(Category));
-    SaveAndSubmit("/Categories/SaveCategory", formData).then(function (d) {
+    Post("/Categories/SaveCategory", { categories: Category }).then(function (d) {
         debugger;
         if (d.success) {
             ClearModel();
