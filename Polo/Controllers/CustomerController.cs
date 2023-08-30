@@ -27,7 +27,6 @@ namespace Polo.Controllers
         {
             return View();
         }
-
         public JsonResult GetAllCustomers()
         {
             Response response = new Response();
@@ -38,15 +37,36 @@ namespace Polo.Controllers
                 var customerDTOs = new List<CustomerDTO>();
                 foreach (var customer in customers)
                 {
-                    var paymentTypeEnum = Enum.GetName(typeof(PaymentType),customer.PaymentType);
+                    var paymentType = "";
+                    var orderType = customer.OrderType != null ? Enum.GetName(typeof(OrderType), customer.OrderType) : null;
+                    var deliveryType = customer.DeliveryType != null ? Enum.GetName(typeof(DeliveryType), customer.DeliveryType) : null;
+                    var address = $"{customer.Street}, {customer.City}, {customer.Address}";
+                    var availableTime = customer.AvailableTime != null ? customer.AvailableTime : null ;
+
+                    if (orderType == OrderType.Pickup.ToString())
+                    {
+                        paymentType = "Card at Pickup Counter";
+                    }
+                    else if (orderType == OrderType.Delivery.ToString() && customer.PaymentType == (int)PaymentType.Card)
+                    {
+                        paymentType = "Card to Delivery Person";
+                    }
+                    else
+                    {
+                        paymentType = Enum.GetName(typeof(PaymentType), customer.PaymentType);
+                    }
+
                     var customerDTO = new CustomerDTO
                     {
                         Id = customer.Id,
-                        Name = $"{customer.FirstName}" + " " + $"{customer.LastName}",
-                        Address = $"{customer.Street}" + " " + $"{customer.City}" + " " +$"{customer.Address}",
+                        Name = $"{customer.FirstName} {customer.LastName}",
+                        Address = address,
                         Number = customer.Number,
                         Email = customer.Email,
-                        PaymentType = paymentTypeEnum,
+                        OrderType = orderType,
+                        DeliveryType = deliveryType,
+                        AvailableTime = availableTime,
+                        PaymentType = paymentType,
                     };
 
                     customerDTOs.Add(customerDTO);

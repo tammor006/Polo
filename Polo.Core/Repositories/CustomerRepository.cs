@@ -37,9 +37,10 @@ namespace Polo.Core.Repositories
                         foundCustomer.City = customer.City;
                         foundCustomer.Number = customer.Number;
                         foundCustomer.Email = customer.Email;
-                        //foundCustomer.OrderType = customer.OrderType;
+                        foundCustomer.OrderType = customer.OrderType;
+                        foundCustomer.DeliveryType = customer.DeliveryType;
+                        foundCustomer.AvailableTime = customer.AvailableTime;
                         foundCustomer.PaymentType = customer.PaymentType;
-                       // foundCustomer.DeliveryTime = customer.DeliveryTime;
                         foundCustomer.UpdatedDate = DateTime.Now;
                         foundCustomer.UpdatedBy = userId.ToString();
 
@@ -52,7 +53,7 @@ namespace Polo.Core.Repositories
                     else
                     {
                         response.Success = false;
-                        response.Detail = "Customer not found"; // Handle not found scenario
+                        response.Detail = "Customer not found"; 
                     }
                 }
                 else
