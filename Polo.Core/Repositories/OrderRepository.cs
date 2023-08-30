@@ -49,27 +49,40 @@ namespace Polo.Core.Repositories
             customer.Address = cust.Address;
             customer.Name = cust.FirstName + " " + cust.LastName;
             customer.Number = cust.Number;
+            customer.Email = cust.Email;
             response.Success = true;
             response.data = customer;
             return response;
         }
-        public Response SaveOrder(List<SaleOrder> orders, string userId)
+        public Response SaveOrder(SaleOrder orders, string userId)
         {
             Response response = new Response();
             try
             {
-                if (orders.Count > 0)
+                orders.CreatedDate = DateTime.Now;
+                orders.CreatedBy = userId.ToString();
+                _db.Add(orders);
+                if (orders.SaleOrderItem != null && orders.SaleOrderItem.Count > 0)
                 {
-                    orders.ForEach(x =>
+                    orders.SaleOrderItem.ToList().ForEach(x =>
                     {
-                        x.CreatedDate = DateTime.Now;
-                        x.CreatedBy = userId.ToString();
+                        x.SaleOrderId = orders.Id;
+                        x.InvoiceNumber = orders.InvoiceNumber;
                     });
-                   
-                    _db.SaleOrder.AddRange(orders);
-                    _db.SaveChanges();
-                    response.Success = true;
+                    _db.SaleOrderItem.AddRange(orders.SaleOrderItem);
                 }
+
+
+
+                _db.SaveChanges();
+                response.Success = true;
+                response.data = new
+                {
+                    Customer = _db.Customer.FirstOrDefault(x => x.Id == orders.CustomerId),
+                    SaleOrder = orders,
+                   
+                };
+                
             }
             catch (Exception ex)
             {

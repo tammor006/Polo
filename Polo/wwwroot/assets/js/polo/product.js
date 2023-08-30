@@ -7,7 +7,8 @@
     price: 0.00,
     categoryId: 0,
     imageUrl: "",
-    imageName:""
+    imageName: "",
+    productAttributes:[]
 }
 function PreBind() {
     Get('/Product/PreBind').then(function (d) {
@@ -94,6 +95,17 @@ function saveProduct() {
     else {
         $(this).parents(".form-group").removeClass('has-error');
     }
+    $(".add").each(function (index) {
+        var name = $('.name').eq(index).val()
+        var price = $('.price').eq(index).val()
+        if (name != "") {
+            Product.productAttributes.push({
+                name: name,
+                price: price
+            })
+        }
+
+    });
     Product.barCode = $("#barcode").val();
     Product.name = $("#productname").val();
     Product.description = $("#productdesc").val();
@@ -212,6 +224,7 @@ $('input[type="file"]').change(function (e) {
     }
 
 });
+
 /*var table = $('#productsDatatable').DataTable();*/
 function LoadTable() {
     $("#productsDatatable").DataTable({

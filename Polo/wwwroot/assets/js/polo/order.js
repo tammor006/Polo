@@ -5,6 +5,10 @@
     qty: 0,
     total:0
 }
+let sub = 0;
+let tax = 0;
+let total = 0;
+let discount = 0;
 var OrderList = [];
 var Customer = {
     id: 0,
@@ -17,65 +21,48 @@ var Customer = {
     email: "",
     paymentType: "",
 };
-
-function ClearCustomer() {
-    $("#FirstName").val("");
-    $("#LastName").val("");
-    $("#Street").val("");
-    $("#City").val("");
-    $("#Address").val("");
-    $("#Number").val("");
-    $("#Email").val("");
-    $("#PaymentType").val("");
-}
-function ShowModal(Id) {
-    debugger;
-    if (Id == 0) {
-        $("#modal").modal('show');
-        $("#myLargeModalLabel").text("Add Customer");
-        ClearModel();
-    }
-    else {
-        Get("/Order/GetCustomerById?number=" + Id).then(function (d) {
-            debugger
-            if (d.success) {
-                Customer.id = d.data.custId;
-                Customer.name = d.data.name;
-                Customer.address = d.data.address;
-                Customer.number = d.data.number;
-                $("#number").val(Customer.number);
-                $("#name").val(Customer.name);
-                $("#address").val(Customer.address);
-                
-               
-            }
-        });
-    }
+var orders = {
+    id: 0,
+    mode: "",
+    discount: 0,
+    subTotal: 0,
+    tax: 0,
+    total: 0,
+    customerId:0,
+    invoiceNumber: 0,
+    saleOrderItem:[]
 }
 function ClearOrder() {
     Customer.id = 0;
     Customer.name = "";
     Customer.address = "";
     Customer.number = "";
+    Customer.email="",
     $("#number").val("");
     $("#name").val("");
     $("#address").val("")
+    $("#email").val("")
 }
 function save() {
     if (Customer.id == 0) {
         toastr["error"]("Please Add Customer")
     }
     else {
-        var orders=[];
+        debugger
+        orders.total = $("#total").val();
+        orders.subTotal = $("#subtotal").val();
+        orders.tax = $("#tax").val();
+        orders.discount = discount;
+        orders.customerId = Customer.id;
+        var c = $("a.nav-link.active").eq(0).data('mode')
+        orders.mode = c
+        orders.invoiceNumber = parseInt(1 + Math.floor(Math.random() * 6))
+        orders.saleOrderItem=[]
         for (let i = 0; i < OrderList.length; i++) {
-            orders.push({
+            orders.saleOrderItem.push({
                 productId: OrderList[i].id,
-                customerId: Customer.id,
                 quantity: OrderList[i].qty,
                 total: OrderList[i].total,
-                mode: $(".nav-link active").data("mode"),
-                invoiceNumber: parseInt(1 + Math.floor(Math.random() * 6))
-
             });
             Post("/Order/SaveOrder", { orders: orders }).then(function (d) {
                 debugger;
@@ -91,41 +78,13 @@ function save() {
 }
 function Search() {
     debugger
-    var number = parseInt($("#number").val());
-    ShowModal(number)
-}
-function saveCustomer() {
-    debugger;
-    var parsleyForm = $('#createCustomer').parsley();
-    parsleyForm.validate();
-    if (!parsleyForm.isValid()) {
-        $('.parsley-error').each(function () {
-            $(this).parents(".form-group").addClass("has-error");
-        });
-        return false;
-    } else {
-        $('.parsley-error').parents(".form-group").removeClass('has-error');
+    var number = $("#number").val();
+    if (number !== "") {
+        number = parseInt(number);
+        ShowModal("Number", number)
     }
-
-    Customer.firstName = $("#FirstName").val();
-    Customer.lastName = $("#LastName").val();
-    Customer.street = $("#Street").val();
-    Customer.city = $("#City").val();
-    Customer.address = $("#Address").val();
-    Customer.number = $("#Number").val();
-    Customer.email = $("#Email").val();
-    Customer.paymentType = $("#PaymentType").val();
-
-    Post("/Customer/SaveCustomer", { customer: Customer }).then(function (d) {
-        debugger;
-        if (d.success) {
-            ClearCustomer();
-            $(".modal").modal('hide');
-            ShowModal(parseInt(Customer.number));
-        } else {
-            toastr["error"](d.detail);
-        }
-    });
+    else
+    toastr["error"]("Please Enter Number");
 }
 function PreBind() {
     Get('/Order/PreBind').then(function (d) {
@@ -181,12 +140,48 @@ function DeleteRow($rowToDel) {
 
     OrderList = OrderList.filter(function (el) { return el.id != $rowToDel; });
    
-    sum = 0;
+    sub = 0;
+    tax = 0;
+    total = 0;
+    discount = 0
+    $('#tax').val("")
+    $('#subtotal').val("")
     $('#total').val("")
+    var value = $('#disc').val() === "" ? 0 : parseInt($('#disc').val());
     for (let x of OrderList) {
-        sum += x.total;
+        sub += x.total;
     }
-    $('#total').val(sum)
+    if (value != 0) {
+        discount = ((value / 100) * sub);
+        sub = sub - discount;
+    }
+    tax = parseInt(sub / 10);
+    total = sub + tax;
+    $('#tax').val(tax)
+    $('#subtotal').val(sub)
+    $('#total').val(total)
+}
+function AddDisc() {
+    debugger
+    sub = 0;
+    tax = 0;
+    total = 0;
+    discount = 0
+    $('#tax').val("")
+    $('#subtotal').val("")
+    $('#total').val("")
+    var value = parseInt($('#disc').val());
+    for (let x of OrderList) {
+        sub += x.total;
+    }
+    discount = ((value / 100) * sub);
+    sub = sub - discount;
+    tax = sub / 10;
+    total = sub + tax;
+    $('#tax').val(tax)
+    $('#subtotal').val(sub)
+    $('#total').val(total)
+
 }
 $(document).ready(function () {
     PreBind();
@@ -205,6 +200,7 @@ $(document).ready(function () {
     $("#clear").click(function () {
         input_value.val("");
     });
+   
     $("#enter").click(function () {
         debugger
         const add = {};
@@ -216,12 +212,26 @@ $(document).ready(function () {
         add.qty = menu.qty
         add.total = menu.total
         OrderList.push(add);
-        $('#total').val("");
-        sum=0
+        sub = 0;
+        tax = 0;
+        total = 0;
+        discount=0
+        $('#tax').val("")
+        $('#subtotal').val("")
+        $('#total').val("")
+        var value = $('#disc').val() === "" ? 0 : parseInt($('#disc').val());
         for (let x of OrderList) {
-            sum +=x.total;
+            sub += x.total;  
         }
-        $('#total').val(sum)
+        if (value != 0) {
+            discount = ((value / 100) * sub);
+            sub = sub - d;
+        }
+        tax = parseInt( sub / 10);
+        total = sub + tax;
+        $('#tax').val(tax)
+        $('#subtotal').val(sub)
+        $('#total').val(total)
         input_value.val("");
         $('#keypad').modal('hide');
         
@@ -239,11 +249,13 @@ $(document).ready(function () {
     });
 
 });
-let sum = 0;
 function Clear() {
     debugger
     OrderList = [];
     $('#total').val("")
+    $('#tax').val("")
+    $('#subtotal').val("")
+    $('#disc').val("")
     $('#tbdata').empty();
 }
 function ClearModel() {

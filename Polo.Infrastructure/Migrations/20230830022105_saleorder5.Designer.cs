@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Polo.Infrastructure;
 
@@ -11,9 +12,11 @@ using Polo.Infrastructure;
 namespace Polo.Infrastructure.Migrations
 {
     [DbContext(typeof(PoloDBContext))]
-    partial class PoloDBContextModelSnapshot : ModelSnapshot
+    [Migration("20230830022105_saleorder5")]
+    partial class saleorder5
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

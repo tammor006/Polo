@@ -10,7 +10,7 @@
     paymentType: "",
 };
 
-function ClearModel() {
+function ClearCustomer() {
     $("#FirstName").val("");
     $("#LastName").val("");
     $("#Street").val("");
@@ -20,14 +20,15 @@ function ClearModel() {
     $("#Email").val("");
     $("#PaymentType").val("");
 }
-function ShowModal(Id) {
+function ShowModal(Mode,Id) {
     debugger;
     ClearModel();
-    if (Id == 0) {
+    if (Id==0) {
         $("#modal").modal('show');
         $("#myLargeModalLabel").text("Add Customer");
+        $("#type").val(Mode)
     }
-    else {
+    else if (Mode == "Edit") {
         Get("/Customer/GetCustomerById?id=" + Id).then(function (d) {
             debugger
             if (d.success) {
@@ -39,9 +40,9 @@ function ShowModal(Id) {
                 Customer.address = d.data.customer.address;
                 Customer.number = d.data.customer.number;
                 Customer.email = d.data.customer.email;
-               /* Customer.orderType = d.data.customer.orderType;*/
+                /* Customer.orderType = d.data.customer.orderType;*/
                 Customer.paymentType = d.data.customer.paymentType;
-               /* Customer.deliveryTime = d.data.customer.deliveryTime;*/
+                /* Customer.deliveryTime = d.data.customer.deliveryTime;*/
 
                 $("#FirstName").val(Customer.firstName);
                 $("#LastName").val(Customer.lastName);
@@ -51,14 +52,33 @@ function ShowModal(Id) {
                 $("#Number").val(Customer.number);
                 $("#Email").val(Customer.email);
                 $("#PaymentType").val(Customer.paymentType);
+                $("#type").val(Mode)
                 $("#modal").modal('show');
                 $("#myLargeModalLabel").text("Edit Customer");
             }
         });
     }
+    else {
+        Get("/Order/GetCustomerById?number=" + Id).then(function (d) {
+            debugger
+            if (d.success) {
+                Customer.id = d.data.custId;
+                Customer.name = d.data.name;
+                Customer.address = d.data.address;
+                Customer.number = d.data.number;
+                Customer.email = d.data.email;
+                $("#number").val(Customer.number);
+                $("#email").val(Customer.email);
+                $("#name").val(Customer.name);
+                $("#address").val(Customer.address);
+
+
+            }
+        });
+    }
 }
 
-function saveCustomer() {
+function saveCustomer(crud) {
     debugger;
     var parsleyForm = $('#createCustomer').parsley();
     parsleyForm.validate();
@@ -83,11 +103,18 @@ function saveCustomer() {
     Post("/Customer/SaveCustomer", { customer: Customer }).then(function (d) {
         debugger;
         if (d.success) {
-            ClearModel();
+            ClearCustomer();
             $(".modal").modal('hide');
-            $("#customerDatatable").dataTable().fnDestroy();
-            LoadTable(); 
-            toastr["success"](d.detail);
+            var type = $("#type").val()
+            if (type == "Add" || type=="Edit") {
+                $("#customerDatatable").dataTable().fnDestroy();
+                LoadTable();
+                toastr["success"](d.detail);
+            }
+            else {
+                
+                ShowModal(type,parseInt(Customer.number));
+            }
         } else {
             toastr["error"](d.detail);
         }
@@ -111,7 +138,7 @@ function LoadTable() {
                 "data": "id",
                 "render": function (data, type, row) {
                     return '<td>' +
-                        '<a href="javascript:void(0);" class="mr-3 text-primary" data-toggle="tooltip" data-placement="top" title="Edit" data-original-title="Edit" onclick="ShowModal(' + row.id + ')">' +
+                        '<a href="javascript:void(0);" class="mr-3 text-primary" data-toggle="tooltip" data-placement="top" title="Edit" data-original-title="Edit" onclick="ShowModal(Edit,' + row.id + ')">' +
                         '<i class="mdi mdi-pencil font-size-18"></i>' +
                         '</a>' +
                         '<a href="javascript:void(0);" class="text-danger" data-toggle="tooltip" data-placement="top" title="Delete" data-original-title="Delete" onclick="DeleteModal(' + row.id + ')">' +

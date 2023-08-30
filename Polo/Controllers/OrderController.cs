@@ -51,7 +51,7 @@ namespace Polo.Controllers
             }
             return Json(response);
         }
-        public JsonResult SaveOrder(List<SaleOrder> orders)
+        public JsonResult SaveOrder(SaleOrder orders)
         {
             Response response = new Response();
 

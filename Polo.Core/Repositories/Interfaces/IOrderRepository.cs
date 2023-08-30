@@ -11,7 +11,7 @@ namespace Polo.Core.Repositories.Interfaces
     public interface IOrderRepository
     {
         Response PreBind();
-        Response SaveOrder(List<SaleOrder> orders, string userId);
+        Response SaveOrder(SaleOrder orders, string userId);
         Response GetCustomerById(double number);
     }
 }

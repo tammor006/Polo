@@ -77,6 +77,15 @@ namespace Polo.Core.Repositories
 
                     }
                     _db.Entry(foundProduct).State = EntityState.Modified;
+                    if (product.ProductAttributes != null && product.ProductAttributes.Count > 0)
+                    {
+                        _db.ProductAttributes.RemoveRange(_db.ProductAttributes.Where(z => z.ProductId == product.Id));
+                        product.ProductAttributes.ToList().ForEach(x =>
+                        {
+                            x.ProductId = product.Id;
+                        });
+                        _db.ProductAttributes.AddRange(product.ProductAttributes);
+                    }
                     _db.SaveChanges();
                     response.Success = true;
                     response.Detail = " Product is updated Successfully";
@@ -105,6 +114,15 @@ namespace Polo.Core.Repositories
 
                     }
                     _db.Add(product);
+                    if (product.ProductAttributes != null && product.ProductAttributes.Count > 0)
+                    {
+                        _db.ProductAttributes.RemoveRange(_db.ProductAttributes.Where(z => z.ProductId == product.Id));
+                        product.ProductAttributes.ToList().ForEach(x =>
+                        {
+                            x.ProductId = product.Id;
+                        });
+                        _db.ProductAttributes.AddRange(product.ProductAttributes);
+                    }
                     _db.SaveChanges();
                     response.Success = true;
                     response.Detail = " Product is added Successfully";
@@ -144,6 +162,7 @@ namespace Polo.Core.Repositories
             if(!id.IsNullOrZero())
             {
                 Product product = _db.Product.FirstOrDefault(x => x.Id == id);
+                product.ProductAttributes = _db.ProductAttributes.Where(x => x.ProductId == id).ToList();
                 response.data = new
                 {
                     Product=product,

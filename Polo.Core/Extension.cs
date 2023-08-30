@@ -150,6 +150,29 @@ namespace Polo.Infrastructure.Utilities
 
             return string.Format("{0:MM/dd/yyyy}", date);
         }
+        public static string ViewStandardDateTime(this DateTime? date, bool viewTimewithDate = false, string format = "dd/MM/yyyy")
+        {
+            if (date == DateTime.MinValue)
+            {
+                return String.Empty;
+            }
+            else if (!ReferenceEquals(date, null))
+            {
+                if (((DateTime)date).Hour != 0)
+                {
+                    // date = TimeZoneInfo.ConvertTime((DateTime)date, TimeZoneInfo.Utc, TimeZoneInfo.FindSystemTimeZoneById("Pakistan Standard Time"));
+                    //date = ((DateTime)date).AddHours(Convert.ToDouble(WebConfigurationManager.AppSettings["TimeDifference"]));
+
+                }
+            }
+            else
+                return string.Empty;
+
+            if (viewTimewithDate)
+                return string.Format("{0:" + format + " HH:mm}", date);
+
+            return string.Format("{0:" + format + "}", date);
+        }
         public static string ViewDate(this DateTime date, bool viewTimewithDate = false, string format = "dd/MM/yyyy")
         {
             if (date == DateTime.MinValue)

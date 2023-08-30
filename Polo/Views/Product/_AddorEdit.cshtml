@@ -24,52 +24,95 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form method="post" enctype="multipart/form-data" onSubmit="return false;" id="createProduct" name="createProduct" data-parsley-validate data-parsley-error-message>
+            <form method="post" enctype="multipart/form-data" onSubmit="return false;" class="repeater" id="createProduct" name="createProduct" data-parsley-validate data-parsley-error-message>
             <div class="modal-body">
-                <div class="row">
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label for="productname">Product Name</label>
-                                <input id="productname" type="text" class="form-control" required data-parsley-error-message="Please enter Product">
-                        </div>
-                        <div class="form-group">
-                            <label for="category" class="control-label">Category</label>
-                                <select class=" form-control select" id="categoryselect" required data-parsley-error-message="Please enter Category">
-                                    <option value="" selected hidden>Select Category</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label for="barcode">BarCode</label>
-                                <input id="barcode" type="number" class="form-control" required data-parsley-error-message="Please enter Barcode">
-                        </div>
-                        <div class="form-group">
-                            <label for="price">Price</label>
-                                <input id="price" type="number" class="form-control" required data-parsley-error-message="Please enter Price">
-                        </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label for="productdesc">Product Description</label>
-                            <textarea   class="form-control" id="productdesc" rows="6" required></textarea>
-                        </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <label for="image">Image</label>
-                                <input type="file" name="file" class="file">
-                                <div class="input-group">
-                                    <input type="text" class="form-control" disabled placeholder="Upload File" id="file">
-                                    <div class="input-group-append">
-                                        <button type="button" class="browse btn btn-primary" onchange="addFiles()">Browse...</button>
+                    <ul class="nav nav-pills nav-justified" role="tablist">
+                        <li class="nav-item waves-effect waves-light">
+                            <a class="nav-link active" data-mode="Product" data-toggle="tab" href="#home-1" role="tab">
+                                <span class="d-block d-sm-none"><i class="fas fa-home"></i></span>
+                                <span class="d-none d-sm-block">Product</span>
+                            </a>
+                        </li>
+                        <li class="nav-item waves-effect waves-light">
+                            <a class="nav-link" data-toggle="tab" data-mode="Product Attributes" href="#profile-1" role="tab">
+                                <span class="d-block d-sm-none"><i class="far fa-user"></i></span>
+                                <span class="d-none d-sm-block">Product Attributes</span>
+                            </a>
+                        </li>
+                    </ul>
+                        <div class="tab-content p-3 text-muted" style="padding-top:10px !important">
+                            <div class="tab-pane active" id="home-1" role="tabpanel">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label for="productname">Product Name</label>
+                                            <input id="productname" type="text" class="form-control" required data-parsley-error-message="Please enter Product">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="category" class="control-label">Category</label>
+                                            <select class=" form-control select" id="categoryselect" required data-parsley-error-message="Please enter Category">
+                                                <option value="" selected hidden>Select Category</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label for="barcode">BarCode</label>
+                                            <input id="barcode" type="number" class="form-control" required data-parsley-error-message="Please enter Barcode">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="price">Price</label>
+                                            <input id="price" type="number" class="form-control" required data-parsley-error-message="Please enter Price">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label for="productdesc">Product Description</label>
+                                            <textarea class="form-control" id="productdesc" rows="6" required></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label for="image">Image</label>
+                                        <input type="file" name="file" class="file">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" disabled placeholder="Upload File" id="file">
+                                            <div class="input-group-append">
+                                                <button type="button" class="browse btn btn-primary" onchange="addFiles()">Browse...</button>
+                                            </div>
+                                        </div>
+                                        <div class="form-group" style="text-align: center">
+                                            <img src="https://placehold.it/120x80" id="preview" class="img-thumbnail" width="120" height="80">
+                                        </div>
                                     </div>
                                 </div>
-                            <div class="form-group" style="text-align: center">
-                                <img src="https://placehold.it/120x80" id="preview" class="img-thumbnail" width="120" height="80">
                             </div>
-                    </div>
-                </div>
-            </div>
+                            <div class="tab-pane" id="profile-1" role="tabpanel">
+                            <div class="row">
+                                <div class="col-12">
+                                     <div data-repeater-list="group-a">
+                                         <div data-repeater-item class="row">
+                                                        <div class="form-group col-lg-4">
+                                                            <label for="name">Attribute</label>
+                                                            <input type="text" id="attr" name="untyped-input" class="form-control name" />
+                                                        </div>
+
+                                                        <div class="form-group col-lg-4">
+                                                            <label for="email">Price</label>
+                                                            <input type="number" id="priceattr" class="form-control price" />
+                                                        </div>
+
+                                                <div class="button-items col-lg-4 " style="margin-top:26px">
+                                                <input data-repeater-create type="button" class="btn btn-success mt-3 mt-lg-0 add" value="Add" />
+                                                <input data-repeater-delete type="button" class="btn btn-primary mt-3 mt-lg-0" value="Delete" />
+                                            </div>
+
+                                                    </div>
+                                     </div>
+                                </div>
+                            </div>
+                            </div>
+                            </div>
+                        </div>
             <div class="modal-footer">
                     <button type="submit" onclick="saveProduct()" id="btnCreateProduct" class="btn btn-primary mr-1 waves-effect waves-light">Save Changes
                         @*<span style=" display:none">

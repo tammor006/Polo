@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Polo.Infrastructure;
 
@@ -11,9 +12,11 @@ using Polo.Infrastructure;
 namespace Polo.Infrastructure.Migrations
 {
     [DbContext(typeof(PoloDBContext))]
-    partial class PoloDBContextModelSnapshot : ModelSnapshot
+    [Migration("20230830001603_saleorder4")]
+    partial class saleorder4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -467,17 +470,12 @@ namespace Polo.Infrastructure.Migrations
                     b.Property<float>("Quantity")
                         .HasColumnType("real");
 
-                    b.Property<int>("SaleOrderId")
-                        .HasColumnType("int");
-
                     b.Property<float>("Total")
                         .HasColumnType("real");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ProductId");
-
-                    b.HasIndex("SaleOrderId");
 
                     b.ToTable("SaleOrderItem");
                 });
@@ -674,15 +672,7 @@ namespace Polo.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Polo.Infrastructure.Entities.SaleOrder", "SaleOrder")
-                        .WithMany("SaleOrderItem")
-                        .HasForeignKey("SaleOrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Product");
-
-                    b.Navigation("SaleOrder");
                 });
 
             modelBuilder.Entity("Polo.Infrastructure.Entities.Stock", b =>
@@ -699,11 +689,6 @@ namespace Polo.Infrastructure.Migrations
             modelBuilder.Entity("Polo.Infrastructure.Entities.Product", b =>
                 {
                     b.Navigation("ProductAttributes");
-                });
-
-            modelBuilder.Entity("Polo.Infrastructure.Entities.SaleOrder", b =>
-                {
-                    b.Navigation("SaleOrderItem");
                 });
 #pragma warning restore 612, 618
         }
