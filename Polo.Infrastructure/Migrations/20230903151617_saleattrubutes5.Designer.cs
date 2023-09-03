@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Polo.Infrastructure;
 
@@ -11,9 +12,11 @@ using Polo.Infrastructure;
 namespace Polo.Infrastructure.Migrations
 {
     [DbContext(typeof(PoloDBContext))]
-    partial class PoloDBContextModelSnapshot : ModelSnapshot
+    [Migration("20230903151617_saleattrubutes5")]
+    partial class saleattrubutes5
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -424,12 +427,15 @@ namespace Polo.Infrastructure.Migrations
                     b.Property<int>("ProductAttributesId")
                         .HasColumnType("int");
 
-                    b.Property<int>("SaleOrderItemId")
+                    b.Property<int>("SaleOrderId")
                         .HasColumnType("int");
+
+                    b.Property<bool>("isDeleted")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SaleOrderItemId");
+                    b.HasIndex("SaleOrderId");
 
                     b.ToTable("SaleItemAtrributes");
                 });
@@ -698,13 +704,13 @@ namespace Polo.Infrastructure.Migrations
 
             modelBuilder.Entity("Polo.Infrastructure.Entities.SaleItemAtrributes", b =>
                 {
-                    b.HasOne("Polo.Infrastructure.Entities.SaleOrderItem", "SaleOrderItem")
+                    b.HasOne("Polo.Infrastructure.Entities.SaleOrder", "SaleOrder")
                         .WithMany("SaleItemAtrributes")
-                        .HasForeignKey("SaleOrderItemId")
+                        .HasForeignKey("SaleOrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("SaleOrderItem");
+                    b.Navigation("SaleOrder");
                 });
 
             modelBuilder.Entity("Polo.Infrastructure.Entities.SaleOrder", b =>
@@ -755,12 +761,9 @@ namespace Polo.Infrastructure.Migrations
 
             modelBuilder.Entity("Polo.Infrastructure.Entities.SaleOrder", b =>
                 {
-                    b.Navigation("SaleOrderItem");
-                });
-
-            modelBuilder.Entity("Polo.Infrastructure.Entities.SaleOrderItem", b =>
-                {
                     b.Navigation("SaleItemAtrributes");
+
+                    b.Navigation("SaleOrderItem");
                 });
 #pragma warning restore 612, 618
         }

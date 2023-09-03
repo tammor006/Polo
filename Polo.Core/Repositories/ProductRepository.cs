@@ -162,10 +162,18 @@ namespace Polo.Core.Repositories
             if(!id.IsNullOrZero())
             {
                 Product product = _db.Product.FirstOrDefault(x => x.Id == id);
-                product.ProductAttributes = _db.ProductAttributes.Where(x => x.ProductId == id).ToList();
+                var cat = _db.ProductAttributes.Where(x => x.ProductId == id).ToList();
+                List<ProductAttributesVM> attributesVM = cat.GroupBy(x => new { x.Category,x.IsRequired }).Select(r => new ProductAttributesVM
+                {
+                    
+                    Category =r.Key.IsRequired==true? r.Key.Category+"(required)":r.Key.Category,
+                    attributes=r.ToList()
+
+                }).ToList();
                 response.data = new
                 {
                     Product=product,
+                    Attribute=attributesVM
                 };
                 response.Success = true;
             }

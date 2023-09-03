@@ -12,8 +12,8 @@ using Polo.Infrastructure;
 namespace Polo.Infrastructure.Migrations
 {
     [DbContext(typeof(PoloDBContext))]
-    [Migration("20230830022105_saleorder5")]
-    partial class saleorder5
+    [Migration("20230903152521_saleattrubutes6")]
+    partial class saleattrubutes6
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -245,7 +245,6 @@ namespace Polo.Infrastructure.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UpdatedBy")
@@ -271,6 +270,9 @@ namespace Polo.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime?>("AvailableTime")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("City")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -281,10 +283,7 @@ namespace Polo.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("DeliveryTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("DeliveryType")
+                    b.Property<int>("DeliveryType")
                         .HasColumnType("int");
 
                     b.Property<string>("Email")
@@ -303,7 +302,7 @@ namespace Polo.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("OrderType")
+                    b.Property<int>("OrderType")
                         .HasColumnType("int");
 
                     b.Property<int>("PaymentType")
@@ -385,6 +384,12 @@ namespace Polo.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Category")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsRequired")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -400,6 +405,39 @@ namespace Polo.Infrastructure.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("ProductAttributes");
+                });
+
+            modelBuilder.Entity("Polo.Infrastructure.Entities.SaleItemAtrributes", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Category")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<float>("Price")
+                        .HasColumnType("real");
+
+                    b.Property<int>("ProductAttributesId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SaleOrderItemId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("isDeleted")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SaleOrderItemId");
+
+                    b.ToTable("SaleItemAtrributes");
                 });
 
             modelBuilder.Entity("Polo.Infrastructure.Entities.SaleOrder", b =>
@@ -461,8 +499,14 @@ namespace Polo.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<bool>("ISDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<int>("InvoiceNumber")
                         .HasColumnType("int");
+
+                    b.Property<float>("Price")
+                        .HasColumnType("real");
 
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
@@ -472,9 +516,6 @@ namespace Polo.Infrastructure.Migrations
 
                     b.Property<int>("SaleOrderId")
                         .HasColumnType("int");
-
-                    b.Property<float>("Total")
-                        .HasColumnType("real");
 
                     b.HasKey("Id");
 
@@ -500,6 +541,9 @@ namespace Polo.Infrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<DateTime>("LastUpdate")
@@ -658,6 +702,17 @@ namespace Polo.Infrastructure.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("Polo.Infrastructure.Entities.SaleItemAtrributes", b =>
+                {
+                    b.HasOne("Polo.Infrastructure.Entities.SaleOrderItem", "SaleOrder")
+                        .WithMany("SaleItemAtrributes")
+                        .HasForeignKey("SaleOrderItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("SaleOrder");
+                });
+
             modelBuilder.Entity("Polo.Infrastructure.Entities.SaleOrder", b =>
                 {
                     b.HasOne("Polo.Infrastructure.Entities.Customer", "Customer")
@@ -707,6 +762,11 @@ namespace Polo.Infrastructure.Migrations
             modelBuilder.Entity("Polo.Infrastructure.Entities.SaleOrder", b =>
                 {
                     b.Navigation("SaleOrderItem");
+                });
+
+            modelBuilder.Entity("Polo.Infrastructure.Entities.SaleOrderItem", b =>
+                {
+                    b.Navigation("SaleItemAtrributes");
                 });
 #pragma warning restore 612, 618
         }

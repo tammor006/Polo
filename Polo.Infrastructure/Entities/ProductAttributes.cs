@@ -14,6 +14,8 @@ namespace Polo.Infrastructure.Entities
         public int ProductId { get; set; }
         public virtual Product Product { get; set; }
         public string Name { get; set; }
+        public string? Category { get; set; }
+        public bool IsRequired { get; set; }
         public float Price { get; set; }
     }
 }

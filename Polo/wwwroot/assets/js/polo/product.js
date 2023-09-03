@@ -33,11 +33,13 @@ function ClearModel() {
     $('#categoryselect').val("");
     $('input[type=file]').val('');
     document.getElementById("preview").src = 'https://placehold.it/120x80';
+    $('.repeat').find('div').remove()
     $('#createProduct').parsley().reset();
     $(".form-group").removeClass('has-error');
 }
 function ShowModal(Id) {
     ClearModel();
+    Repeat();
     PreBind();
     if (Id == 0) {
         $("#modal").modal('show');
@@ -81,7 +83,32 @@ function ShowModal(Id) {
     }
 
 }
-
+function Repeat() {
+    $('.repeat').append(
+        '<div data-repeater-list="group-a" >' +
+        '<div data-repeater-item class= "row" >' +
+        '<div class="form-group col-lg-3">' +
+        '<label for="name">Attribute</label><input type="text" id="attr" name="untyped-input" class="form-control name" />' +
+        '</div>' +
+        '<div class="form-group col-lg-3">' +
+        '<label for="name">Category</label><input type="text" id="catattr" name="untyped-input" class="form-control category" />' +
+        '</div>' +
+        '<div class="form-groupcol-lg-1">' +
+        '<label for="isrequired" class="control-label">IsRequired</label><select class=" form-control select isrequired" id="reqattr"><option value="false" selected>No</option><option value="true">Yes</option></select>' +
+        '</div>' +
+        '<div class="form-group col-lg-2">' +
+        '<label for="priceattr">Price</label><input type="number" id="priceattr" class="form-control price" />' +
+        '</div>' +
+        '<div class="button-items col-lg-3" style="margin-top:26px">' +
+        '<input  type="button" class="btn btn-success mt-3 mt-lg-0 add" value="Add" /><input data-repeater-delete type="button" class="btn btn-primary mt-3 mt-lg-0" value="Delete" />' +
+        '</div>' +
+        '</div>' +
+        '</div > '
+    )
+}
+$(document).on('click', '.add', function () {
+    Repeat(); 
+})
 function saveProduct() {
     debugger
     var parsleyForm = $('#createProduct').parsley();
@@ -97,11 +124,16 @@ function saveProduct() {
     }
     $(".add").each(function (index) {
         var name = $('.name').eq(index).val()
-        var price = $('.price').eq(index).val()
+        var price = $('.price').eq(index).val() == "" ? 0 : $('.price').eq(index).val()
+        var category = $('.category').eq(index).val()
+        var isRequired = $('.isrequired  option:selected').eq(index).val()
         if (name != "") {
             Product.productAttributes.push({
                 name: name,
-                price: price
+                price: price,
+                category: category,
+                isRequired: isRequired
+
             })
         }
 
@@ -180,7 +212,7 @@ $('input[type="file"]').change(function (e) {
                     img.onload = function () {
                         var w = this.width;
                         var h = this.height;
-                        if (this.width == 120 && this.height == 80) {
+                       
                             if (!readerEvt) {
                                 binaryString = reader.content;
                             }
@@ -201,9 +233,9 @@ $('input[type="file"]').change(function (e) {
                             //    FileName: FullName
 
                             //});
-                        } else {
-                            toastr["error"]("Plese select 120x80 Image")
-                        }
+                        //} else {
+                        //    toastr["error"]("Plese select 120x80 Image")
+                        //}
                     }
 
                     //$scope.$apply();

@@ -7,6 +7,14 @@
         overflow-x: auto;
         white-space: nowrap;
     }
+
+    .div {
+        position: relative;
+        display: inline-block;
+       
+        border: 3px solid #eff2f7;
+       
+    }
 </style>
 <!-- ============================================================== -->
 <div class="main-content">
@@ -45,9 +53,8 @@
                                 <thead>
                                     <tr>
                                         <th></th>
-                                        <th class="text-sm-leftt">Item</th>
+                                            <th class="text-sm-leftt">Item</th>
                                         <th class="text-sm-right">Qty</th>
-                                        <th class="text-sm-right">Price</th>
                                         <th class="text-sm-right">Total</th>
                                     </tr>
                                 </thead>
@@ -129,13 +136,13 @@
                     </div>
                     <div class="col-sm-6">
                     <div class="row">
-                    <div class="col-md-2" style="padding: 0px"><span class=" col-md-12 btn btn-warning waves-effect waves-light">Categories</span></div>
-                    <div class="col-md-10"><span class="col-md-11 btn btn-danger waves-effect waves-light">Menu</span></div>
-                    <div class="col-md-2" id="product" style="padding: 0px">
+                    <div class="col-md-3" style="padding: 0px"><span class=" col-md-12 btn btn-warning waves-effect waves-light">Categories</span></div>
+                    <div class="col-md-9" style="padding:0px"><span class="col-md-12 btn btn-danger waves-effect waves-light">Menu</span></div>
+                    <div class="col-md-3" id="product" style="padding: 0px">
                         <div class="nav flex-column nav-pills" style="background-color:white;padding-top:5px;border:2px solid #eff2f7;min-height: 470px; max-height: 470px " id="v-pills-tab" role="tablist" aria-orientation="vertical"> </div>
                             </div>
-                    <div class="col-md-10">
-                                 <div class=" col-md-12 tab-content text-muted mt-4 mt-md-0" id="v-pills-tabContent"></div>
+                    <div class="col-md-9" style="padding:0px">
+                        <div class="container tab-content text-muted mt-4 mt-md-0" id="v-pills-tabContent"></div>
                             </div>
                     </div>
                    </div>
@@ -146,6 +153,7 @@
     <!-- End Page-content -->
 @Html.Partial("~/Views/Order/_KeyPad.cshtml")
 @Html.Partial("~/Views/Customer/_AddorEdit.cshtml")
+@Html.Partial("~/Views/Order/_Product.cshtml")
 <script src="~/assets/js/polo/order.js?vs=@DateTime.Now.Ticks"></script>
 <script src="~/assets/js/polo/customer.js?vs=@DateTime.Now.Ticks"></script>
 

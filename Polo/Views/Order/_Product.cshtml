@@ -1,0 +1,30 @@
+﻿<div class="modal fade" id="exampleModalScrollable" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable" style="max-width: 350px !important;">
+        <div class="modal-content" style="background-color: #f8f8fb;">
+            <div class="modal-header">
+                <h5 class="modal-title mt-0" id="exampleModalScrollableTitle"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+           
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12 counter">
+                            <input hidden id="productId" />
+                            <label>Quantity</label>
+                        </div>
+                        <div class="col-md-12 check">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" id="qtyprice" style="margin-right:0px" class="btn btn-danger"></button>
+                    <button type="button" class="btn btn-danger" onclick="AddToCart()" style="margin-left:0px">Add to Cart</button>
+                </div>
+            
+           
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>

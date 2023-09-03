@@ -24,5 +24,6 @@ namespace Polo.Infrastructure
 		public DbSet<SaleOrder> SaleOrder { get; set; }
 		public DbSet<SaleOrderItem> SaleOrderItem { get; set; }
 		public DbSet<ProductAttributes> ProductAttributes { get; set; }
-	}
+        public DbSet<SaleItemAtrributes> SaleItemAtrributes { get; set; }
+    }
 }

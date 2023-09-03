@@ -59,6 +59,7 @@ namespace Polo.Core.Repositories
             Response response = new Response();
             try
             {
+                var orderList = new List<SaleItemAtrributes>();
                 orders.CreatedDate = DateTime.Now;
                 orders.CreatedBy = userId.ToString();
                 _db.Add(orders);
@@ -68,11 +69,15 @@ namespace Polo.Core.Repositories
                     {
                         x.SaleOrderId = orders.Id;
                         x.InvoiceNumber = orders.InvoiceNumber;
-                    });
-                    _db.SaleOrderItem.AddRange(orders.SaleOrderItem);
+                         x.SaleItemAtrributes.ToList().ForEach(y =>
+                        {
+                            y.SaleOrderItemId = x.Id;
+                        });
+                        orderList.AddRange(x.SaleItemAtrributes);
+                        _db.Add(x);
+                        _db.SaleItemAtrributes.AddRange(x.SaleItemAtrributes);
+                    });     
                 }
-
-
 
                 _db.SaveChanges();
                 response.Success = true;

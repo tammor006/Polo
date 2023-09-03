@@ -5,11 +5,27 @@
     qty: 0,
     total:0
 }
+var product = {
+    productId: 0,
+    quantity: 0,
+    name: "",
+    price: 0,
+    categories: []
+
+}
+var productList=[]
+var  productAttributesList=[]
+var productAttributes = {
+    productAttributesId: 0,
+    Category: "",
+    name: "",
+    price: 0,
+    productId:0
+}
 let sub = 0;
 let tax = 0;
 let total = 0;
 let discount = 0;
-var OrderList = [];
 var Customer = {
     id: 0,
     firstName: "",
@@ -57,12 +73,13 @@ function save() {
         var c = $("a.nav-link.active").eq(0).data('mode')
         orders.mode = c
         orders.invoiceNumber = parseInt(1 + Math.floor(Math.random() * 6))
-        orders.saleOrderItem=[]
-        for (let i = 0; i < OrderList.length; i++) {
+        orders.saleOrderItem = []
+        for (let i = 0; i < productList.length; i++) {
             orders.saleOrderItem.push({
-                productId: OrderList[i].id,
-                quantity: OrderList[i].qty,
-                total: OrderList[i].total,
+                productId: productList[i].productId,
+                quantity: productList[i].quantity,
+                total: productList[i].price,
+                saleItemAtrributes: productList[i].categories
             });
             Post("/Order/SaveOrder", { orders: orders }).then(function (d) {
                 debugger;
@@ -76,6 +93,79 @@ function save() {
         }
     }
 }
+function AddToCart() {
+    debugger
+    product = {}
+    product.productId =parseInt($('#productId').val())
+    product.price = parseInt($('#qtyprice').html())
+    product.name = $("#exampleModalScrollableTitle").text()
+    product.quantity = $('#touchcounter').val()
+    var checkboxes = $('.custom-control-input')
+    for (var i = 0; i < checkboxes.length; i++) {
+        // And stick the checked ones onto an array...
+        if (checkboxes[i].checked == true && !checkboxes[i].className.includes("theme-choice")) {
+            debugger
+            productAttributesList=[]
+            productAttributes = {}
+            productAttributes.productId = product.productId
+            productAttributes.productAttributesId = checkboxes[i].dataset.id
+            productAttributes.name = checkboxes[i].dataset.name
+            productAttributes.Category = checkboxes[i].dataset.category
+            productAttributes.price = checkboxes[i].dataset.productprice == "" ? 0 : parseInt(checkboxes[i].dataset.productprice)
+            productAttributesList.push(productAttributes);
+          
+        }
+    }
+    let attr;
+    for (var j = 0; j < productAttributesList.length; j++) {
+         attr = `<ul>
+                     <li>${productAttributesList[j].name}</li>
+                     <li>${productAttributesList[j].price}</li>
+                     </ul> `
+    }
+    product.categories = productAttributesList
+    productList.push(product)
+    sub = 0;
+    tax = 0;
+    total = 0;
+    discount = 0
+    $('#tax').val("")
+    $('#subtotal').val("")
+    $('#total').val("")
+    var value = $('#disc').val() === "" ? 0 : parseInt($('#disc').val());
+    for (let x of productList) {
+        sub += x.price;
+    }
+    if (value != 0) {
+        discount = ((value / 100) * sub);
+        sub = sub - discount;
+    }
+    tax = parseInt(sub / 10);
+    total = sub + tax;
+    $('#tax').val(tax)
+    $('#subtotal').val(sub)
+    $('#total').val(total)
+    $('#exampleModalScrollable').modal('hide');
+
+    let rowContent
+        = `<tr data-toggle="popover" data-html="true" data-trigger="hover" class="pop" id="${product.productId}">
+        <td><a href="javascript: void(0);" class="text-danger" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" onclick= "DeleteRow(${product.productId})"><i class="mdi mdi-close font-size-18"></i></a></td>
+       <td >${product.name}</td>
+       <td class="text-sm-right">${product.quantity}</td>
+       <td class="text-sm-right">${product.price}</td>
+     </tr>`;
+    $('#tbdata').append(rowContent);
+    $('.pop').attr('data-content', attr)
+}
+//function PopOver(id) {
+//    debugger
+//    var attributes=[]
+//    $.each(productAttributesList, function () {
+//        if (this.productId === id) {
+//            attributes = this.Categories
+//        }
+//    });
+//}
 function Search() {
     debugger
     var number = $("#number").val();
@@ -97,7 +187,7 @@ function PreBind() {
                         $('#v-pills-tab').append('<a class="nav-link mb-2 active" id="v-pills-' + d.data.product[i].category + '-tab" data-toggle="pill" href="#v-pills-' + d.data.product[i].category + '" role="tab" aria-controls="v-pills-' + d.data.product[i].category + '" aria-selected="true">' + d.data.product[i].category + '</a>');
                         $('#v-pills-tabContent').append('<div class="tab-pane fade show active" id="v-pills-' + d.data.product[i].category + '" role="tabpanel" aria-labelledby="v-pills-' + d.data.product[i].category + '-tab"></div> ')
                         $($.map(d.data.product[i].product, function (v, j) {
-                            $('#v-pills-' + d.data.product[i].category + '').append('<a class="data" href="javascript: void(0);" data-id="' + v.id + '" data-name="' + v.name + '" data-price="' + v.price + '" style = "padding:10px 0px 0px 0px" > <img src="uploads/' + v.imageUrl + ' " class="img-thumbnail"></a>')
+                            $('#v-pills-' + d.data.product[i].category + '').append('<div class=" col-md-4 div"><a class="data" href="javascript: void(0);" data-id="' + v.id + '" data-name="' + v.name + '" data-price="' + v.price + '" style = "padding:10px 0px 0px 0px;" ><img src="uploads/' + v.imageUrl + ' " class="img-thumbnail"><h6 style="font-size:11px">' + v.name + '</h6></a></div>')
                            
                         }));
                     }
@@ -105,41 +195,88 @@ function PreBind() {
                         $('#v-pills-tab').append('<a class="nav-link mb-2" id="v-pills-' + d.data.product[i].category + '-tab" data-toggle="pill" href="#v-pills-' + d.data.product[i].category + '" onclick="AddClass(e) role="tab" aria-controls="v-pills-' + d.data.product[i].category + '" aria-selected="false"><p>' + d.data.product[i].category + '</p></a>' );
                         $('#v-pills-tabContent').append('<div class="tab-pane fade" id="v-pills-' + d.data.product[i].category + '" role="tabpanel" aria-labelledby="v-pills-' + d.data.product[i].category + '-tab"></div> ')
                         $($.map(d.data.product[i].product, function (v, j) {
-                            $('#v-pills-' + d.data.product[i].category + '').append('<a class="data" href="javascript: void(0);" data-id="' + v.id + '" data-name="' + v.name + '" data-price="' + v.price + '" style = "padding:10px 0px 0px 0px" > <img src="uploads/' + v.imageUrl + ' " class="img-thumbnail"></a>')
+                            $('#v-pills-' + d.data.product[i].category + '').append('<div class=" col-md-4 div"><a class="data" href="javascript: void(0);" data-id="' + v.id + '" data-name="' + v.name + '" data-price="' + v.price + '" style = "padding:10px 0px 0px 0px;" ><img src="uploads/' + v.imageUrl + ' " class="img-thumbnail"><h6 class="text-center">' + v.name + '</h6></a></div>')
 
                         }));
                     }
                 }
                 else {
                     toastr["error"]("Categories can not be greater than 10");
-                }
-               
-                
+                }               
             }
-           
-           
-
         }
         else
             toastr["error"](d.detail);
     });
 }
+$(document).on("click", ".down", function (evt) {
+    var value = parseInt($('#touchcounter').val());
+    value = value - 1;
+    $('#touchcounter').val(value)
+    price = parseInt($(this).data("price"))
+    var total = value * price
+    $('#qtyprice').html(total);
+});
+$(document).on("click", ".up", function (evt) {
+    debugger
+    var value = parseInt($('#touchcounter').val());
+    value = value + 1;
+    $('#touchcounter').val(value)
+    price = parseInt($(this).data("price"))
+    var total = value * price
+    $('#qtyprice').html(total);
+});
 $(document).on("click", ".data", function (evt) {
     debugger
     evt.preventDefault();
     ClearModel();
     menu.id = $(this).data("id");
-    menu.name = $(this).data("name");
-    menu.price = $(this).data("price");
-    $('#keypad').modal('show')
+    Get("/Product/GetProductById?id=" + menu.id).then(function (d) {
+        debugger
+        if (d.success) {
+            debugger
+            $('#exampleModalScrollable').modal('show')
+            $('.counter').find('div').remove()
+            $('.check').find('div').remove()
+            $('#productId').val(d.data.product.id)
+            $('.counter').append('<div class="input-group"><div class="input-group-append"><button class="btn btn-secondary down" data-price="' + d.data.product.price + '" type="button">-</button></div><input type = "number" class= "form-control" value="1" id="touchcounter"><div class="input-group-append"><button class="btn btn-secondary up" data-price="' + d.data.product.price + '" type="button">+</button></div></div> ')
+            $('#qtyprice').html(d.data.product.price)
+            $("#exampleModalScrollableTitle").text(d.data.product.name)
+            for (let i = 0; i < d.data.attribute.length; i++) {
+                debugger
+                $('.check').append('<div class="card"><h7 class= "card-header mt-0" >' + d.data.attribute[i].category + '</h7><div class="card-body" id="v-'+ d.data.attribute[i].category+'" ></div></div>')
+                $(d.data.attribute[i].attributes).each(function (j, v) {
+                    debugger
+                    $("#" + CSS.escape('v-' + d.data.attribute[i].category + '')).append('<div class= "custom-control custom-checkbox custom-checkbox-danger mb-3"><input type="checkbox" data-id="' + v.id + '" data-category="' + v.category + '"  data-name="' + v.name + '" data-productprice=' + v.price + ' class="custom-control-input vc-' + d.data.attribute[i].category + '" id="' + v.name + '" value="' + v.id + '"><label class="custom-control-label col-md-12" for="' + v.name + '" >' + v.name + '<span style="float:right;text-align:right" class="col-md-6" >' + v.price + '</span ></label></div>')
+                });
+            }     
+        }
+    });
+});
+$(document).on("change", ".custom-control-input", function (evt) {
+    debugger
+    var c = evt.currentTarget.classList[1]
+    var price = parseInt($(this).data("productprice"))
+    var total = parseInt($('#qtyprice').html())
+    if (c.includes("(required)")) {
+        total = total + price
+        $('#qtyprice').html(total)
+        $("." + CSS.escape(c)).not(this).prop("checked", false);
+    }
+    else {
+        if (!$(this).is(":checked")) {
+            total = total - price
+        }
+        else {
+            total = total + price
+        }
+        $('#qtyprice').html(total)
+    }
+
 });
 function DeleteRow($rowToDel) {
-    debugger
     $('#' + $rowToDel + '').closest('tr').remove();
-    /*var row_index = $('#' + $rowToDel + '').index();*/
-
-    OrderList = OrderList.filter(function (el) { return el.id != $rowToDel; });
-   
+    productList = productList.filter(function (el) { return el.productId != $rowToDel; });
     sub = 0;
     tax = 0;
     total = 0;
@@ -148,8 +285,8 @@ function DeleteRow($rowToDel) {
     $('#subtotal').val("")
     $('#total').val("")
     var value = $('#disc').val() === "" ? 0 : parseInt($('#disc').val());
-    for (let x of OrderList) {
-        sub += x.total;
+    for (let x of productList) {
+        sub += x.price;
     }
     if (value != 0) {
         discount = ((value / 100) * sub);
@@ -163,95 +300,66 @@ function DeleteRow($rowToDel) {
 }
 function AddDisc() {
     debugger
-    sub = 0;
-    tax = 0;
-    total = 0;
-    discount = 0
-    $('#tax').val("")
-    $('#subtotal').val("")
-    $('#total').val("")
-    var value = parseInt($('#disc').val());
-    for (let x of OrderList) {
-        sub += x.total;
-    }
-    discount = ((value / 100) * sub);
-    sub = sub - discount;
-    tax = sub / 10;
-    total = sub + tax;
-    $('#tax').val(tax)
-    $('#subtotal').val(sub)
-    $('#total').val(total)
-
-}
-$(document).ready(function () {
-    PreBind();
-    const input_value = $("#qty");
-    $("#qty").keypress(function () {
-        return false;
-    });
-    $(".calc").click(function () {
-        let value = $(this).val();
-        field(value);
-    });
-    function field(value) {
-        input_value.val(input_value.val() + value);
-
-    }
-    $("#clear").click(function () {
-        input_value.val("");
-    });
-   
-    $("#enter").click(function () {
-        debugger
-        const add = {};
-        menu.qty = input_value.val();
-        menu.total = menu.price * menu.qty;
-        add.id = menu.id
-        add.name = menu.name
-        add.price = menu.price
-        add.qty = menu.qty
-        add.total = menu.total
-        OrderList.push(add);
+    if (productList.length != 0) {
         sub = 0;
         tax = 0;
         total = 0;
-        discount=0
+        discount = 0
         $('#tax').val("")
         $('#subtotal').val("")
         $('#total').val("")
-        var value = $('#disc').val() === "" ? 0 : parseInt($('#disc').val());
-        for (let x of OrderList) {
-            sub += x.total;  
+        var value = parseInt($('#disc').val());
+        for (let x of productList) {
+            sub += x.total;
         }
-        if (value != 0) {
-            discount = ((value / 100) * sub);
-            sub = sub - d;
-        }
-        tax = parseInt( sub / 10);
+        discount = ((value / 100) * sub);
+        sub = sub - discount;
+        tax = sub / 10;
         total = sub + tax;
         $('#tax').val(tax)
         $('#subtotal').val(sub)
         $('#total').val(total)
-        input_value.val("");
-        $('#keypad').modal('hide');
-        
-            let rowContent
-                = `<tr id="${menu.id}">
-                <td><a href="javascript: void(0);" class="text-danger" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" onclick= "DeleteRow(${menu.id})"><i class="mdi mdi-close font-size-18"></i></a></td>
-       <td >${menu.name}</td>
-       <td class="text-sm-right">${menu.price}</td>
-       <td class="text-sm-right">${menu.qty}</td>
-       <td class="text-sm-right">${menu.total}</td>
-     </tr>`;
-        $('#tbdata').append(rowContent);
-       
-        
+    }
+    else
+        toastr["error"]("please Enter product");
+}
+$(document).ready(function () {
+    PreBind();
+    const input_value = $("#qty");
+    //$('input[type="checkbox"]').click(function () {
+    //    debugger
+    //    $('input[type="checkbox"]').not(this).prop("checked", false);
+    //});
+    $("#qty").keypress(function () {
+        return false;
     });
+    //var $checks = $('input[type="checkbox"]');
+    //$checks.click(function () {
+    //    debugger
+    //    $checks.not(this).prop("checked", false);
+   // });
+    //$(".custom-control-input").click(function () {
+    //    debugger
+    //    $('.custom-control-input').not(this).prop('checked', false);
+    //});
 
+    //$(".calc").click(function () {
+    //    let value = $(this).val();
+    //    field(value);
+    //});
+    //function field(value) {
+    //    input_value.val(input_value.val() + value);
+
+    //}
+    //$("#clear").click(function () {
+    //    input_value.val("");
+    //});
+    $('[data-toggle="popover"]').popover({})
 });
+$('[data-toggle="popover"]').popover({})
 function Clear() {
     debugger
-    OrderList = [];
+    productList=[]
     $('#total').val("")
     $('#tax').val("")
     $('#subtotal').val("")
