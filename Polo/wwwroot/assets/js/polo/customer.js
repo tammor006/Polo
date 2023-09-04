@@ -28,7 +28,7 @@ function ClearCustomer() {
 }
 function ShowModal(Mode,Id) {
     debugger;
-    ClearModel();
+    ClearCustomer();
     if (Id==0) {
         $("#modal").modal('show');
         $("#myLargeModalLabel").text("Add Customer");
@@ -88,8 +88,7 @@ function ShowModal(Mode,Id) {
         });
     }
 }
-
-function saveCustomer(crud) {
+function performCustomerSaving(crud) {
     debugger;
     var parsleyForm = $('#createCustomer').parsley();
     parsleyForm.validate();
@@ -120,21 +119,38 @@ function saveCustomer(crud) {
             ClearCustomer();
             $(".modal").modal('hide');
             var type = $("#type").val()
-            if (type == "Add" || type=="Edit") {
+            if (type == "Add" || type == "Edit") {
                 $("#customerDatatable").dataTable().fnDestroy();
                 LoadTable();
                 toastr["success"](d.detail);
-            }
-            else {
-                
-                ShowModal(type,parseInt(Customer.number));
+            } else {
+                ShowModal(type, parseInt(Customer.number));
             }
         } else {
             toastr["error"](d.detail);
         }
     });
 }
+function saveCustomer(crud) {
+    debugger;
+    checkAddress(function (isWithinRadius) {
+        debugger;
+        if (isWithinRadius) {
+            performCustomerSaving(crud);
+        } else {
+            showMapModal();
+        }
+    });
+   }
+function showMapModal() {
+    // Open the modal
+    $("#radiusExceededModal").modal("show");
 
+    // Initialize the map inside the modal
+    initMap();
+    addPinpoint(providedLatitude, providedLongitude);
+    drawRadiusCircle(providedLatitude, providedLongitude, radiusInKm);
+}
 function LoadTable() {
     $("#customerDatatable").DataTable({
         'ajax': {
@@ -155,7 +171,7 @@ function LoadTable() {
                 "data": "id",
                 "render": function (data, type, row) {
                     return '<td>' +
-                        '<a href="javascript:void(0);" class="mr-3 text-primary" data-toggle="tooltip" data-placement="top" title="Edit" data-original-title="Edit" onclick="ShowModal(Edit,' + row.id + ')">' +
+                        '<a  class="mr-3 text-primary" data-toggle="tooltip" data-placement="top" title="Edit" data-original-title="Edit" onclick="ShowModal(Edit,' + row.id + ')">' +
                         '<i class="mdi mdi-pencil font-size-18"></i>' +
                         '</a>' +
                         '<a href="javascript:void(0);" class="text-danger" data-toggle="tooltip" data-placement="top" title="Delete" data-original-title="Delete" onclick="DeleteModal(' + row.id + ')">' +
@@ -211,7 +227,7 @@ $(document).ready(function () {
     });
 });
 function ValidateEmail() {
-    var email = document.getElementById("txtEmail").value;
+    var email = document.getElementById("Email").value;
     var lblError = document.getElementById("lblError");
     lblError.innerHTML = "";
     var expr = /^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
@@ -243,5 +259,16 @@ function toggleAvailableTime() {
     } else {
         availableTimeContainer.hide();
         $('#AvailableTime').prop('required', false);
+    }
+}
+function checkAddressFields() {
+    var street = document.getElementById("Street").value;
+    var city = document.getElementById("City").value;
+    var address = document.getElementById("Address").value;
+
+    if (!street || !city || !address) {
+        document.getElementById("validationError").innerHTML = "All address fields are required.";
+    } else {
+        document.getElementById("validationError").innerHTML = "";
     }
 }
