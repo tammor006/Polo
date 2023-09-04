@@ -13,8 +13,12 @@ var product = {
     categories: []
 
 }
+var categoryList = {
+    name: "",
+    attrList:[]
+}
 var productList=[]
-var  productAttributesList=[]
+var productAttributesList=[]
 var productAttributes = {
     productAttributesId: 0,
     Category: "",
@@ -59,6 +63,11 @@ function ClearOrder() {
     $("#address").val("")
     $("#email").val("")
 }
+$(function () {
+    $('[data-toggle="popover"]').popover({
+       
+    });
+});
 function save() {
     if (Customer.id == 0) {
         toastr["error"]("Please Add Customer")
@@ -94,18 +103,15 @@ function save() {
     }
 }
 function AddToCart() {
-    debugger
     product = {}
     product.productId =parseInt($('#productId').val())
     product.price = parseInt($('#qtyprice').html())
     product.name = $("#exampleModalScrollableTitle").text()
     product.quantity = $('#touchcounter').val()
     var checkboxes = $('.custom-control-input')
+    productAttributesList = []
     for (var i = 0; i < checkboxes.length; i++) {
-        // And stick the checked ones onto an array...
         if (checkboxes[i].checked == true && !checkboxes[i].className.includes("theme-choice")) {
-            debugger
-            productAttributesList=[]
             productAttributes = {}
             productAttributes.productId = product.productId
             productAttributes.productAttributesId = checkboxes[i].dataset.id
@@ -113,15 +119,35 @@ function AddToCart() {
             productAttributes.Category = checkboxes[i].dataset.category
             productAttributes.price = checkboxes[i].dataset.productprice == "" ? 0 : parseInt(checkboxes[i].dataset.productprice)
             productAttributesList.push(productAttributes);
-          
         }
     }
-    let attr;
-    for (var j = 0; j < productAttributesList.length; j++) {
-         attr = `<ul>
-                     <li>${productAttributesList[j].name}</li>
-                     <li>${productAttributesList[j].price}</li>
-                     </ul> `
+    var catList = []
+    var aaa=[]
+    for (var i = 0; i < productAttributesList.length; i++) {
+        debugger
+
+        if (!catList.includes(productAttributesList[i].Category) || catList.length == 0) {
+            categoryList = {}
+            catList.push(productAttributesList[i].Category)
+            categoryList.name = productAttributesList[i].Category
+            categoryList.attrList = productAttributesList.filter(function (el) { return el.Category == productAttributesList[i].Category; })
+            aaa.push(categoryList)
+        }
+    }
+    let attr = "";
+    for (var j = 0; j < aaa.length; j++) {
+        let a = "";
+         a = `<span>${aaa[j].name}</span>` 
+        let b = ""
+        for (var i = 0;i < aaa[j].attrList.length; i++) {
+            b = `<ul class="nav nav-pills nav-justified">
+                     <li class="nav-item waves-effect waves-light">${aaa[j].attrList[i].name}</li>
+                     <li class="nav-item waves-effect waves-light">${aaa[j].attrList[i].price}</li>
+                     </ul>`
+            a=a+b
+        }
+        attr = attr + a
+
     }
     product.categories = productAttributesList
     productList.push(product)
@@ -148,14 +174,15 @@ function AddToCart() {
     $('#exampleModalScrollable').modal('hide');
 
     let rowContent
-        = `<tr data-toggle="popover" data-html="true" data-trigger="hover" class="pop" id="${product.productId}">
-        <td><a href="javascript: void(0);" class="text-danger" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete" onclick= "DeleteRow(${product.productId})"><i class="mdi mdi-close font-size-18"></i></a></td>
-       <td >${product.name}</td>
+        = `<tr data-toggle="popover" data-html="true" data-placement="left" data-trigger="hover" data-original-title="Add on" class="pop" id="${product.productId}">
+        <td><a href="javascript: void(0);" class="text-danger" onclick= "DeleteRow(${product.productId})"><i class="mdi mdi-close font-size-18"></i></a></td>
+       <td class="text-sm-left">${product.name}</td>
        <td class="text-sm-right">${product.quantity}</td>
        <td class="text-sm-right">${product.price}</td>
      </tr>`;
     $('#tbdata').append(rowContent);
     $('.pop').attr('data-content', attr)
+    $('[data-toggle="popover"]').popover()
 }
 //function PopOver(id) {
 //    debugger
@@ -247,7 +274,7 @@ $(document).on("click", ".data", function (evt) {
                 $('.check').append('<div class="card"><h7 class= "card-header mt-0" >' + d.data.attribute[i].category + '</h7><div class="card-body" id="v-'+ d.data.attribute[i].category+'" ></div></div>')
                 $(d.data.attribute[i].attributes).each(function (j, v) {
                     debugger
-                    $("#" + CSS.escape('v-' + d.data.attribute[i].category + '')).append('<div class= "custom-control custom-checkbox custom-checkbox-danger mb-3"><input type="checkbox" data-id="' + v.id + '" data-category="' + v.category + '"  data-name="' + v.name + '" data-productprice=' + v.price + ' class="custom-control-input vc-' + d.data.attribute[i].category + '" id="' + v.name + '" value="' + v.id + '"><label class="custom-control-label col-md-12" for="' + v.name + '" >' + v.name + '<span style="float:right;text-align:right" class="col-md-6" >' + v.price + '</span ></label></div>')
+                    $("#" + CSS.escape('v-' + d.data.attribute[i].category + '')).append('<div class= "custom-control custom-checkbox custom-checkbox-danger mb-3"><input type="checkbox" data-id="' + v.id + '" data-category="' + d.data.attribute[i].category + '"  data-name="' + v.name + '" data-productprice=' + v.price + ' class="custom-control-input vc-' + d.data.attribute[i].category + '" id="' + v.name + '" value="' + v.id + '"><label class="custom-control-label col-md-12" for="' + v.name + '" >' + v.name + '<span style="float:right;text-align:right" class="col-md-6" >' + v.price + '</span ></label></div>')
                 });
             }     
         }
@@ -354,9 +381,7 @@ $(document).ready(function () {
     //$("#clear").click(function () {
     //    input_value.val("");
     //});
-    $('[data-toggle="popover"]').popover({})
 });
-$('[data-toggle="popover"]').popover({})
 function Clear() {
     debugger
     productList=[]
