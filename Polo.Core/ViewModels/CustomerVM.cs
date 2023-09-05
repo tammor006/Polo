@@ -13,5 +13,7 @@ namespace Polo.Core.ViewModels
         public string Address { get; set; }
         public string Number { get; set; }
         public string Email { get; set; }
+        public string City { get; set; }
+        public string Street { get; set; }
     }
 }

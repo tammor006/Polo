@@ -24,4 +24,18 @@ namespace Polo.Infrastructure.Utilities
         public static string SuccessMessage = "Request processed successfully";
         public static string AccountCreationMessage = "Registered successfully";
     }
+    public class SelectList
+    {
+        public string Id { get; set; }
+        public string Code { get; set; }
+        public string Type { get; set; }
+        public bool IsShow { get; set; }
+        public int SortOrder { get; set; }
+        public string Name { get; set; }
+        public string ShortDescription { get; set; }
+        public string StrScheduleDate { get; set; }
+        public string StrStartTime { get; set; }
+        public string StrEndTime { get; set; }
+        public string Comments { get; set; }
+    }
 }

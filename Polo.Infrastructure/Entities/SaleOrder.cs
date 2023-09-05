@@ -27,5 +27,10 @@ namespace Polo.Infrastructure.Entities
         public DateTime UpdatedDate { get; set; }
         public string? Mode { get; set; }
         public virtual ICollection<SaleOrderItem> SaleOrderItem { get; set; }
+        public string DeliveryType { get; set; }
+        public DateTime? AvailableTime { get; set; }
+        public string PaymentType { get; set; }
+        [NotMapped]
+        public string StrAvailableTime { get; set; }
     }
 }

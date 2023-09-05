@@ -37,10 +37,6 @@ namespace Polo.Core.Repositories
                         foundCustomer.City = customer.City;
                         foundCustomer.Number = customer.Number;
                         foundCustomer.Email = customer.Email;
-                        foundCustomer.OrderType = customer.OrderType;
-                        foundCustomer.DeliveryType = customer.DeliveryType;
-                        foundCustomer.AvailableTime = customer.AvailableTime;
-                        foundCustomer.PaymentType = customer.PaymentType;
                         foundCustomer.UpdatedDate = DateTime.Now;
                         foundCustomer.UpdatedBy = userId.ToString();
 
@@ -60,6 +56,7 @@ namespace Polo.Core.Repositories
                 {
                     customer.CreatedDate = DateTime.Now;
                     customer.CreatedBy = userId.ToString();
+                    customer.IsActive = true;
                     _db.Add(customer);
                     _db.SaveChanges();
 

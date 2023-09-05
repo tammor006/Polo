@@ -1,8 +1,9 @@
-﻿const providedLatitude = 32.192524447521336;
-const providedLongitude = 74.1898098789401;
+﻿const providedLatitude = 31.39162053915295;
+const providedLongitude = 73.10660837762082;
 const radiusInKm = 5;
 let map;
 let circle;
+
 
 function initMap() {
     map = new google.maps.Map(document.getElementById("map"), {
@@ -11,19 +12,18 @@ function initMap() {
     });
 }
 function checkAddress(callback) {
-    const street = $("#Street").val();
-    const city = $("#City").val();
-    const postalCode = $("#Address").val();
+   const street = $("#Street").val();
+   const city = $("#City").val();
+   const area = $("#Address").val();
     const geocoder = new google.maps.Geocoder();
-    if (!street || !city || !postalCode) {
+    if (!street || !city || !area) {
         document.getElementById("validationError").innerHTML = "All address fields are required.";
         return;
     } else {
         document.getElementById("validationError").innerHTML = "";
     }
-    const userAddress = `${street}, ${city}, ${postalCode}`;
-
-    geocoder.geocode({ address: userAddress }, function (results, status) {
+    geocoder.geocode({ address: street +area + city }, function (results, status) {
+        debugger
         if (status === google.maps.GeocoderStatus.OK) {
             const userLatitude = results[0].geometry.location.lat();
             const userLongitude = results[0].geometry.location.lng();
@@ -33,11 +33,12 @@ function checkAddress(callback) {
             if (distance <= radiusInKm) {
                 callback(true);
             } else {
+                toastr["warning"]("Address is outside the 5km radius");
                 // Address is outside the 5km radius
                 callback(false);
             }
         } else {
-            console.error("Geocoding failed. Please check your address.");
+            toastr["error"]("Geocoding failed. Please check your address.");
             callback(false);
         }
     });

@@ -38,23 +38,22 @@ namespace Polo.Controllers
                 foreach (var customer in customers)
                 {
                     var paymentType = "";
-                    var orderType = customer.OrderType != null ? Enum.GetName(typeof(OrderType), customer.OrderType) : null;
-                    var deliveryType = customer.DeliveryType != null ? Enum.GetName(typeof(DeliveryType), customer.DeliveryType) : null;
+         
                     var address = $"{customer.Street}, {customer.City}, {customer.Address}";
-                    var availableTime = customer.AvailableTime != null ? customer.AvailableTime : null ;
+                   // var availableTime = customer.AvailableTime != null ? customer.AvailableTime : null ;
 
-                    if (orderType == OrderType.Pickup.ToString())
-                    {
-                        paymentType = "Card at Pickup Counter";
-                    }
-                    else if (orderType == OrderType.Delivery.ToString() && customer.PaymentType == (int)PaymentType.Card)
-                    {
-                        paymentType = "Card to Delivery Person";
-                    }
-                    else
-                    {
-                        paymentType = Enum.GetName(typeof(PaymentType), customer.PaymentType);
-                    }
+                    //if (orderType == OrderType.Pickup.ToString())
+                    //{
+                    //    paymentType = "Card at Pickup Counter";
+                    //}
+                    //else if (orderType == OrderType.Delivery.ToString() && customer.PaymentType == (int)PaymentType.Card)
+                    //{
+                    //    paymentType = "Card to Delivery Person";
+                    //}
+                    //else
+                    //{
+                    //    paymentType = Enum.GetName(typeof(PaymentType), customer.PaymentType);
+                    //}
 
                     var customerDTO = new CustomerDTO
                     {
@@ -63,9 +62,9 @@ namespace Polo.Controllers
                         Address = address,
                         Number = customer.Number,
                         Email = customer.Email,
-                        OrderType = orderType,
-                        DeliveryType = deliveryType,
-                        AvailableTime = availableTime,
+                        //OrderType = orderType,
+                        //DeliveryType = deliveryType,
+                        //AvailableTime = availableTime,
                         PaymentType = paymentType,
                     };
 

@@ -1,11 +1,4 @@
-﻿@using Polo.Core.Enum;
-@{
-    var paymentTypes = Enum.GetValues(typeof(PaymentType)).Cast<PaymentType>();
-    var orderTypes = Enum.GetValues(typeof(OrderType)).Cast<OrderType>();
-    var deliverytypes = Enum.GetValues(typeof(DeliveryType)).Cast<DeliveryType>();
-}
-
-<div id="modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+﻿<div id="modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -39,73 +32,30 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label for="OrderType">Order Type</label>
-                                <select id="OrderType" class="form-control" required onchange="toggleAddressFields()">
-                                    @foreach (var orderType in orderTypes)
-                                    {
-                                        <option value="@((int)orderType)">@orderType</option>
-                                    }
-                                </select>
+                                <label for="Number">Number</label>
+                                <input id="Number" type="text" class="form-control" required placeholder="e.g +9230983293">
+                                <div class="invalid-feedback">Unknown phone number. Please use a local phone number or a number that includes the international country code (e.g., +1 for US).</div>
                             </div>
                         </div>
-                        <div class="row col-sm-12" id="addressFields" style="display:none;">
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <label for="Street">Street</label>
                                     <input id="Street" type="text" class="form-control" placeholder="enter street number or name" onkeyup="checkAddressFields()">
                                 </div>
                             </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label for="Address">Area</label>
+                                <input id="Address" type="text" class="form-control" placeholder="enter postal code, block, area" onkeyup="checkAddressFields()">
+                            </div>
+                        </div>
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <label for="City">City</label>
                                     <input id="City" type="text" class="form-control" placeholder="enter city" onkeyup="checkAddressFields()">
                                 </div>
                             </div>
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <label for="Address">Address</label>
-                                    <input id="Address" type="text" class="form-control" placeholder="enter postal code, block, area" onkeyup="checkAddressFields()">
-                                </div>
-                            </div>
                             <div id="validationError" style="color: red;"></div>
-                        </div>
-
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label for="Number">Number</label>
-                                <input id="Number" type="text" class="form-control" required placeholder="e.g +9230983293">
-                                <div class="invalid-feedback">Unknown phone number. Please use a local phone number or a number that includes the international country code (e.g., +1 for US).</div>
-                            </div>
-                        </div>
-
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label for="DeliveryType">Delivery Type</label>
-                                <select id="DeliveryType" class="form-control" onchange="toggleAvailableTime()" required>
-                                    @foreach (var deliveryType in deliverytypes)
-                                    {
-                                        <option value="@((int)deliveryType)">@deliveryType</option>
-                                    }
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-sm-6" id="availableTimeContainer" style="display:none;">
-                            <div class="form-group">
-                                <label for="AvailableTime">Available Time</label>
-                                <input id="AvailableTime" type="datetime-local" class="form-control">
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label for="PaymentType">Payment Type</label>
-                                <select id="PaymentType" class="form-control" required>
-                                    @foreach (var paymentType in paymentTypes)
-                                    {
-                                        <option value="@((int)paymentType)">@paymentType</option>
-                                    }
-                                </select>
-                            </div>
-                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">

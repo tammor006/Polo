@@ -50,6 +50,8 @@ namespace Polo.Core.Repositories
             customer.Name = cust.FirstName + " " + cust.LastName;
             customer.Number = cust.Number;
             customer.Email = cust.Email;
+            customer.Street = cust.Street;
+            customer.City = cust.City;
             response.Success = true;
             response.data = customer;
             return response;
@@ -62,6 +64,7 @@ namespace Polo.Core.Repositories
                 var orderList = new List<SaleItemAtrributes>();
                 orders.CreatedDate = DateTime.Now;
                 orders.CreatedBy = userId.ToString();
+                orders.AvailableTime = orders.StrAvailableTime.DbDate();
                 _db.Add(orders);
                 if (orders.SaleOrderItem != null && orders.SaleOrderItem.Count > 0)
                 {

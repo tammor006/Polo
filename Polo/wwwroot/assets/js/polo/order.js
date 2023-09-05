@@ -50,6 +50,9 @@ var orders = {
     total: 0,
     customerId:0,
     invoiceNumber: 0,
+    deliveryType: "",
+    StrAvailableTime: "",
+    paymentType: "",
     saleOrderItem:[]
 }
 function ClearOrder() {
@@ -62,6 +65,10 @@ function ClearOrder() {
     $("#name").val("");
     $("#address").val("")
     $("#email").val("")
+    $('#paymenttype').val("");
+    $('#deliverytype').val("");
+    $('#availabletime').val("")
+    $('#availabletime').hide();
 }
 $(function () {
     $('[data-toggle="popover"]').popover({
@@ -69,9 +76,15 @@ $(function () {
     });
 });
 function save() {
-    if (Customer.id == 0) {
+    orders.paymentType = $('#paymenttype option:selected').val()
+    orders.deliveryType = $('#deliverytype option:selected').val()
+    orders.strAvailableTime = $('#availabletime').val();
+    if (Customer.id == 0) 
         toastr["error"]("Please Add Customer")
-    }
+    else if (orders.deliveryType == "")
+        toastr["error"]("Please Add Delivery Type")
+    else if (orders.paymentType == "") 
+        toastr["error"]("Please Add Payment Type")
     else {
         debugger
         orders.total = $("#total").val();
@@ -176,8 +189,7 @@ function AddToCart() {
     let rowContent
         = `<tr data-toggle="popover" data-html="true" data-placement="left" data-trigger="hover" data-original-title="Add on" class="pop" id="${product.productId}">
         <td><a href="javascript: void(0);" class="text-danger" onclick= "DeleteRow(${product.productId})"><i class="mdi mdi-close font-size-18"></i></a></td>
-       <td class="text-sm-left">${product.name}</td>
-       <td class="text-sm-right">${product.quantity}</td>
+       <td class="text-sm-left">${product.quantity} X ${product.name}</td>
        <td class="text-sm-right">${product.price}</td>
      </tr>`;
     $('#tbdata').append(rowContent);
@@ -213,10 +225,10 @@ function PreBind() {
                     if (div.childElementCount === 0) {
                         $('#v-pills-tab').append('<a class="nav-link mb-2 active" id="v-pills-' + d.data.product[i].category + '-tab" data-toggle="pill" href="#v-pills-' + d.data.product[i].category + '" role="tab" aria-controls="v-pills-' + d.data.product[i].category + '" aria-selected="true">' + d.data.product[i].category + '</a>');
                         $('#v-pills-tabContent').append('<div class="tab-pane fade show active" id="v-pills-' + d.data.product[i].category + '" role="tabpanel" aria-labelledby="v-pills-' + d.data.product[i].category + '-tab"></div> ')
-                        $($.map(d.data.product[i].product, function (v, j) {
+                        $.each(d.data.product[i].product, function (j,v) {
                             $('#v-pills-' + d.data.product[i].category + '').append('<div class=" col-md-4 div"><a class="data" href="javascript: void(0);" data-id="' + v.id + '" data-name="' + v.name + '" data-price="' + v.price + '" style = "padding:10px 0px 0px 0px;" ><img src="uploads/' + v.imageUrl + ' " class="img-thumbnail"><h6 style="font-size:11px">' + v.name + '</h6></a></div>')
                            
-                        }));
+                        });
                     }
                     else {
                         $('#v-pills-tab').append('<a class="nav-link mb-2" id="v-pills-' + d.data.product[i].category + '-tab" data-toggle="pill" href="#v-pills-' + d.data.product[i].category + '" onclick="AddClass(e) role="tab" aria-controls="v-pills-' + d.data.product[i].category + '" aria-selected="false"><p>' + d.data.product[i].category + '</p></a>' );
@@ -397,4 +409,15 @@ function ClearModel() {
     menu.price = 0;
     menu.qty = 0
     menu.total = 0
+}
+function toggleAvailableTime() {
+    debugger
+    var deliveryType = $('#deliverytype').val();
+    var availabletime = $('#availabletime')
+
+    if (deliveryType === 'Later') {
+        availabletime.show();
+    } else {
+        availabletime.hide();
+    }
 }

@@ -7,10 +7,6 @@
     address: "",
     number: "",
     email: "",
-    orderType : "",
-    deliveryType: "",
-    availableTime : "",
-    paymentType: "",
 };
 
 function ClearCustomer() {
@@ -21,10 +17,6 @@ function ClearCustomer() {
     $("#Address").val("");
     $("#Number").val("");
     $("#Email").val("");
-    $("#OrderType").val("");
-    $("#DeliveryType").val("");
-    $("#AvailableTime").val("");
-    $("#PaymentType").val("");
 }
 function ShowModal(Mode,Id) {
     debugger;
@@ -46,12 +38,6 @@ function ShowModal(Mode,Id) {
                 Customer.address = d.data.customer.address;
                 Customer.number = d.data.customer.number;
                 Customer.email = d.data.customer.email;
-                Customer.orderType = d.data.customer.orderType;
-                Customer.deliveryType = d.data.customer.deliveryType;
-                Customer.availableTime = d.data.customer.availableTime;
-                Customer.paymentType = d.data.customer.paymentType;
-               /* Customer.deliveryTime = d.data.customer.deliveryTime;*/
-
                 $("#FirstName").val(Customer.firstName);
                 $("#LastName").val(Customer.lastName);
                 $("#Street").val(Customer.street);
@@ -59,10 +45,6 @@ function ShowModal(Mode,Id) {
                 $("#Address").val(Customer.address);
                 $("#Number").val(Customer.number);
                 $("#Email").val(Customer.email);
-                $("#OrderType").val(Customer.orderType);
-                $("#DeliveryType").val(Customer.deliveryType);
-                $("#AvailableTime").val(Customer.availableTime);
-                $("#PaymentType").val(Customer.paymentType);
                 $("#type").val(Mode)
                 $("#modal").modal('show');
                 $("#myLargeModalLabel").text("Edit Customer");
@@ -76,12 +58,14 @@ function ShowModal(Mode,Id) {
                 Customer.id = d.data.custId;
                 Customer.name = d.data.name;
                 Customer.address = d.data.address;
+                Customer.city = d.data.city;
+                Customer.street = d.data.street;
                 Customer.number = d.data.number;
                 Customer.email = d.data.email;
                 $("#number").val(Customer.number);
                 $("#email").val(Customer.email);
                 $("#name").val(Customer.name);
-                $("#address").val(Customer.address);
+                $("#address").val(Customer.street + Customer.address + ","+ Customer.city );
 
 
             }
@@ -108,10 +92,7 @@ function performCustomerSaving(crud) {
     Customer.address = $("#Address").val();
     Customer.number = $("#Number").val();
     Customer.email = $("#Email").val();
-    Customer.orderType = $("#OrderType").val();
-    Customer.deliveryType = $("#DeliveryType").val();
-    Customer.availableTime = $("#AvailableTime").val();
-    Customer.paymentType = $("#PaymentType").val();
+
 
     Post("/Customer/SaveCustomer", { customer: Customer }).then(function (d) {
         debugger;
@@ -163,10 +144,6 @@ function LoadTable() {
             { "data": "address" },
             { "data": "number" },
             { "data": "email" },
-            { "data": "orderType" },
-            { "data": "deliveryType" },
-            { "data": "availableTime" },
-            { "data": "paymentType" },
             {
                 "data": "id",
                 "render": function (data, type, row) {
@@ -249,18 +226,6 @@ function toggleAddressFields() {
     }
 }
 
-function toggleAvailableTime() {
-    var deliveryType = $('#DeliveryType').val();
-    var availableTimeContainer = $('#availableTimeContainer');
-
-    if (deliveryType === '2') {
-        availableTimeContainer.show();
-        $('#AvailableTime').prop('required', true);
-    } else {
-        availableTimeContainer.hide();
-        $('#AvailableTime').prop('required', false);
-    }
-}
 function checkAddressFields() {
     var street = document.getElementById("Street").value;
     var city = document.getElementById("City").value;
