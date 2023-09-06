@@ -61,10 +61,10 @@ function ClearOrder() {
     Customer.address = "";
     Customer.number = "";
     Customer.email="",
-    $("#number").val("");
-    $("#name").val("");
-    $("#address").val("")
-    $("#email").val("")
+    $(".number").val("");
+    $(".name").val("");
+    $(".address").val("")
+    $(".email").val("")
     $('#paymenttype').val("");
     $('#deliverytype').val("");
     $('#availabletime').val("")
@@ -87,9 +87,9 @@ function save() {
         toastr["error"]("Please Add Payment Type")
     else {
         debugger
-        orders.total = $("#total").val();
-        orders.subTotal = $("#subtotal").val();
-        orders.tax = $("#tax").val();
+        orders.total = $(".total").val();
+        orders.subTotal = $(".subtotal").val();
+        orders.tax = $(".tax").val();
         orders.discount = discount;
         orders.customerId = Customer.id;
         var c = $("a.nav-link.active").eq(0).data('mode')
@@ -168,10 +168,10 @@ function AddToCart() {
     tax = 0;
     total = 0;
     discount = 0
-    $('#tax').val("")
-    $('#subtotal').val("")
-    $('#total').val("")
-    var value = $('#disc').val() === "" ? 0 : parseInt($('#disc').val());
+    $('.tax').val("")
+    $('.subtotal').val("")
+    $('.total').val("")
+    var value = $('.disc').val() === "" ? 0 : parseInt($('.disc').val());
     for (let x of productList) {
         sub += x.price;
     }
@@ -181,9 +181,9 @@ function AddToCart() {
     }
     tax = parseInt(sub / 10);
     total = sub + tax;
-    $('#tax').val(tax)
-    $('#subtotal').val(sub)
-    $('#total').val(total)
+    $('.tax').val(tax)
+    $('.subtotal').val(sub)
+    $('.total').val(total)
     $('#exampleModalScrollable').modal('hide');
 
     let rowContent
@@ -207,9 +207,8 @@ function AddToCart() {
 //}
 function Search() {
     debugger
-    var number = $("#number").val();
+    var number = $(".number").val();
     if (number !== "") {
-        number = parseInt(number);
         ShowModal("Number", number)
     }
     else
@@ -320,9 +319,9 @@ function DeleteRow($rowToDel) {
     tax = 0;
     total = 0;
     discount = 0
-    $('#tax').val("")
-    $('#subtotal').val("")
-    $('#total').val("")
+    $('.tax').val("")
+    $('.subtotal').val("")
+    $('.total').val("")
     var value = $('#disc').val() === "" ? 0 : parseInt($('#disc').val());
     for (let x of productList) {
         sub += x.price;
@@ -333,9 +332,9 @@ function DeleteRow($rowToDel) {
     }
     tax = parseInt(sub / 10);
     total = sub + tax;
-    $('#tax').val(tax)
-    $('#subtotal').val(sub)
-    $('#total').val(total)
+    $('.tax').val(tax)
+    $('.subtotal').val(sub)
+    $('.total').val(total)
 }
 function AddDisc() {
     debugger
@@ -344,10 +343,10 @@ function AddDisc() {
         tax = 0;
         total = 0;
         discount = 0
-        $('#tax').val("")
-        $('#subtotal').val("")
-        $('#total').val("")
-        var value = parseInt($('#disc').val());
+        $('.tax').val("")
+        $('.subtotal').val("")
+        $('.total').val("")
+        var value = parseInt($('.disc').val());
         for (let x of productList) {
             sub += x.total;
         }
@@ -355,9 +354,9 @@ function AddDisc() {
         sub = sub - discount;
         tax = sub / 10;
         total = sub + tax;
-        $('#tax').val(tax)
-        $('#subtotal').val(sub)
-        $('#total').val(total)
+        $('.tax').val(tax)
+        $('.subtotal').val(sub)
+        $('.total').val(total)
     }
     else
         toastr["error"]("please Enter product");
@@ -397,10 +396,10 @@ $(document).ready(function () {
 function Clear() {
     debugger
     productList=[]
-    $('#total').val("")
-    $('#tax').val("")
-    $('#subtotal').val("")
-    $('#disc').val("")
+    $('.total').val("")
+    $('.tax').val("")
+    $('.subtotal').val("")
+    $('.disc').val("")
     $('#tbdata').empty();
 }
 function ClearModel() {

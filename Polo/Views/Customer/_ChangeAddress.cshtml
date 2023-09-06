@@ -1,0 +1,44 @@
+﻿<div id="addressModal" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+             <h5 class="modal-title mt-0" id="myChangeAddress">Change Address</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <form method ="post" id="changeAddress" onSubmit="return false;" name="changeAddress" data-parsley-validate data-parsley-error-message>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label for="Street">Street</label>
+                                <input id="changestreet" type="text" class="form-control" placeholder="enter street number or name" required>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label for="Address">Area</label>
+                                <input id="changeaddress" type="text" class="form-control" placeholder="enter postal code, block, area" required>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label for="City">City</label>
+                                <input id="changecity" type="text" class="form-control" placeholder="enter city" required>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" onclick="saveAddress()" class="btn btn-primary mr-1 waves-effect waves-light">Save Changes</button>
+                    <button class="btn btn-secondary waves-effect" data-dismiss="modal" aria-label="Close">Cancel</button>
+                </div>
+            </form>
+           
+        </div>
+    </div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+

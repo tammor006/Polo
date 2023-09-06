@@ -98,7 +98,7 @@
                                     </div>
                                     <div class="col-6">
                                         <div class="input-group">
-                                            <input type="text" id="number" class="form-control" placeholder="Customer">
+                                            <input type="text" class="number form-control" placeholder="Customer">
                                             <div class="input-group-append">
                                                 <button class="btn btn-secondary" type="button" onclick="Search()">
                                                     <i class="fa fa-search"></i>
@@ -108,7 +108,7 @@
                                     </div>
                                     <div class="col-md-6">
                                             <div class="input-group">
-                                                <input type="number" id="disc" class="form-control" onchange="AddDisc()" placeholder="Disc">
+                                                <input type="number"  class=" disc form-control" onchange="AddDisc()" placeholder="Disc">
                                                 <div class="input-group-append">
                                                     <button class="btn btn-secondary" type="button" onclick="AddCouprn()">
                                                          + Coupen
@@ -118,28 +118,27 @@
                                     </div>
                                     <div class ="col-md-6">
                                         <div class="form-group">
-                                                <input id="name" readonly type="text" placeholder="Name" class="form-control">
+                                                <input  readonly type="text" placeholder="Name" class=" name form-control">
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                             <div class="form-group">
-                                                <input id="subtotal" readonly type="number" placeholder="Sub Total" class="form-control">
+                                                <input readonly type="number" placeholder="Sub Total" class="subtotal form-control">
                                             </div>
                                             <div class="form-group">
-                                                <input id="tax" readonly type="number" placeholder="Tax" class="form-control">
+                                                <input  readonly type="text" placeholder="Tax" class=" tax form-control">
                                             </div>
                                             <div class="form-group">
-                                                <input id="total" readonly type="number" placeholder="Total" class="form-control">
+                                                <input  readonly type="text" placeholder="Total" class="total form-control">
                                             </div>
                                     </div>
                                     <div class="col-md-6">
-                                           @* <div class="search-box mr-2 mb-2 d-inline-block">
-                                                <div class="position-relative">
-                                                    <a onclick="AddressModal()" class="col-md-12 btn btn-success btn-rounded waves-effect waves-light mb-2 mr-2">Change Address</a>
-                                                </div>
-                                            </div>*@
+                                         <div class="button-items" style="margin:2px">
+                                                <button onclick="AddressModal()" class="col-md-12 btn btn-success btn-rounded waves-effect waves-light" style="font-size:10px;padding:2px;margin-bottom:7px">Change Address</button>
+                                                <button onclick="showMapModal()" class="col-md-12 btn btn-success btn-rounded waves-effect waves-light" style="font-size:10px;padding:2px;margin-bottom: 7px !important">Map</button>
+                                         </div>
                                               <div class="form-group">
-                                                    <textarea id="address" readonly rows="4" placeholder="Address" class="form-control"></textarea>
+                                                <textarea readonly rows="3" placeholder="Address" class="address form-control"></textarea>
                                                 </div>
                                     </div>
                                     <div class="col-1"></div>
@@ -156,7 +155,7 @@
                                         </div>
                                         <div class="col-6">
                                             <div class="input-group">
-                                                <input type="text" id="number" class="form-control" placeholder="Customer">
+                                                <input type="text" class="number form-control" placeholder="Customer">
                                                 <div class="input-group-append">
                                                     <button class="btn btn-secondary" type="button" onclick="Search()">
                                                         <i class="fa fa-search"></i>
@@ -166,7 +165,7 @@
                                         </div>
                                         <div class="col-md-6">
                                             <div class="input-group">
-                                                <input type="number" id="disc" class="form-control" onchange="AddDisc()" placeholder="Disc">
+                                                <input type="number" class="disc form-control" onchange="AddDisc()" placeholder="Disc">
                                                 <div class="input-group-append">
                                                     <button class="btn btn-secondary" type="button" onclick="AddCouprn()">
                                                         + Coupen
@@ -176,23 +175,23 @@
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <input id="name" readonly type="text" placeholder="Name" class="form-control">
+                                                <input readonly type="text" placeholder="Name" class=" name form-control">
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <input id="subtotal" readonly type="number" placeholder="Sub Total" class="form-control">
+                                                <input readonly type="text" placeholder="Sub Total" class="subtotal form-control">
                                             </div>
                                             <div class="form-group">
-                                                <input id="tax" readonly type="number" placeholder="Tax" class="form-control">
+                                                <input readonly type="text" placeholder="Tax" class="tax form-control">
                                             </div>
                                             <div class="form-group">
-                                                <input id="total" readonly type="number" placeholder="Total" class="form-control">
+                                                <input readonly type="text" placeholder="Total" class=" total form-control">
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <input id="email" readonly type="text" placeholder="Email" class="form-control">
+                                                <input readonly type="text" placeholder="Email" class=" email form-control">
                                             </div>
                                         </div>
                                         <div class="col-1"></div>
@@ -229,11 +228,14 @@
           @*  <button>Print</button>*@
     </div>
     <!-- End Page-content -->
-@Html.Partial("~/Views/Order/_KeyPad.cshtml")
+@Html.Partial("~/Views/Order/_Map.cshtml")
+@Html.Partial("~/Views/Customer/_ChangeAddress.cshtml")
 @Html.Partial("~/Views/Customer/_AddorEdit.cshtml")
 @Html.Partial("~/Views/Order/_Product.cshtml")
 <script src="~/assets/js/polo/order.js?vs=@DateTime.Now.Ticks"></script>
 <script src="~/assets/js/polo/customer.js?vs=@DateTime.Now.Ticks"></script>
+<script src="~/assets/js/polo/map.js?vs=@DateTime.Now.Ticks"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBlwJzOHdkHJzVphRWKs9zIai33dQmydBg&callback=initMap"></script>
 
 
                                  '

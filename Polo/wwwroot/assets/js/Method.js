@@ -33,7 +33,23 @@ function Get(url) {
         }
     });
 }
-
+function GetById(url,data) {
+    return $.ajax({
+        method: "Get",
+        url: url,
+        data: data,
+        cache: false,
+        success: function (d) {
+            if ($.type(d) == "string" && d == "")
+                LoginNow()
+            else if ($.type(d) == "string")
+                AccessDenied();
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            ErrorMessage(errorMsg);
+        }
+    });
+}
 
 
 

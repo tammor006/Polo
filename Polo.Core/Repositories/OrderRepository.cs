@@ -40,10 +40,10 @@ namespace Polo.Core.Repositories
             return response;
         }
 
-        public Response GetCustomerById(double number)
+        public Response GetCustomerById(string number)
         {
             Response response = new Response();
-            var cust = _db.Customer.FirstOrDefault(x => x.Number == number.ToString());
+            var cust = _db.Customer.FirstOrDefault(x => x.Number ==number);
             CustomerVM customer = new CustomerVM();
             customer.CustId = cust.Id;
             customer.Address = cust.Address;

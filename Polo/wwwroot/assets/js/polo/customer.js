@@ -8,7 +8,7 @@
     number: "",
     email: "",
 };
-
+var number=""
 function ClearCustomer() {
     $("#FirstName").val("");
     $("#LastName").val("");
@@ -17,10 +17,18 @@ function ClearCustomer() {
     $("#Address").val("");
     $("#Number").val("");
     $("#Email").val("");
+    $('#createCustomer').parsley().reset();
+    $(".form-group").removeClass('has-error');
+}
+function ClearChangeCustomer() {
+    $("#changestreet").val("");
+    $("#changecity").val("");
+    $("#changeaddress").val("");
+    $('#changeAddress').parsley().reset();
+    $(".form-group").removeClass('has-error');
 }
 function ShowModal(Mode,Id) {
     debugger;
-    ClearCustomer();
     if (Id==0) {
         $("#modal").modal('show');
         $("#myLargeModalLabel").text("Add Customer");
@@ -48,11 +56,13 @@ function ShowModal(Mode,Id) {
                 $("#type").val(Mode)
                 $("#modal").modal('show');
                 $("#myLargeModalLabel").text("Edit Customer");
+                ClearCustomer();
             }
         });
     }
     else {
-        Get("/Order/GetCustomerById?number=" + Id).then(function (d) {
+        number = Id
+        GetById("/Order/GetCustomerById", { number: number }).then(function (d) {
             debugger
             if (d.success) {
                 Customer.id = d.data.custId;
@@ -62,17 +72,17 @@ function ShowModal(Mode,Id) {
                 Customer.street = d.data.street;
                 Customer.number = d.data.number;
                 Customer.email = d.data.email;
-                $("#number").val(Customer.number);
-                $("#email").val(Customer.email);
-                $("#name").val(Customer.name);
-                $("#address").val(Customer.street + Customer.address + ","+ Customer.city );
+                $(".number").val(Customer.number);
+                $(".email").val(Customer.email);
+                $(".name").val(Customer.name);
+                $(".address").val(Customer.street + Customer.address + ","+ Customer.city );
 
 
             }
         });
     }
 }
-function performCustomerSaving(crud) {
+function performCustomerSaving() {
     debugger;
     var parsleyForm = $('#createCustomer').parsley();
     parsleyForm.validate();
@@ -105,32 +115,36 @@ function performCustomerSaving(crud) {
                 LoadTable();
                 toastr["success"](d.detail);
             } else {
-                ShowModal(type, parseInt(Customer.number));
+                ShowModal(type, Customer.number);
             }
         } else {
             toastr["error"](d.detail);
         }
     });
 }
-function saveCustomer(crud) {
+function saveCustomer() {
     debugger;
     checkAddress(function (isWithinRadius) {
         debugger;
         if (isWithinRadius) {
-            performCustomerSaving(crud);
+            performCustomerSaving();
         } else {
-            showMapModal();
+            toastr["warning"]("Geocoding failed. Please check your address.");
         }
     });
    }
 function showMapModal() {
-    // Open the modal
-    $("#radiusExceededModal").modal("show");
+    debugger
 
-    // Initialize the map inside the modal
-    initMap();
-    addPinpoint(providedLatitude, providedLongitude);
-    drawRadiusCircle(providedLatitude, providedLongitude, radiusInKm);
+    GetLatitudeLongitude({address: Customer.street + Customer.address + Customer.city }, function (results) {
+        debugger
+        if (results)
+            $("#radiusExceededModal").modal("show");
+        else {
+            $("#radiusExceededModal").modal("show");
+            toastr["warning"]("Please Change Address");
+        }
+});
 }
 function LoadTable() {
     $("#customerDatatable").DataTable({
@@ -236,4 +250,49 @@ function checkAddressFields() {
     } else {
         document.getElementById("validationError").innerHTML = "";
     }
+}
+function AddressModal() {
+    debugger
+    if ($("#number").val() !=="")
+        $('#addressModal').modal('show');
+    else
+        toastr["warning"]("Please enter the customer");
+}
+function saveAddress() {
+            var parsleyForm = $('#changeAddress').parsley();
+            parsleyForm.validate();
+            if (!parsleyForm.isValid()) {
+                $('.parsley-error').each(function () {
+                    $(this).parents(".form-group").addClass("has-error");
+                });
+                return false;
+            }
+            else {
+                $('.parsley-error').parents(".form-group").removeClass('has-error');
+                checkChangeAddress(function (status) {
+                    debugger;
+                    if (status) {
+                        Customer.street = $("#changestreet").val();
+                        Customer.city = $("#changecity").val();
+                        Customer.address = $("#changeaddress").val();
+                        Customer.number = parseInt($("#number").val())
+                        Post("/Customer/SaveAddress", { customer: Customer }).then(function (d) {
+                            debugger;
+                            if (d.success) {
+                                ClearChangeCustomer();
+                                $("#addressModal").modal('hide');
+                                ShowModal(type, parseInt(Customer.number));
+                            }
+                            else {
+                                toastr["error"](d.detail);
+                            }
+                        });
+                    }
+                    else {
+                        toastr["warning"]("Geocoding failed. Please check your address.");
+                    }
+                }); 
+            }
+           
+    
 }

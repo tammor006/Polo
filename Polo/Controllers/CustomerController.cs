@@ -109,6 +109,31 @@ namespace Polo.Controllers
             }
             return Json(response);
         }
+        public JsonResult SaveAddress(Customer customer)
+        {
+            Response response = new Response();
+
+            try
+            {
+                if (User.Identity.IsAuthenticated)
+                {
+                    string userId = _userManager.GetUserId(User);
+                    response = _customerRepository.SaveAddress(customer, userId);
+                }
+                else
+                {
+                    response.Success = false;
+                    response.Detail = "User not Authenticated";
+                    return Json(response);
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Detail = Message.ErrorMessage;
+            }
+            return Json(response);
+        }
 
         public JsonResult GetCustomerById(int id)
         {

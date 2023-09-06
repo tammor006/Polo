@@ -12,6 +12,6 @@ namespace Polo.Core.Repositories.Interfaces
     {
         Response PreBind();
         Response SaveOrder(SaleOrder orders, string userId);
-        Response GetCustomerById(double number);
+        Response GetCustomerById(string number);
     }
 }

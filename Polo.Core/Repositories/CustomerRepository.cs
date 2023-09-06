@@ -71,6 +71,42 @@ namespace Polo.Core.Repositories
             }
             return response;
         }
+        public Response SaveAddress(Customer customer, string userId)
+        {
+            Response response = new Response();
+            try
+            {
+                if (!customer.Id.IsNullOrZero())
+                {
+                    Customer foundCustomer = _db.Customer.FirstOrDefault(x => x.Number == customer.Number);
+                    if (foundCustomer != null)
+                    {
+                        foundCustomer.Address = customer.Address;
+                        foundCustomer.Street = customer.Street;
+                        foundCustomer.City = customer.City;
+                        foundCustomer.UpdatedDate = DateTime.Now;
+                        foundCustomer.UpdatedBy = userId.ToString();
+
+                        _db.Entry(foundCustomer).State = EntityState.Modified;
+                        _db.SaveChanges();
+
+                        response.Success = true;
+                        response.Detail = "Customer address is changed sucessfully";
+                    }
+                    else
+                    {
+                        response.Success = false;
+                        response.Detail = "Customer not found";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Detail = Message.ErrorMessage;
+            }
+            return response;
+        }
 
         public Response GetCustomerById(int id)
         {

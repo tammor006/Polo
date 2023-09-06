@@ -14,6 +14,7 @@ namespace Polo.Core.Repositories.Interfaces
     {
         List<Customer> GetAllCustomers();
         Response SaveCustomer(Customer customers, string userId);
+        Response SaveAddress(Customer customers, string userId);
         Response GetCustomerById(int id);
         Response DeleteCustomer(int id);
     }

@@ -37,7 +37,7 @@ namespace Polo.Controllers
             return Json(response);
         }
         [HttpGet]
-        public JsonResult GetCustomerById(double number)
+        public JsonResult GetCustomerById(string number)
         {
             Response response = new Response();
             try
