@@ -92,13 +92,13 @@
                                     <div class="col-6">
                                         <div class="search-box mr-2 mb-2 d-inline-block">
                                             <div class="position-relative">
-                                                    <a onclick="ShowModal('Number',0)" class=" col-md-12 btn btn-success btn-rounded waves-effect waves-light mb-2 mr-2"> <i class="mdi mdi-plus mr-1"></i> Add Customer</a>
+                                                    <a onclick="ShowModal('Number',0)" class=" col-md-12 btn btn-success waves-effect waves-light mb-2 mr-2"> <i class="mdi mdi-plus mr-1"></i> Add Customer</a>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-6">
                                         <div class="input-group">
-                                            <input type="text" class="number form-control" placeholder="Customer">
+                                            <input type="text" name="delnumber" class="number form-control" placeholder="Customer">
                                             <div class="input-group-append">
                                                 <button class="btn btn-secondary" type="button" onclick="Search()">
                                                     <i class="fa fa-search"></i>
@@ -108,7 +108,7 @@
                                     </div>
                                     <div class="col-md-6">
                                             <div class="input-group">
-                                                <input type="number"  class=" disc form-control" onchange="AddDisc()" placeholder="Disc">
+                                                <input type="number" name="deldiscount" class=" disc form-control" onchange="AddDisc()" placeholder="Disc">
                                                 <div class="input-group-append">
                                                     <button class="btn btn-secondary" type="button" onclick="AddCouprn()">
                                                          + Coupen
@@ -133,12 +133,14 @@
                                             </div>
                                     </div>
                                     <div class="col-md-6">
-                                         <div class="button-items" style="margin:2px">
-                                                <button onclick="AddressModal()" class="col-md-12 btn btn-success btn-rounded waves-effect waves-light" style="font-size:10px;padding:2px;margin-bottom:7px">Change Address</button>
-                                                <button onclick="showMapModal()" class="col-md-12 btn btn-success btn-rounded waves-effect waves-light" style="font-size:10px;padding:2px;margin-bottom: 7px !important">Map</button>
-                                         </div>
+                                        <div class="row">
+                                                <div class="button-items" style="margin:2px">
+                                                    <button onclick="AddressModal()" class="btn btn-dark waves-effect waves-light" style="padding:8px;">Change Address</button>
+                                                    <button onclick="showMapModal()" class="btn btn-light  waves-effect waves-light" style="padding:8px; margin-left:0px">Map</button>
+                                                </div>
+                                        </div>
                                               <div class="form-group">
-                                                <textarea readonly rows="3" placeholder="Address" class="address form-control"></textarea>
+                                                <textarea readonly rows="4" placeholder="Address" class="address form-control"></textarea>
                                                 </div>
                                     </div>
                                     <div class="col-1"></div>
@@ -155,7 +157,7 @@
                                         </div>
                                         <div class="col-6">
                                             <div class="input-group">
-                                                <input type="text" class="number form-control" placeholder="Customer">
+                                                <input type="text" name="picknumber" class="number form-control" placeholder="Customer">
                                                 <div class="input-group-append">
                                                     <button class="btn btn-secondary" type="button" onclick="Search()">
                                                         <i class="fa fa-search"></i>
@@ -165,7 +167,7 @@
                                         </div>
                                         <div class="col-md-6">
                                             <div class="input-group">
-                                                <input type="number" class="disc form-control" onchange="AddDisc()" placeholder="Disc">
+                                                <input type="number" name="pickdiscount" class="disc form-control" onchange="AddDisc()" placeholder="Disc">
                                                 <div class="input-group-append">
                                                     <button class="btn btn-secondary" type="button" onclick="AddCouprn()">
                                                         + Coupen

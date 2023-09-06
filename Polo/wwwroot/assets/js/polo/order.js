@@ -87,32 +87,43 @@ function save() {
         toastr["error"]("Please Add Payment Type")
     else {
         debugger
-        orders.total = $(".total").val();
-        orders.subTotal = $(".subtotal").val();
-        orders.tax = $(".tax").val();
-        orders.discount = discount;
-        orders.customerId = Customer.id;
-        var c = $("a.nav-link.active").eq(0).data('mode')
-        orders.mode = c
-        orders.invoiceNumber = parseInt(1 + Math.floor(Math.random() * 6))
-        orders.saleOrderItem = []
-        for (let i = 0; i < productList.length; i++) {
-            orders.saleOrderItem.push({
-                productId: productList[i].productId,
-                quantity: productList[i].quantity,
-                total: productList[i].price,
-                saleItemAtrributes: productList[i].categories
-            });
-            Post("/Order/SaveOrder", { orders: orders }).then(function (d) {
-                debugger;
-                if (d.success) {
-                    ClearOrder();
-                    Clear();
-                } else {
-                    toastr["error"](d.detail);
+        const address = $('.address').val()
+        GetLatitudeLongitude({ address: address }, function (results) {
+            debugger
+            if (results) {
+                orders.total = $(".total").val();
+                orders.subTotal = $(".subtotal").val();
+                orders.tax = $(".tax").val();
+                orders.discount = discount;
+                orders.customerId = Customer.id;
+                var c = $("a.nav-link.active").eq(0).data('mode')
+                orders.mode = c
+                orders.invoiceNumber = parseInt(1 + Math.floor(Math.random() * 6))
+                orders.saleOrderItem = []
+                for (let i = 0; i < productList.length; i++) {
+                    orders.saleOrderItem.push({
+                        productId: productList[i].productId,
+                        quantity: productList[i].quantity,
+                        total: productList[i].price,
+                        saleItemAtrributes: productList[i].categories
+                    });
                 }
-            });
-        }
+                Post("/Order/SaveOrder", { orders: orders }).then(function (d) {
+                    debugger;
+                    if (d.success) {
+                        ClearOrder();
+                        Clear();
+                    } else {
+                        toastr["error"](d.detail);
+                    }
+                });
+            }
+            else {
+                $("#radiusExceededModal").modal("show");
+                toastr["warning"]("Please Change Address");
+            }
+        });
+        
     }
 }
 function AddToCart() {
@@ -167,11 +178,17 @@ function AddToCart() {
     sub = 0;
     tax = 0;
     total = 0;
-    discount = 0
+    discount = 0;
+    var value;
     $('.tax').val("")
     $('.subtotal').val("")
     $('.total').val("")
-    var value = $('.disc').val() === "" ? 0 : parseInt($('.disc').val());
+    if (mode == "Delivery") {
+        value = $('input[name="deldiscount"]').val() === "" ? 0 : parseInt($('input[name="deldiscount"]').val());
+    }
+    else {
+        value = $('input[name="pickdiscount"]').val() === "" ? 0 : parseInt($('input[name="pickdiscount"]').val());
+    }
     for (let x of productList) {
         sub += x.price;
     }
@@ -207,12 +224,24 @@ function AddToCart() {
 //}
 function Search() {
     debugger
-    var number = $(".number").val();
-    if (number !== "") {
-        ShowModal("Number", number)
+    var number;
+    var mode = $("a.nav-link.active").eq(0).data('mode')
+    if (mode == "Delivery") {
+        number = $('input[name="delnumber"]').val();
+        if (number !== "") {
+            ShowModal("Number", number)
+        }
+        else
+            toastr["error"]("Please Enter Number");
     }
-    else
-    toastr["error"]("Please Enter Number");
+    else {
+        number = $('input[name="picknumber"]').val();
+        if (number !== "") {
+            ShowModal("Number", number)
+        }
+        else
+            toastr["error"]("Please Enter Number");
+    }
 }
 function PreBind() {
     Get('/Order/PreBind').then(function (d) {
@@ -318,11 +347,17 @@ function DeleteRow($rowToDel) {
     sub = 0;
     tax = 0;
     total = 0;
-    discount = 0
+    discount = 0;
+    var value;
     $('.tax').val("")
     $('.subtotal').val("")
     $('.total').val("")
-    var value = $('#disc').val() === "" ? 0 : parseInt($('#disc').val());
+    if (mode == "Delivery") {
+        value = $('input[name="deldiscount"]').val() === "" ? 0 : parseInt($('input[name="deldiscount"]').val());
+    }
+    else {
+        value = $('input[name="pickdiscount"]').val() === "" ? 0 : parseInt($('input[name="pickdiscount"]').val());
+    }
     for (let x of productList) {
         sub += x.price;
     }
@@ -342,11 +377,17 @@ function AddDisc() {
         sub = 0;
         tax = 0;
         total = 0;
-        discount = 0
+        discount = 0;
+        var value;
         $('.tax').val("")
         $('.subtotal').val("")
         $('.total').val("")
-        var value = parseInt($('.disc').val());
+        if (mode == "Delivery") {
+            value = $('input[name="deldiscount"]').val() === "" ? 0 : parseInt($('input[name="deldiscount"]').val());
+        }
+        else {
+            value = $('input[name="pickdiscount"]').val() === "" ? 0 : parseInt($('input[name="pickdiscount"]').val());
+        }
         for (let x of productList) {
             sub += x.total;
         }
