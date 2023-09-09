@@ -32,5 +32,6 @@ namespace Polo.Infrastructure.Entities
         public string PaymentType { get; set; }
         [NotMapped]
         public string StrAvailableTime { get; set; }
+       
     }
 }

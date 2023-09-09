@@ -78,7 +78,7 @@ namespace Polo.Infrastructure.Utilities
         {
             return String.IsNullOrEmpty(Convert.ToString(value)) ? string.Empty : value;
         }
-        public static string ToString(this object value)
+        public static string ToString(this object value, string v)
         {
             return Convert.ToString(value);
         }
@@ -110,7 +110,7 @@ namespace Polo.Infrastructure.Utilities
                         DateTime dt = DateTime.Parse(date, CultureInfo.GetCultureInfo("en-GB"));
                         //dt = DateTimeOffset.Parse(string.Format("{0:MM/dd/yyyy HH:mm}", dt)).DateTime;
                         if (toUtc)
-                            return DateTimeOffset.Parse(string.Format("{0:MM/dd/yyyy HH:mm}", dt)).DateTime;
+                            return DateTimeOffset.Parse(string.Format("{0:MM/dd/yyyy HH:mm}", dt)).DateTime.ToLocalTime();
 
                         else
                             return dt;// DateTime.Parse(date, CultureInfo.GetCultureInfo("en-GB"));

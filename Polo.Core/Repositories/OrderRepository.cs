@@ -64,7 +64,7 @@ namespace Polo.Core.Repositories
                 var orderList = new List<SaleItemAtrributes>();
                 orders.CreatedDate = DateTime.Now;
                 orders.CreatedBy = userId.ToString();
-                orders.AvailableTime = orders.StrAvailableTime.DbDate();
+                orders.AvailableTime =Convert.ToDateTime(orders.StrAvailableTime).ToLocalTime();
                 _db.Add(orders);
                 if (orders.SaleOrderItem != null && orders.SaleOrderItem.Count > 0)
                 {
@@ -72,6 +72,7 @@ namespace Polo.Core.Repositories
                     {
                         x.SaleOrderId = orders.Id;
                         x.InvoiceNumber = orders.InvoiceNumber;
+                        x.Product = _db.Product.FirstOrDefault(y => y.Id == x.ProductId);
                          x.SaleItemAtrributes.ToList().ForEach(y =>
                         {
                             y.SaleOrderItemId = x.Id;
@@ -84,11 +85,14 @@ namespace Polo.Core.Repositories
 
                 _db.SaveChanges();
                 response.Success = true;
+
                 response.data = new
                 {
                     Customer = _db.Customer.FirstOrDefault(x => x.Id == orders.CustomerId),
-                    SaleOrder = orders,
-                   
+                    Orders = orders,
+                    strCreatedDate = orders.CreatedDate.ToString("dd MMM, H:mm"),
+                    strAvailableTime=orders.AvailableTime.ToString("dd MMM, H:mm"),
+
                 };
                 
             }

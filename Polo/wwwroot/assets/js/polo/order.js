@@ -51,7 +51,7 @@ var orders = {
     customerId:0,
     invoiceNumber: 0,
     deliveryType: "",
-    StrAvailableTime: "",
+    strAvailableTime: "",
     paymentType: "",
     saleOrderItem:[]
 }
@@ -113,6 +113,7 @@ function save() {
                     if (d.success) {
                         ClearOrder();
                         Clear();
+                        PrintInvoice(d.data);
                     } else {
                         toastr["error"](d.detail);
                     }
@@ -125,6 +126,48 @@ function save() {
         });
         
     }
+}
+function PrintInvoice(InvoiceData) {
+    debugger
+    var data = InvoiceData;
+    $('#invoiceno').html(data.orders.invoiceNumber);
+    $('#invoicepost').html(data.strCreatedDate);
+    $('#invoiceacceipt').html(data.strCreatedDate);
+    $('#invoicecomplete').html(data.strAvailableTime);
+    $('#invoicefirst').html(data.customer.firstName);
+    $('#invoiceLast').html(data.customer.lastName);
+    $('#invoiceemail').html(data.customer.email);
+    $('#invoicenum').html(data.customer.number);
+    $('#invoicetax').html(data.orders.tax);
+    $('#invoicetotal').html(data.orders.total);
+    $('#invoicesubtotal').html(data.orders.subTotal);
+    $('#invoicaddress').html(data.customer.street + "&nbsp" + data.customer.address + "," + data.customer.city);
+    $('#invoicepaymentmethod').html(data.orders.paymentType);
+    if (discount !== 0) {
+        var value = data.orders.subTotal + data.orders.discount
+        value = value / data.orders.discount
+        $('#tableinvoice').after(' <ul style="border:1px solid black;padding: 5px"><li> ' + value + ' % discount</li><li style="float:right" id="invoicedisc"> ' + data.orders.discount + '</li></ul > ')
+    }
+    $.each(data.orders.saleOrderItem, function (i, x) {
+        $('#tbdinvoice').append(
+            '<tr>' +
+            '<td style="width:200px"  id="' + x.product.name + i + '">' + x.quantity + "x" + x.product.name + "<br/>&nbsp&nbsp" + '</td>' +
+            '<td style="text-align:right;width:60px;float:right">' + x.total + '</td>' +
+            '</tr>'
+        )
+        $.each(x.saleItemAtrributes, function (j, y) {
+            $("td[id='" + x.product.name + i + "']").append('<mark>' + y.price == 0 ? y.name + "" : y.name + "(" + y.price + ")" + '</mark><br/>&nbsp&nbsp')
+        });
+    });
+    var divToPrint = document.getElementById('DivIdToPrint');
+    var newWin = window.open('', 'Print-Window');
+    newWin.document.open();
+    newWin.document.write('<html><body onload="window.print()">' + divToPrint.innerHTML + '</body></html>');
+    newWin.document.close();
+    setTimeout(function () {
+        newWin.close();
+    }, 10);
+    /*$('#invoicemodal').modal("show")*/
 }
 function AddToCart() {
     product = {}
@@ -183,6 +226,7 @@ function AddToCart() {
     $('.tax').val("")
     $('.subtotal').val("")
     $('.total').val("")
+    var mode = $("a.nav-link.active").eq(0).data('mode')
     if (mode == "Delivery") {
         value = $('input[name="deldiscount"]').val() === "" ? 0 : parseInt($('input[name="deldiscount"]').val());
     }
@@ -281,7 +325,8 @@ $(document).on("click", ".down", function (evt) {
     value = value - 1;
     $('#touchcounter').val(value)
     price = parseInt($(this).data("price"))
-    var total = value * price
+    var total = parseInt($('#qtyprice').html())
+     total= total - price
     $('#qtyprice').html(total);
 });
 $(document).on("click", ".up", function (evt) {
@@ -290,7 +335,8 @@ $(document).on("click", ".up", function (evt) {
     value = value + 1;
     $('#touchcounter').val(value)
     price = parseInt($(this).data("price"))
-    var total = value * price
+    var total = parseInt($('#qtyprice').html())
+    total = total + price
     $('#qtyprice').html(total);
 });
 $(document).on("click", ".data", function (evt) {
@@ -352,6 +398,7 @@ function DeleteRow($rowToDel) {
     $('.tax').val("")
     $('.subtotal').val("")
     $('.total').val("")
+    var mode = $("a.nav-link.active").eq(0).data('mode')
     if (mode == "Delivery") {
         value = $('input[name="deldiscount"]').val() === "" ? 0 : parseInt($('input[name="deldiscount"]').val());
     }
@@ -382,6 +429,7 @@ function AddDisc() {
         $('.tax').val("")
         $('.subtotal').val("")
         $('.total').val("")
+        var mode = $("a.nav-link.active").eq(0).data('mode')
         if (mode == "Delivery") {
             value = $('input[name="deldiscount"]').val() === "" ? 0 : parseInt($('input[name="deldiscount"]').val());
         }
@@ -389,7 +437,7 @@ function AddDisc() {
             value = $('input[name="pickdiscount"]').val() === "" ? 0 : parseInt($('input[name="pickdiscount"]').val());
         }
         for (let x of productList) {
-            sub += x.total;
+            sub += x.price;
         }
         discount = ((value / 100) * sub);
         sub = sub - discount;
