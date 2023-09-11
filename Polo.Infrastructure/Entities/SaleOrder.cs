@@ -12,7 +12,7 @@ namespace Polo.Infrastructure.Entities
     {
         [Key]
         public int Id { get; set; }
-        public int InvoiceNumber { get; set; }
+        public string InvoiceNumber { get; set; }
         [ForeignKey("Customer")]
         public int CustomerId { get; set; }
         public virtual Customer Customer { get; set; }
@@ -28,7 +28,7 @@ namespace Polo.Infrastructure.Entities
         public string? Mode { get; set; }
         public virtual ICollection<SaleOrderItem> SaleOrderItem { get; set; }
         public string DeliveryType { get; set; }
-        public DateTime? AvailableTime { get; set; }
+        public DateTime AvailableTime { get; set; }
         public string PaymentType { get; set; }
         [NotMapped]
         public string StrAvailableTime { get; set; }

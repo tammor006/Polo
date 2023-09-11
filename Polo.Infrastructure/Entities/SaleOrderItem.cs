@@ -12,7 +12,7 @@ namespace Polo.Infrastructure.Entities
     {
         [Key]
         public int Id { get; set; }
-        public int InvoiceNumber { get; set; }
+        public string InvoiceNumber { get; set; }
         [ForeignKey("SaleOrder")]
         public int SaleOrderId { get; set; }
         public  virtual SaleOrder SaleOrder { get; set; }

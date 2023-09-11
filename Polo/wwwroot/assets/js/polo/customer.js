@@ -255,24 +255,11 @@ function checkAddressFields() {
     }
 }
 function AddressModal() {
-    debugger
-    var mode = $("a.nav-link.active").eq(0).data('mode')
-    if (mode == "Delivery") {
-        number = $('input[name="delnumber"]').val();
-        if (number !== "") {
+        if (Customer.id !== 0) {
             $('#addressModal').modal('show');
         }
         else
-            toastr["warning"]("Please enter the customer");
-    }
-    else if (mode == "Pickup") {
-        number = $('input[name="picknumber"]').val();
-        if (number !== "") {
-            $('#addressModal').modal('show');
-        }
-        else
-            toastr["warning"]("Please enter the customer");
-    }
+            toastr["warning"]("Please select the customer");
 }
 function saveAddress() {
             var parsleyForm = $('#changeAddress').parsley();

@@ -26,6 +26,7 @@ function PreBind() {
     });
 }
 function ClearModel() {
+    product = {};
     $("#barcode").val("");
     $("#productname").val("");
     $("#productdesc").val("");
@@ -38,9 +39,9 @@ function ClearModel() {
     $(".form-group").removeClass('has-error');
 }
 function ShowModal(Id) {
+    debugger
     ClearModel();
     Repeat();
-    PreBind();
     if (Id == 0) {
         $("#modal").modal('show');
         $("#myLargeModalLabel").text("Add Product");
@@ -58,17 +59,12 @@ function ShowModal(Id) {
                 Product.price = d.data.product.price;
                 Product.imageUrl = d.data.product.imageUrl;
                 Product.imageName = d.data.product.imageName;
-                document.getElementById("preview").src = "uploads/" + Product.imageUrl;
-                document.querySelector('input[type="file"]').val = Product.imageName;
-                //    const fileInput = document.querySelector('input[type="file"]');
-                //const myFile = new File(['Hello World!'], Product.imageName , {
-                //        type: 'text/plain',
-                //        lastModified: new Date(),
-                //    });
-                //    const dataTransfer = new DataTransfer();
-                //    dataTransfer.items.add(myFile);
-                //    fileInput.files = dataTransfer.files;
-                
+                if (Product.imageUrl !== "") {
+                    document.getElementById("preview").src = "uploads/" + Product.imageUrl;
+                    document.querySelector('input[type="file"]').val = Product.imageName;
+                }
+                else
+                    document.getElementById("preview").src = "https://placehold.it/120x80";
                 $("#barcode").val(Product.barCode);
                 $("#productname").val(Product.name);
                 $("#productdesc").val(Product.description);
@@ -84,9 +80,11 @@ function ShowModal(Id) {
 
 }
 function Repeat() {
+    debugger
+  var length=  $('.repeat .group-a').length
     $('.repeat').append(
-        '<div data-repeater-list="group-a" >' +
-        '<div data-repeater-item class= "row" >' +
+        '<div class="group-a" >' +
+        '<div  class= "row" >' +
         '<div class="form-group col-lg-3">' +
         '<label for="name">Attribute</label><input type="text" id="attr" name="untyped-input" class="form-control name" />' +
         '</div>' +
@@ -100,7 +98,7 @@ function Repeat() {
         '<label for="priceattr">Price</label><input type="number" id="priceattr" class="form-control price" />' +
         '</div>' +
         '<div class="button-items col-lg-3" style="margin-top:26px">' +
-        '<input  type="button" class="btn btn-success mt-3 mt-lg-0 add" value="Add" /><input data-repeater-delete type="button" class="btn btn-primary mt-3 mt-lg-0" value="Delete" />' +
+        '<input  type="button" class="btn btn-success mt-3 mt-lg-0 add" value="Add" /><input data-repeater-delete type="button" class="btn btn-danger mt-3 mt-lg-0 delete" value="Delete" />' +
         '</div>' +
         '</div>' +
         '</div > '
@@ -108,6 +106,11 @@ function Repeat() {
 }
 $(document).on('click', '.add', function () {
     Repeat(); 
+})
+$(document).on('click', '.delete', function () {
+    var length = $('.repeat .group-a').length
+    if (length !==1)
+    $(this).parent().parent().parent().remove();
 })
 function saveProduct() {
     debugger
@@ -308,4 +311,5 @@ $(document).ready(function () {
     //    dropdownParent: $('#modal')
     //});
     LoadTable();
+    PreBind();
 });

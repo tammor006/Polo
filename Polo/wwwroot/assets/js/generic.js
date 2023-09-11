@@ -114,6 +114,9 @@ function UnBlockUI(e) {
     //    $("#divLoader").fadeOut("slow");
 }
 $(function ($) {
+    //$('#availabletime').datetimepicker(
+    //    { format: 'DD/MM/YYYY H:mm',showTodayButton: true, showClear: true, showClose: true }
+    //);
     //$('.DateDOB').datetimepicker(
     //    {
     //        format: 'DD/MM/YYYY',
@@ -129,7 +132,7 @@ $(function ($) {
   //  $('.datetimepicker').datetimepicker({ format: 'DD/MM/YYYY H:mm', showTodayButton: true, showClear: true, showClose: true });*/
    // $('.datetimepicker-current').datetimepicker({ format: 'DD/MM/YYYY H:mm', defaultDate: new Date(), showTodayButton: true, showClear: true, showClose: true });*/
   //  $(".datepicker-current").datepicker({ format: 'DD/MM/YYYY', defaultDate: new Date(), showTodayButton: true, showClear: true, showClose: true, });
-    $(".datepicker-minToday").datepicker({ format: 'DD/MM/YYYY', minDate: new Date(), showTodayButton: true, showClear: true, showClose: true });
+   // $(".datepicker-minToday").datepicker({ format: 'DD/MM/YYYY', minDate: new Date(), showTodayButton: true, showClear: true, showClose: true });
    // $(".datetimepicker-minToday").datetimepicker({ format: 'DD/MM/YYYY H:mm', minDate: new Date(), showTodayButton: true, showClear: true, showClose: true });
   // $('.DateTo').datetimepicker({ format: 'DD/MM/YYYY H:mm', showTodayButton: true, showClear: true, showClose: true });
     //$('.DateFrom').datetimepicker(

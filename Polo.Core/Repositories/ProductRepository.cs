@@ -57,7 +57,7 @@ namespace Polo.Core.Repositories
                     foundProduct.UpdatedBy = userId.ToString();
                     foundProduct.Description = product.Description;
                     foundProduct.CategoryId = product.CategoryId;
-                    if (product.ImageUrl =="")
+                    if (files != null)
                     {
                         int i = 0;
                         IFormFile formFile = files[i];
@@ -94,7 +94,7 @@ namespace Polo.Core.Repositories
                 {
                     product.CreatedDate = DateTime.Now;
                     product.CreatedBy = userId.ToString();
-                    if (product.ImageName != null)
+                    if (files != null)
                     {
                         int i = 0;
                         IFormFile formFile = files[i];

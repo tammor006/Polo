@@ -49,7 +49,7 @@ var orders = {
     tax: 0,
     total: 0,
     customerId:0,
-    invoiceNumber: 0,
+    invoiceNumber: "",
     deliveryType: "",
     strAvailableTime: "",
     paymentType: "",
@@ -74,17 +74,24 @@ $(function () {
     $('[data-toggle="popover"]').popover({
        
     });
+    
 });
 function save() {
+    debugger
     orders.paymentType = $('#paymenttype option:selected').val()
     orders.deliveryType = $('#deliverytype option:selected').val()
     orders.strAvailableTime = $('#availabletime').val();
     if (Customer.id == 0) 
-        toastr["error"]("Please Add Customer")
+        toastr["warning"]("Please Add Customer")
     else if (orders.deliveryType == "")
-        toastr["error"]("Please Add Delivery Type")
+        toastr["warning"]("Please Add Delivery Type")
     else if (orders.paymentType == "") 
-        toastr["error"]("Please Add Payment Type")
+        toastr["warning"]("Please Add Payment Type")
+    else if (productList.length == 0) 
+        toastr["warning"]("Please Add Item")
+    else if (orders.deliveryType == "Later" && orders.strAvailableTime=="") {
+            toastr["warning"]("Please Enter Available Time")
+    }
     else {
         debugger
         const address = $('.address').val()
@@ -98,7 +105,7 @@ function save() {
                 orders.customerId = Customer.id;
                 var c = $("a.nav-link.active").eq(0).data('mode')
                 orders.mode = c
-                orders.invoiceNumber = parseInt(1 + Math.floor(Math.random() * 6))
+                orders.invoiceNumber = Math.random().toString(6).substring(2, 8)
                 orders.saleOrderItem = []
                 for (let i = 0; i < productList.length; i++) {
                     orders.saleOrderItem.push({
@@ -115,7 +122,7 @@ function save() {
                         Clear();
                         PrintInvoice(d.data);
                     } else {
-                        toastr["error"](d.detail);
+                        toastr["warning"](d.detail);
                     }
                 });
             }
@@ -148,6 +155,9 @@ function PrintInvoice(InvoiceData) {
         value = value / data.orders.discount
         $('#tableinvoice').after(' <ul style="border:1px solid black;padding: 5px"><li> ' + value + ' % discount</li><li style="float:right" id="invoicedisc"> ' + data.orders.discount + '</li></ul > ')
     }
+    if (data.orderTime != 0) {
+        $('#invoicepaymentmethod').after(' <ul style="background-color:black;border: 1px thin black;color:white;margin-bottom:10px;padding:2px 0px 2px 10px"><li>How Before Possible</li><li style="float:right" id="invoicedisc"> ' + data.orderTime + '</li></ul > ')
+    }
     $.each(data.orders.saleOrderItem, function (i, x) {
         $('#tbdinvoice').append(
             '<tr>' +
@@ -162,6 +172,7 @@ function PrintInvoice(InvoiceData) {
     var divToPrint = document.getElementById('DivIdToPrint');
     var newWin = window.open('', 'Print-Window');
     newWin.document.open();
+   // newWin.document.after();
     newWin.document.write('<html><body onload="window.print()">' + divToPrint.innerHTML + '</body></html>');
     newWin.document.close();
     setTimeout(function () {
@@ -171,7 +182,7 @@ function PrintInvoice(InvoiceData) {
 }
 function AddToCart() {
     product = {}
-    product.productId =parseInt($('#productId').val())
+    product.productId = parseInt($('#productId').val())
     product.price = parseInt($('#qtyprice').html())
     product.name = $("#exampleModalScrollableTitle").text()
     product.quantity = $('#touchcounter').val()
@@ -189,7 +200,7 @@ function AddToCart() {
         }
     }
     var catList = []
-    var aaa=[]
+    var aaa = []
     for (var i = 0; i < productAttributesList.length; i++) {
         debugger
 
@@ -204,14 +215,14 @@ function AddToCart() {
     let attr = "";
     for (var j = 0; j < aaa.length; j++) {
         let a = "";
-         a = `<span>${aaa[j].name}</span>` 
+        a = `<span>${aaa[j].name}</span>`
         let b = ""
-        for (var i = 0;i < aaa[j].attrList.length; i++) {
+        for (var i = 0; i < aaa[j].attrList.length; i++) {
             b = `<ul class="nav nav-pills nav-justified">
                      <li class="nav-item waves-effect waves-light">${aaa[j].attrList[i].name}</li>
                      <li class="nav-item waves-effect waves-light">${aaa[j].attrList[i].price}</li>
                      </ul>`
-            a=a+b
+            a = a + b
         }
         attr = attr + a
 
@@ -246,26 +257,29 @@ function AddToCart() {
     $('.subtotal').val(sub)
     $('.total').val(total)
     $('#exampleModalScrollable').modal('hide');
-
-    let rowContent
-        = `<tr data-toggle="popover" data-html="true" data-placement="left" data-trigger="hover" data-original-title="Add on" class="pop" id="${product.productId}">
-        <td><a href="javascript: void(0);" class="text-danger" onclick= "DeleteRow(${product.productId})"><i class="mdi mdi-close font-size-18"></i></a></td>
+    debugger
+    var index = $('#tbdata tr').length;
+    if (attr != "") {
+        let rowContent
+            = `<tr data-toggle="popover" data-html="true" data-placement="left" data-trigger="hover" data-original-title="Add on" class="pop"" id="${index}">
+        <td><a href="javascript: void(0);" class="text-danger" onclick= "DeleteRow(${index})"><i class="mdi mdi-close font-size-18"></i></a></td>
        <td class="text-sm-left">${product.quantity} X ${product.name}</td>
        <td class="text-sm-right">${product.price}</td>
      </tr>`;
-    $('#tbdata').append(rowContent);
-    $('.pop').attr('data-content', attr)
-    $('[data-toggle="popover"]').popover()
+        $('#tbdata').append(rowContent);
+        $('#' + index + '').attr('data-content', attr)
+        $('[data-toggle="popover"]').popover()
+    }
+    else {
+        let rowContent
+            = `<tr class="pop"" id="${index}">
+        <td><a href="javascript: void(0);" class="text-danger" onclick= "DeleteRow(${index})"><i class="mdi mdi-close font-size-18"></i></a></td>
+       <td class="text-sm-left">${product.quantity} X ${product.name}</td>
+       <td class="text-sm-right">${product.price}</td>
+     </tr>`;
+        $('#tbdata').append(rowContent);
+    }
 }
-//function PopOver(id) {
-//    debugger
-//    var attributes=[]
-//    $.each(productAttributesList, function () {
-//        if (this.productId === id) {
-//            attributes = this.Categories
-//        }
-//    });
-//}
 function Search() {
     debugger
     var number;
@@ -276,7 +290,7 @@ function Search() {
             ShowModal("Number", number)
         }
         else
-            toastr["error"]("Please Enter Number");
+            toastr["warning"]("Please Enter Number");
     }
     else {
         number = $('input[name="picknumber"]').val();
@@ -284,7 +298,7 @@ function Search() {
             ShowModal("Number", number)
         }
         else
-            toastr["error"]("Please Enter Number");
+            toastr["warning"]("Please Enter Number");
     }
 }
 function PreBind() {
@@ -295,29 +309,34 @@ function PreBind() {
             for (var i = 0; i < d.data.product.length; i++) {
                 if (div.childElementCount < 10) {
                     if (div.childElementCount === 0) {
-                        $('#v-pills-tab').append('<a class="nav-link mb-2 active" id="v-pills-' + d.data.product[i].category + '-tab" data-toggle="pill" href="#v-pills-' + d.data.product[i].category + '" role="tab" aria-controls="v-pills-' + d.data.product[i].category + '" aria-selected="true">' + d.data.product[i].category + '</a>');
-                        $('#v-pills-tabContent').append('<div class="tab-pane fade show active" id="v-pills-' + d.data.product[i].category + '" role="tabpanel" aria-labelledby="v-pills-' + d.data.product[i].category + '-tab"></div> ')
-                        $.each(d.data.product[i].product, function (j,v) {
-                            $('#v-pills-' + d.data.product[i].category + '').append('<div class=" col-md-4 div"><a class="data" href="javascript: void(0);" data-id="' + v.id + '" data-name="' + v.name + '" data-price="' + v.price + '" style = "padding:10px 0px 0px 0px;" ><img src="uploads/' + v.imageUrl + ' " class="img-thumbnail"><h6 style="font-size:11px">' + v.name + '</h6></a></div>')
-                           
+                        $('#v-pills-tab').append('<a class="nav-link mb-2 active" id="v-pills-' + d.data.product[i].category + '-tab" data-toggle="pill" href="#' + d.data.product[i].category + '" role="tab" aria-controls="v-pills-' + d.data.product[i].category + '" aria-selected="true">' + d.data.product[i].category + '</a>');
+                        $('#v-pills-tabContent').append('<div class="tab-pane fade show active" id="' + d.data.product[i].category + '" role="tabpanel" aria-labelledby="v-pills-' + d.data.product[i].category + '-tab"></div> ')
+                        $.each(d.data.product[i].product, function (j, v) {
+                            if (v.imageUrl != "")
+                                $("[id='" + d.data.product[i].category + "']").append('<div class=" col-md-4 div"><a class="data" href="javascript: void(0);" data-id="' + v.id + '" data-name="' + v.name + '" data-price="' + v.price + '" style = "padding:10px 0px 0px 0px;color: black" ><img src="uploads/' + v.imageUrl + ' " class="img-thumbnail"><span style="font-size:11px">' + v.name + '</span></a></div>')
+                            else
+                                $("[id='" + d.data.product[i].category + "']").append('<div class=" col-md-4 div"><a class="data" href="javascript: void(0);" data-id="' + v.id + '" data-name="' + v.name + '" data-price="' + v.price + '" style = "padding:10px 0px 0px 0px;color: black" ><img src="https://placehold.it/120x80" class="img-thumbnail"><span style="font-size:11px">' + v.name + '</span></a></div>')
                         });
                     }
+                    
                     else {
-                        $('#v-pills-tab').append('<a class="nav-link mb-2" id="v-pills-' + d.data.product[i].category + '-tab" data-toggle="pill" href="#v-pills-' + d.data.product[i].category + '" onclick="AddClass(e) role="tab" aria-controls="v-pills-' + d.data.product[i].category + '" aria-selected="false"><p>' + d.data.product[i].category + '</p></a>' );
-                        $('#v-pills-tabContent').append('<div class="tab-pane fade" id="v-pills-' + d.data.product[i].category + '" role="tabpanel" aria-labelledby="v-pills-' + d.data.product[i].category + '-tab"></div> ')
-                        $($.map(d.data.product[i].product, function (v, j) {
-                            $('#v-pills-' + d.data.product[i].category + '').append('<div class=" col-md-4 div"><a class="data" href="javascript: void(0);" data-id="' + v.id + '" data-name="' + v.name + '" data-price="' + v.price + '" style = "padding:10px 0px 0px 0px;" ><img src="uploads/' + v.imageUrl + ' " class="img-thumbnail"><h6 class="text-center">' + v.name + '</h6></a></div>')
-
-                        }));
+                        $('#v-pills-tab').append('<a class="nav-link mb-2" id="v-pills-' + d.data.product[i].category + '-tab" data-toggle="pill" href="#' + d.data.product[i].category + '" role="tab" aria-controls="v-pills-' + d.data.product[i].category + '" aria-selected="false">' + d.data.product[i].category + '</a>' );
+                        $('#v-pills-tabContent').append('<div class="tab-pane fade" id="' + d.data.product[i].category + '" role="tabpanel" aria-labelledby="v-pills-' + d.data.product[i].category + '-tab"></div> ')
+                        $.each(d.data.product[i].product, function (j, v) {
+                            if (v.imageUrl != "")
+                                $("[id='" + d.data.product[i].category + "']").append('<div class=" col-md-4 div"><a class="data" href="javascript: void(0);" data-id="' + v.id + '" data-name="' + v.name + '" data-price="' + v.price + '" style = "padding:10px 0px 0px 0px;color: black" ><img src="uploads/' + v.imageUrl + ' " class="img-thumbnail"><span style="font-size:11px">' + v.name + '</span></a></div>')
+                            else
+                                $("[id='" + d.data.product[i].category + "']").append('<div class=" col-md-4 div"><a class="data" href="javascript: void(0);" data-id="' + v.id + '" data-name="' + v.name + '" data-price="' + v.price + '" style = "padding:10px 0px 0px 0px;color: black" ><img src="https://placehold.it/120x80" class="img-thumbnail"><span style="font-size:11px">' + v.name + '</span></a></div>')
+                        });
                     }
                 }
                 else {
-                    toastr["error"]("Categories can not be greater than 10");
+                    toastr["warning"]("Categories can not be greater than 10");
                 }               
             }
         }
         else
-            toastr["error"](d.detail);
+            toastr["warning"](d.detail);
     });
 }
 $(document).on("click", ".down", function (evt) {
@@ -388,8 +407,9 @@ $(document).on("change", ".custom-control-input", function (evt) {
 
 });
 function DeleteRow($rowToDel) {
+    debugger
     $('#' + $rowToDel + '').closest('tr').remove();
-    productList = productList.filter(function (el) { return el.productId != $rowToDel; });
+    productList = productList.filter(function (el,i) { return i != $rowToDel; });
     sub = 0;
     tax = 0;
     total = 0;
@@ -448,7 +468,7 @@ function AddDisc() {
         $('.total').val(total)
     }
     else
-        toastr["error"]("please Enter product");
+        toastr["warning"]("please Enter product");
 }
 $(document).ready(function () {
     PreBind();

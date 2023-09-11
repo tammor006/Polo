@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.WebPages;
 
 namespace Polo.Core.Repositories
 {
@@ -64,7 +65,19 @@ namespace Polo.Core.Repositories
                 var orderList = new List<SaleItemAtrributes>();
                 orders.CreatedDate = DateTime.Now;
                 orders.CreatedBy = userId.ToString();
-                orders.AvailableTime =Convert.ToDateTime(orders.StrAvailableTime).ToLocalTime();
+                int time=0;
+                if (orders.DeliveryType == "As_Soon_As")
+                {
+                    orders.AvailableTime = orders.CreatedDate.AddMinutes(40);
+                }
+                else
+                {
+                    orders.AvailableTime =Convert.ToDateTime(orders.StrAvailableTime);
+                    TimeSpan? dateDiff = orders.AvailableTime-orders.CreatedDate;
+                     time = dateDiff.Value.Minutes;
+                }
+                //orders.AvailableTime =Convert.ToDateTime(orders.StrAvailableTime).AddSeconds(35);
+                //TimeSpan? dateDiff = orders.AvailableTime-orders.CreatedDate;
                 _db.Add(orders);
                 if (orders.SaleOrderItem != null && orders.SaleOrderItem.Count > 0)
                 {
@@ -73,13 +86,17 @@ namespace Polo.Core.Repositories
                         x.SaleOrderId = orders.Id;
                         x.InvoiceNumber = orders.InvoiceNumber;
                         x.Product = _db.Product.FirstOrDefault(y => y.Id == x.ProductId);
-                         x.SaleItemAtrributes.ToList().ForEach(y =>
+                        if (x.SaleItemAtrributes != null)
                         {
-                            y.SaleOrderItemId = x.Id;
-                        });
-                        orderList.AddRange(x.SaleItemAtrributes);
+                            x.SaleItemAtrributes.ToList().ForEach(y =>
+                           {
+                               y.SaleOrderItemId = x.Id;
+                           });
+                            orderList.AddRange(x.SaleItemAtrributes);
+                        }
                         _db.Add(x);
-                        _db.SaleItemAtrributes.AddRange(x.SaleItemAtrributes);
+                        if (x.SaleItemAtrributes != null)
+                            _db.SaleItemAtrributes.AddRange(x.SaleItemAtrributes);
                     });     
                 }
 
@@ -90,8 +107,9 @@ namespace Polo.Core.Repositories
                 {
                     Customer = _db.Customer.FirstOrDefault(x => x.Id == orders.CustomerId),
                     Orders = orders,
+                    strAvailableTime = orders.AvailableTime.ToString("dd MMM, H:mm"),
                     strCreatedDate = orders.CreatedDate.ToString("dd MMM, H:mm"),
-                    strAvailableTime=orders.AvailableTime.ToString("dd MMM, H:mm"),
+                    orderTime= time,
 
                 };
                 

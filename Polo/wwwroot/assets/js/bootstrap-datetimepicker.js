@@ -61,6 +61,7 @@
         factory(jQuery, moment);
     }
 }(function ($, moment) {
+    debugger
     'use strict';
     if (!moment) {
         throw new Error('bootstrap-datetimepicker requires Moment.js to be loaded first');
