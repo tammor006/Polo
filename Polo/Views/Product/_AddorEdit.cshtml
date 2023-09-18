@@ -26,74 +26,162 @@
             </div>
             <form method="post" enctype="multipart/form-data" onSubmit="return false;" class="repeater" id="createProduct" name="createProduct" data-parsley-validate data-parsley-error-message>
             <div class="modal-body">
-                    <ul class="nav nav-pills nav-justified" role="tablist">
+                   <ul class="nav nav-pills nav-justified" role="tablist">
                         <li class="nav-item waves-effect waves-light">
-                            <a class="nav-link active" data-mode="Product" data-toggle="tab" href="#home-1" role="tab">
+                            <a class="nav-link active" data-mode="Product" data-toggle="tab" href="#product" role="tab">
                                 <span class="d-block d-sm-none"><i class="fas fa-home"></i></span>
                                 <span class="d-none d-sm-block">Product</span>
                             </a>
                         </li>
                         <li class="nav-item waves-effect waves-light">
-                            <a class="nav-link" data-toggle="tab" data-mode="Product Attributes" href="#profile-1" role="tab">
+                            <a class="nav-link" data-toggle="tab" data-mode="Product Items" href="#items" role="tab">
+                                <span class="d-block d-sm-none"><i class="far fa-user"></i></span>
+                                <span class="d-none d-sm-block">Product Items</span>
+                            </a>
+                        </li>
+                        <li class="nav-item waves-effect waves-light">
+                            <a class="nav-link" data-toggle="tab" data-mode="Product Attributes" href="#attributes" role="tab">
                                 <span class="d-block d-sm-none"><i class="far fa-user"></i></span>
                                 <span class="d-none d-sm-block">Product Attributes</span>
                             </a>
                         </li>
+                        
                     </ul>
-                        <div class="tab-content p-3 text-muted" style="padding-top:10px !important">
-                            <div class="tab-pane active" id="home-1" role="tabpanel">
-                                <div class="row">
-                                    <div class="col-sm-6">
-                                        <div class="form-group">
-                                            <label for="productname">Product Name</label>
-                                            <input id="productname" type="text" class="form-control" required data-parsley-error-message="Please enter Product">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="category" class="control-label">Category</label>
-                                            <select class=" form-control select" id="categoryselect" required data-parsley-error-message="Please enter Category">
-                                                <option value="" selected hidden>Select Category</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <div class="form-group">
-                                            <label for="barcode">BarCode</label>
-                                            <input id="barcode" type="number" class="form-control" required data-parsley-error-message="Please enter Barcode">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="price">Price</label>
-                                            <input id="price" type="number" class="form-control" required data-parsley-error-message="Please enter Price">
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <div class="form-group">
-                                            <label for="productdesc">Product Description</label>
-                                            <textarea class="form-control" id="productdesc" rows="6" required></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <label for="image">Image</label>
-                                        <input type="file" name="file" class="file">
-                                        <div class="input-group">
-                                            <input type="text" class="form-control" disabled placeholder="Upload File" id="file">
-                                            <div class="input-group-append">
-                                                <button type="button" class="browse btn btn-primary" onchange="addFiles()">Browse...</button>
-                                            </div>
-                                        </div>
-                                        <div class="form-group" style="text-align: center">
-                                            <img src="https://placehold.it/120x80" id="preview" class="img-thumbnail" width="120" height="80">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="tab-pane" id="profile-1" role="tabpanel">
+                   <div class="tab-content p-3 text-muted" style="padding-top:10px !important">
+                        <div class="tab-pane active" id="product" role="tabpanel">
                             <div class="row">
-                                <div class="col-12 repeat">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label for="productname">Product Name</label>
+                                        <input id="productname" type="text" class="form-control" required data-parsley-error-message="Please enter Product">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="category" class="control-label">Category</label>
+                                        <select class=" form-control select" id="categoryselect" required data-parsley-error-message="Please enter Category">
+                                            <option value="" selected hidden>Select Category</option>
+                                        </select>
+                                    </div>
                                 </div>
-                            </div>
-                            </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label for="barcode">BarCode</label>
+                                        <input id="barcode" type="number" class="form-control" required data-parsley-error-message="Please enter Barcode">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="price">Price</label>
+                                        <input id="price" type="number" class="form-control" required data-parsley-error-message="Please enter Price">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label for="productdesc">Product Description</label>
+                                        <textarea class="form-control" id="productdesc" rows="6" required></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="image">Image</label>
+                                    <input type="file" name="file" class="file">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" disabled placeholder="Upload File" id="file">
+                                        <div class="input-group-append">
+                                            <button type="button" class="browse btn btn-primary" onchange="addFiles()">Browse...</button>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" style="text-align: center">
+                                        <img src="https://placehold.it/120x80" id="preview" class="img-thumbnail" width="120" height="80">
+                                    </div>
+                                </div>
                             </div>
                         </div>
+                        <div class="tab-pane" id="items" role="tabpanel">
+                            <div class="row">
+                                <div class="form-group col-lg-3">
+                                    <label for="itemname">Name</label><input type="hidden" id="itemid" class="itemsid" />
+                                    <input type="text" id="itemname" class="form-control itemsname" />
+                                </div>
+                                <div class="form-group col-lg-3">
+                                    <label for="itemqty">Qty</label>
+                                    <input type="number" id="itemqty" class="form-control itemsqty" />
+                                </div>
+                                <div class="form-group col-lg-3">
+                                    <label for="measure" class="control-label">Measure By</label>
+                                    <select class=" form-control select itemsmeasure" id="measure">
+                                        <option value="" selected hidden>Select</option>
+                                        <option value="gm"> In Grams</option>
+                                        <option value="number">In Number</option>
+                                    </select>
+                                </div>
+                                <div class="button-items col-lg-3" style="margin-top:26px">
+                                    <input type="button" class="btn btn-success mt-3 mt-lg-0 additem" value="Add" />
+                                </div>
+                                <div class="validationitem" style="color: red;"></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="table_item" style="min-height: 33vh; max-height: 33vh;border:2px solid #eff2f7">
+                                        <table id="tableitem" class="table table-striped table-nowrap mb-0">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-sm-left">Name</th>
+                                                    <th class="text-sm-left">Quantity</th>
+                                                    <th class="text-sm-left">Measure By</th>
+                                                    <th class="text-sm-right">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tbitem"></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="attributes" role="tabpanel">
+                            <div class="row">
+                                <div class="form-group col-lg-4">
+                                    <label for="attrselect">Attribute</label><input type="hidden" id="idattr" class="attrid" />
+                                    <select class=" form-control select name" id="attrselect">
+                                        <option value="" selected hidden>Select</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-lg-3">
+                                    <label for="name">Category</label><input type="text" id="catattr" name="untyped-input" class="form-control category" />
+                                </div>
+                                <div class="form-groupcol-lg-2">
+                                    <label for="isrequired" class="control-label">IsRequired</label>
+                                    <select class=" form-control select isrequired" id="reqattr">
+                                        <option value="" selected hidden>Select</option>
+                                        <option value="false">No</option>
+                                        <option value="true">Yes</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-lg-2">
+                                    <label for="priceattr">Price</label><input type="number" id="priceattr" class="form-control price" />
+                                </div>
+                                <div class="button-items col-lg-1" style="margin-top:26px">
+                                    <input type="button" class="btn btn-success mt-3 mt-lg-0 addattr" value="Add" />
+                                </div>
+                                <div class="validationattr" style="color: red;"></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="table_attr" style="min-height: 33vh; max-height: 33vh;border:2px solid #eff2f7">
+                                        <table id="tableattribute" class="table table-striped table-nowrap mb-0">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-sm-left">Attribute</th>
+                                                    <th class="text-sm-left">Category</th>
+                                                    <th class="text-sm-left">Required</th>
+                                                    <th class="text-sm-right">Price</th>
+                                                    <th class="text-sm-right">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tbatrr"></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                   </div>
+            </div>
             <div class="modal-footer">
                     <button type="submit" onclick="saveProduct()" id="btnCreateProduct" class="btn btn-primary mr-1 waves-effect waves-light">Save Changes
                         @*<span style=" display:none">
@@ -107,6 +195,6 @@
             </div>
             </form>
         </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
+</div><!-- /.modal-dialog -->
 </div>
 

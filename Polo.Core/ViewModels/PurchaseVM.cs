@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 
 namespace Polo.Core.ViewModels
 {
-    public class StockVM
+    public class PurchaseVM
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public float Quantity { get; set; }
-        public string StrLastUpdated { get; set; }
-        public string MeasureQuantity { get; set; }
+        public string InvoiceNo { get; set; }
+        public float SubTotal { get; set; }
+        public float Tax { get; set; }
+        public float Total { get; set; }
     }
 }

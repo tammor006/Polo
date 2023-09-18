@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Polo.Infrastructure.Entities;
 
 #nullable disable
 
@@ -48,6 +49,11 @@ namespace Polo.Infrastructure.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Stock");
+        }
+
+        public static implicit operator stock(Stock v)
+        {
+            throw new NotImplementedException();
         }
     }
 }

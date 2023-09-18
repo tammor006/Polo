@@ -12,18 +12,16 @@
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="form-group">
-                                <label for="product" class="control-label">Product</label>
-                                <select class=" form-control select" id="productselect" required data-parsley-error-message="Please enter Product">
-                                    <option value="" selected hidden>Select Product</option>
-                                </select>
+                                <label for="product" class="control-label">Name</label>
+                                <input id="productselect" type="text" class="form-control" readonly>
                             </div>
                             <div class="form-group">
                                 <label for="quantity">Quantity</label>
                                 <input id="quantity" type="number" class="form-control" required data-parsley-error-message="Please enter Quantity">
                             </div>
                             <div class="form-group">
-                                <label for="date">Date</label>
-                                <input id="date" type="text" class="form-control datepicker-minToday" required data-parsley-error-message="Please enter Date">
+                                <label for="measure">Measure</label>
+                                <input id="measure" type="text" class="form-control datepicker-minToday" readonly>
                             </div>
                         </div>
                     </div>

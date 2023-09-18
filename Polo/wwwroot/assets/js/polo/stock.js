@@ -1,9 +1,8 @@
 ﻿var Stock = {
     id: 0,
     quantity: 0,
-    strLastUpdate: "",
     isActive: true,
-    productId:0
+    name:""
 }
 
 function PreBind() {
@@ -18,7 +17,7 @@ function PreBind() {
 
         }
         else
-            toastr["errror"](d.detail);
+            toastr["warning"](d.detail);
     });
 }
 function ClearModel() {
@@ -28,28 +27,19 @@ function ClearModel() {
 }
 function ShowModal(Id) {
     ClearModel();
-    if (Id == 0) {
-        $("#modal").modal('show');
-        $("#mySmallModalLabel").text("Add Stock");
-    }
-    else {
         Get("/Stock/GetStockById?id=" + Id).then(function (d) {
             debugger
             if (d.success) {
                 Stock.id = d.data.stock.id;
-                Stock.productId = d.data.stock.productId;
+                Stock.name = d.data.stock.name;
                 Stock.quantity = d.data.stock.quantity;
-                Stock.strLastUpdate = d.data.stock.strLastUpdate;
-                $("#date").val(Stock.strLastUpdate);
+                $("#measure").val(d.data.stock.measureQuantity);
                 $("#quantity").val(Stock.quantity);
-                $('#productselect').val(Stock.productId);
+                $('#productselect').val(Stock.name);
                 $("#modal").modal('show');
                 $("#mySmallModalLabel").text("Edit Stock");
             }
         })
-
-
-    }
 
 }
 
@@ -68,7 +58,7 @@ function saveStock() {
     }
     Stock.strLastUpdate = $("#date").val();
     Stock.quantity = $("#quantity").val();
-    Stock.productId = $('#productselect option:selected').val()
+    Stock.productId = $('#productselect').val()
     Post("/Stock/SaveStock", { stock: Stock }).then(function (d) {
         if (d.success) {
             ClearModel();
@@ -81,7 +71,7 @@ function saveStock() {
 
         }
         else {
-            toastr["error"](d.detail)
+            toastr["warning"](d.detail)
 
         }
     });
@@ -95,8 +85,9 @@ function LoadTable() {
             "dataType": 'json',
         },
         "columns": [
-            { "data": "productName" },
+            { "data": "name" },
             { "data": "quantity" },
+            { "data": "measureQuantity" },
             { "data": "strLastUpdated" },
             {
                 "data": 'id',

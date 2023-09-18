@@ -33,6 +33,7 @@ namespace Polo.Injector
             Services.AddScoped<IStockRepository, StockRepository>();
             Services.AddScoped<IOrderRepository, OrderRepository>();
             Services.AddScoped<ICustomerRepository, CustomerRepository>();
+            Services.AddScoped<IPurchaseRepository, PurchaseRepository>();
             return Services;
         }
     }

@@ -1,40 +1,38 @@
-﻿using Microsoft.AspNetCore.Cors;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Polo.Core.Repositories;
 using Polo.Core.Repositories.Interfaces;
 using Polo.Infrastructure.Entities;
+using Polo.Infrastructure.Migrations;
 using Polo.Infrastructure.Utilities;
-using System.IO;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Authorization;
 
 namespace Polo.Controllers
 {
     [Authorize]
-    public class ProductController : Controller
+    public class PurchaseController : Controller
     {
-        private readonly IProductRepository _productsRepository;
-        private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly IPurchaseRepository _PurchasesRepository;
         private readonly UserManager<IdentityUser> _userManager;
-        public ProductController(UserManager<IdentityUser> userManager,IProductRepository productsRepository,IWebHostEnvironment webHostEnvironment)
+        public PurchaseController(UserManager<IdentityUser> userManager, IPurchaseRepository PurchasesRepository)
         {
-            _productsRepository = productsRepository;
-            _webHostEnvironment = webHostEnvironment;
+            _PurchasesRepository = PurchasesRepository;
             _userManager = userManager;
         }
         public IActionResult Index()
         {
             return View();
         }
-        public JsonResult PreBind()
+        public IActionResult Create()
+        {
+            return View();
+        }
+        public JsonResult PreBindPurchase()
         {
             Response response = new Response();
             try
             {
-                response = _productsRepository.PreBind();
+                response = _PurchasesRepository.PreBindPurchase();
             }
             catch (Exception ex)
             {
@@ -43,15 +41,23 @@ namespace Polo.Controllers
             }
             return Json(response);
         }
-        public JsonResult SaveProduct( Product product)
+        public JsonResult SavePurchase(Purchase purchase)
         {
             Response response = new Response();
 
-            string userId = _userManager.GetUserId(User);
             try
             {
-                product = Request.Form["product"].ToString().deserialize<Product>();
-                response = _productsRepository.SaveProduct(product,Request.Form.Files.Count.IsNullOrZero() ? null : Request.Form.Files,userId);
+                if (User.Identity.IsAuthenticated)
+                {
+                    string userId = _userManager.GetUserId(User);
+                    response = _PurchasesRepository.SavePurchase(purchase, userId);
+                }
+                else
+                {
+                    response.Success = false;
+                    response.Detail = "User not Authenticated";
+                    return Json(response);
+                }
             }
             catch (Exception ex)
             {
@@ -60,12 +66,12 @@ namespace Polo.Controllers
             }
             return Json(response);
         }
-        public JsonResult GetAllProduct()
+        public JsonResult GetAllPurchase()
         {
             Response response = new Response();
             try
             {
-                response = _productsRepository.GetAllProduct();
+                response = _PurchasesRepository.GetAllPurchase();
             }
             catch (Exception ex)
             {
@@ -74,34 +80,44 @@ namespace Polo.Controllers
             }
             return Json(response);
         }
-        public JsonResult GetProductById(int id)
+        public JsonResult  DeletePurchase(int id)
         {
             Response response = new Response();
-            try
-            {
-                response = _productsRepository.GetProductById(id);
-            }
-            catch (Exception ex)
-            {
-                response.Success = false;
-                response.Detail = Message.ErrorMessage;
-            }
-            return Json(response);
-        }
-        public JsonResult DeleteProduct(int id)
-        {
-            Response response = new Response();
-            try
-            {
-                response = _productsRepository.DeleteProduct(id);
-            }
-            catch (Exception ex)
-            {
-                response.Success = false;
-                response.Detail = Message.ErrorMessage;
-            }
-            return Json(response);
-        }
 
+            try
+            {
+                if (User.Identity.IsAuthenticated)
+                {
+                    string userId = _userManager.GetUserId(User);
+                    response = _PurchasesRepository.DeletePurchase(id, userId);
+                }
+                else
+                {
+                    response.Success = false;
+                    response.Detail = "User not Authenticated";
+                    return Json(response);
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Detail = Message.ErrorMessage;
+            }
+            return Json(response);
+        }
+        public JsonResult GetPurchaseById(int id)
+        {
+            Response response = new Response();
+            try
+            {
+                response = _PurchasesRepository.GetPurchaseById(id);
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Detail = Message.ErrorMessage;
+            }
+            return Json(response);
+        }
     }
 }

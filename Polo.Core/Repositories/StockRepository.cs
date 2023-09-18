@@ -46,8 +46,8 @@ namespace Polo.Core.Repositories
                 {
                     Stock foundStock = _db.Stock.Where(x => x.Id == stock.Id).FirstOrDefault();
                     foundStock.Quantity = stock.Quantity;
-                    foundStock.ProductId = stock.ProductId;
-                    foundStock.LastUpdate = (DateTime)stock.StrLastUpdate.DbDate();
+                    foundStock.Name = stock.Name;
+                    foundStock.LastUpdate = DateTime.Now;
                     foundStock.IsActive = stock.IsActive;
                     foundStock.UpdatedDate = DateTime.Now;
                     foundStock.UpdatedBy = userId.ToString();
@@ -58,7 +58,7 @@ namespace Polo.Core.Repositories
                 }
                 else
                 {
-                    stock.LastUpdate = (DateTime)stock.StrLastUpdate.DbDate();
+                    stock.LastUpdate = DateTime.Now;
                     stock.CreatedDate = DateTime.Now;
                     stock.CreatedBy = userId;
                     _db.Add(stock);
@@ -85,8 +85,9 @@ namespace Polo.Core.Repositories
                 StockVM vM = new StockVM();
                 vM.Id = s.Id;
                 vM.Quantity = s.Quantity;
-                vM.StrLastUpdated = s.LastUpdate.ViewDate();
-                vM.ProductName = _db.Product.FirstOrDefault(x => x.Id == s.ProductId).Name;
+                vM.Name = s.Name;
+                vM.StrLastUpdated = s.LastUpdate.ToString("dd MMM, H:mm");
+                vM.MeasureQuantity = s.MeasureQuantity;
                 stock.Add(vM);
             }
             response.data = stock;
@@ -99,10 +100,6 @@ namespace Polo.Core.Repositories
             if (!id.IsNullOrZero())
             {
                 Stock stock = _db.Stock.FirstOrDefault(x => x.Id == id);
-                if (!ReferenceEquals(stock, null))
-                {
-                    stock.StrLastUpdate = stock.LastUpdate.ViewDate();
-                }
                     response.data = new
                 {
                     Stock = stock,

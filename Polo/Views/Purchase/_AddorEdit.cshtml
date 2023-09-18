@@ -1,0 +1,113 @@
+﻿    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <form method="post" onSubmit="return false;" id="createPurchase" name="createPurchase">
+                        <div class="card-body" style="padding-bottom:0px !important">
+                            <h4 class="card-title mb-4">Purchase Items</h4>
+                            <div class="repeatitem">
+                            <div class="group-item">
+                                <div class="row">
+                                    <div class="form-group col-lg-3">
+                                        <input type="hidden" id="itemid" class="itemsid" /><label for="item" class="control-label">Product Item</label><select class="form-control select2 product" id="item"><option value="" selected hidden>Select Item</option></select>
+                                        <div class="validationpurchase" style="color: red;"></div>
+                                    </div>
+                                    <div class="form-group col-lg-2">
+                                        <label for="itemqty">Qty</label><input type="text" placeholder="0.00" id="itemqty" class="form-control quantity" />
+                                    </div>
+                                    <div class="form-group col-lg-2">
+                                        <label for="itemmeasure" class="control-label">Measure By</label><select class="form-control select2 measure" id="itemmeasure"><option value="" selected hidden>Select</option><option value="Kg"> In Kilograms</option><option value="Number">In Number</option></select>
+                                    </div>
+                                    <div class="form-group col-lg-2">
+                                        <label for="itemprice">Price</label><input type="text" placeholder="0.00" id="itemprice" class="form-control price" />
+                                    </div>
+                                    <div class="form-group col-lg-2">
+                                        <label for="itemtotal">Total</label><input type="text" placeholder="0.00" readonly id="itemtotal" class="form-control itemtotal" />
+                                    </div>
+                                    <div class="button-items col-lg-1" style="margin-top:26px">
+                                        <input type="button" class="btn btn-success mt-3 mt-lg-0 additem" value="Add" />
+                                        
+                                    </div>
+                                    
+                                </div>
+                                
+                            </div> 
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="table_wrapper" style="min-height: 33vh; max-height: 33vh;border:2px solid #eff2f7">
+                                        <table id="tech-companies-1" class="table table-striped table-nowrap mb-0">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-sm-left">Item</th>
+                                                    <th class="text-sm-right">Quantity</th>
+                                                    <th class="text-sm-right">Measure</th>
+                                                    <th class="text-sm-right">Price</th>
+                                                    <th class="text-sm-right">Total</th>
+                                                    <th class="text-sm-right">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tbdata"></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" style="margin-top:10px">
+                                <div class="col-md-2">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" readonly id="invoiceno">
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <select class=" form-control selectname" id="suppliername">
+                                            <option value="" selected hidden>Select Supplier</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <input readonly type="text" placeholder="Company Name" id="cname" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <input readonly type="text" placeholder="Supplier Number" id="snumber" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <input readonly placeholder="Address" class="address form-control">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="input-group">
+                                        <input type="number" name="deldiscount" class="disc form-control" placeholder="Disc">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <input readonly type="number" placeholder="Sub Total" class="subtotal form-control">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <input readonly type="text" placeholder="Tax" class=" tax form-control">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <input readonly type="text" placeholder="Total" class="total form-control">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-primary mr-1 waves-effect waves-light submit">Save Changes</button>
+                            <a class="btn btn-secondary waves-effect" asp-controller="Purchase" asp-action="Index">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>

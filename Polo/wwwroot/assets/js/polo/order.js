@@ -21,6 +21,7 @@ var productList=[]
 var productAttributesList=[]
 var productAttributes = {
     productAttributesId: 0,
+    parentProductId:0,
     Category: "",
     name: "",
     price: 0,
@@ -103,7 +104,7 @@ function save() {
                 orders.tax = $(".tax").val();
                 orders.discount = discount;
                 orders.customerId = Customer.id;
-                var c = $("a.nav-link.active").eq(0).data('mode')
+                var c = $("a.nav-link.active").eq(1).data('mode')
                 orders.mode = c
                 orders.invoiceNumber = Math.random().toString(6).substring(2, 8)
                 orders.saleOrderItem = []
@@ -194,6 +195,7 @@ function AddToCart() {
             productAttributes.productId = product.productId
             productAttributes.productAttributesId = checkboxes[i].dataset.id
             productAttributes.name = checkboxes[i].dataset.name
+            productAttributes.parentProductId = checkboxes[i].dataset.parent
             productAttributes.Category = checkboxes[i].dataset.category
             productAttributes.price = checkboxes[i].dataset.productprice == "" ? 0 : parseInt(checkboxes[i].dataset.productprice)
             productAttributesList.push(productAttributes);
@@ -237,7 +239,7 @@ function AddToCart() {
     $('.tax').val("")
     $('.subtotal').val("")
     $('.total').val("")
-    var mode = $("a.nav-link.active").eq(0).data('mode')
+    var mode = $("a.nav-link.active").eq(1).data('mode')
     if (mode == "Delivery") {
         value = $('input[name="deldiscount"]').val() === "" ? 0 : parseInt($('input[name="deldiscount"]').val());
     }
@@ -283,7 +285,7 @@ function AddToCart() {
 function Search() {
     debugger
     var number;
-    var mode = $("a.nav-link.active").eq(0).data('mode')
+    var mode = $("a.nav-link.active").eq(1).data('mode')
     if (mode == "Delivery") {
         number = $('input[name="delnumber"]').val();
         if (number !== "") {
@@ -379,7 +381,7 @@ $(document).on("click", ".data", function (evt) {
                 $('.check').append('<div class="card"><h7 class= "card-header mt-0" >' + d.data.attribute[i].category + '</h7><div class="card-body" id="v-'+ d.data.attribute[i].category+'" ></div></div>')
                 $(d.data.attribute[i].attributes).each(function (j, v) {
                     debugger
-                    $("#" + CSS.escape('v-' + d.data.attribute[i].category + '')).append('<div class= "custom-control custom-checkbox custom-checkbox-danger mb-3"><input type="checkbox" data-id="' + v.id + '" data-category="' + d.data.attribute[i].category + '"  data-name="' + v.name + '" data-productprice=' + v.price + ' class="custom-control-input vc-' + d.data.attribute[i].category + '" id="' + v.name + '" value="' + v.id + '"><label class="custom-control-label col-md-12" for="' + v.name + '" >' + v.name + '<span style="float:right;text-align:right" class="col-md-6" >' + v.price + '</span ></label></div>')
+                    $("#" + CSS.escape('v-' + d.data.attribute[i].category + '')).append('<div class= "custom-control custom-checkbox custom-checkbox-danger mb-3"><input type="checkbox" data-id="' + v.id + '" data-category="' + d.data.attribute[i].category + '"  data-name="' + v.name + '" data-parent="' + v.parentProductId + '" data-productprice=' + v.price + ' class="custom-control-input vc-' + d.data.attribute[i].category + '" id="' + v.attrText + '" value="' + v.id + '"><label class="custom-control-label col-md-12" for="' + v.attrText + '" >' + v.attrText + '<span style="float:right;text-align:right" class="col-md-6" >' + v.price + '</span ></label></div>')
                 });
             }     
         }
@@ -418,7 +420,7 @@ function DeleteRow($rowToDel) {
     $('.tax').val("")
     $('.subtotal').val("")
     $('.total').val("")
-    var mode = $("a.nav-link.active").eq(0).data('mode')
+    var mode = $("a.nav-link.active").eq(1).data('mode')
     if (mode == "Delivery") {
         value = $('input[name="deldiscount"]').val() === "" ? 0 : parseInt($('input[name="deldiscount"]').val());
     }
@@ -449,7 +451,7 @@ function AddDisc() {
         $('.tax').val("")
         $('.subtotal').val("")
         $('.total').val("")
-        var mode = $("a.nav-link.active").eq(0).data('mode')
+        var mode = $("a.nav-link.active").eq(1).data('mode')
         if (mode == "Delivery") {
             value = $('input[name="deldiscount"]').val() === "" ? 0 : parseInt($('input[name="deldiscount"]').val());
         }

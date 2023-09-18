@@ -1,27 +1,30 @@
 ﻿@{
-    ViewData["Title"] = "Product";
+    ViewData["Title"] = "Purchase";
 }
 <style>
-    .table_attr {
+    .form-control:disabled, .form-control[readonly] {
+        background-color: #f6f6f6;
+    }
+
+    .table_wrapper {
         display: block;
         overflow-x: auto;
         white-space: nowrap;
     }
 </style>
-
 <!-- ============================================================== -->
 <div class="main-content">
-    <div class="page-content">
+    <div id="index" data-index="0" class="page-content">
         <div class="container-fluid">
             <!-- start page title -->
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-flex align-items-center justify-content-between">
-                        <h4 class="mb-0 font-size-18">Products</h4>
+                        <h4 class="mb-0 font-size-18">Purchases</h4>
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
                                 <li class="breadcrumb-item"><a href="javascript: void(0);">Polo</a></li>
-                                <li class="breadcrumb-item active">Products</li>
+                                <li class="breadcrumb-item active">Purchases</li>
                             </ol>
                         </div>
                     </div>
@@ -36,8 +39,8 @@
                                 <div class="col-sm-4">
                                     <div class="search-box mr-2 mb-2 d-inline-block">
                                         <div class="position-relative">
-                                            @*asp-controller="Product" asp-action="CreateOrEdit"*@
-                                            <a onclick="ShowModal(0)"   class="btn btn-success btn-rounded waves-effect waves-light mb-2 mr-2"><i class="mdi mdi-plus mr-1"></i> Add New Product</a>
+                                            @*asp-controller="Purchase" asp-action="CreateOrEdit"*@
+                                            <a onclick="ShowDiv()" class="btn btn-success btn-rounded waves-effect waves-light mb-2 mr-2"><i class="mdi mdi-plus mr-1"></i> Add New Purchase</a>
                                         </div>
                                     </div>
                                 </div>
@@ -46,13 +49,14 @@
                                     </div>
                                 </div><!-- end col-->
                             </div>
-                            <table id="productsDatatable" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                            <table id="purchaseDatatable" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                 <thead class="thead-light">
                                     <tr>
-                                        <th>BarCode</th>
-                                        <th>Name</th>
-                                        <th>Category</th>
-                                        <th>Price</th>
+                                        <th>Invoice No</th>
+                                        <th>Supplier</th>
+                                        <th>Sub Total</th>
+                                        <th>Tax</th>
+                                        <th>Total</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -66,8 +70,11 @@
             <!-- end row -->
         </div> <!-- container-fluid -->
     </div>
-    <!-- End Page-content -->
+    <div data-index="1" id="create" class="page-content" style="display:none; padding: calc(49px + 24px) calc(24px / 2) 0px calc(24px / 2) !important;">
+        @Html.Partial("~/Views/Purchase/_AddorEdit.cshtml")
+    </div>
 </div>
-@Html.Partial("~/Views/Product/_AddorEdit.cshtml")
-<script src="~/assets/js/polo/product.js?vs=@DateTime.Now.Ticks"></script>
+<!-- End Page-content -->
+<script  src="~/assets/js/polo/purchase.js?vs=@DateTime.Now.Ticks"></script>
+
 

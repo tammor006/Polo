@@ -19,5 +19,6 @@ namespace Polo.Infrastructure.Entities
         public virtual SaleOrderItem SaleOrderItem { get; set; }
         public int ProductAttributesId { get; set; }
         public string? Category { get; set; }
+        public int ParentProductId { get; set; }
     }
 }
