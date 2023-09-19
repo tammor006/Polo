@@ -205,7 +205,6 @@ function AddToCart() {
     var aaa = []
     for (var i = 0; i < productAttributesList.length; i++) {
         debugger
-
         if (!catList.includes(productAttributesList[i].Category) || catList.length == 0) {
             categoryList = {}
             catList.push(productAttributesList[i].Category)
@@ -220,6 +219,7 @@ function AddToCart() {
         a = `<span>${aaa[j].name}</span>`
         let b = ""
         for (var i = 0; i < aaa[j].attrList.length; i++) {
+            debugger
             b = `<ul class="nav nav-pills nav-justified">
                      <li class="nav-item waves-effect waves-light">${aaa[j].attrList[i].name}</li>
                      <li class="nav-item waves-effect waves-light">${aaa[j].attrList[i].price}</li>
@@ -247,14 +247,14 @@ function AddToCart() {
         value = $('input[name="pickdiscount"]').val() === "" ? 0 : parseInt($('input[name="pickdiscount"]').val());
     }
     for (let x of productList) {
-        sub += x.price;
+        sub +=x.price;
     }
     if (value != 0) {
         discount = ((value / 100) * sub);
         sub = sub - discount;
     }
     tax = parseInt(sub / 10);
-    total = sub + tax;
+    total = Number(sub + tax).toFixed(2);
     $('.tax').val(tax)
     $('.subtotal').val(sub)
     $('.total').val(total)
@@ -266,7 +266,7 @@ function AddToCart() {
             = `<tr data-toggle="popover" data-html="true" data-placement="left" data-trigger="hover" data-original-title="Add on" class="pop"" id="${index}">
         <td><a href="javascript: void(0);" class="text-danger" onclick= "DeleteRow(${index})"><i class="mdi mdi-close font-size-18"></i></a></td>
        <td class="text-sm-left">${product.quantity} X ${product.name}</td>
-       <td class="text-sm-right">${product.price}</td>
+       <td class="text-sm-right">${Number(product.price).toFixed(2)}</td>
      </tr>`;
         $('#tbdata').append(rowContent);
         $('#' + index + '').attr('data-content', attr)
@@ -277,7 +277,7 @@ function AddToCart() {
             = `<tr class="pop"" id="${index}">
         <td><a href="javascript: void(0);" class="text-danger" onclick= "DeleteRow(${index})"><i class="mdi mdi-close font-size-18"></i></a></td>
        <td class="text-sm-left">${product.quantity} X ${product.name}</td>
-       <td class="text-sm-right">${product.price}</td>
+       <td class="text-sm-right">${Number(product.price).toFixed(2)}</td>
      </tr>`;
         $('#tbdata').append(rowContent);
     }
@@ -368,20 +368,20 @@ $(document).on("click", ".data", function (evt) {
     Get("/Product/GetProductById?id=" + menu.id).then(function (d) {
         debugger
         if (d.success) {
-            debugger
+            var total = Number(d.data.product.price).toFixed(2)
             $('#exampleModalScrollable').modal('show')
             $('.counter').find('div').remove()
             $('.check').find('div').remove()
             $('#productId').val(d.data.product.id)
             $('.counter').append('<div class="input-group"><div class="input-group-append"><button class="btn btn-secondary down" data-price="' + d.data.product.price + '" type="button">-</button></div><input type = "number" class= "form-control" value="1" id="touchcounter"><div class="input-group-append"><button class="btn btn-secondary up" data-price="' + d.data.product.price + '" type="button">+</button></div></div> ')
-            $('#qtyprice').html(d.data.product.price)
+            $('#qtyprice').html(total)
             $("#exampleModalScrollableTitle").text(d.data.product.name)
             for (let i = 0; i < d.data.attribute.length; i++) {
                 debugger
                 $('.check').append('<div class="card"><h7 class= "card-header mt-0" >' + d.data.attribute[i].category + '</h7><div class="card-body" id="v-'+ d.data.attribute[i].category+'" ></div></div>')
                 $(d.data.attribute[i].attributes).each(function (j, v) {
                     debugger
-                    $("#" + CSS.escape('v-' + d.data.attribute[i].category + '')).append('<div class= "custom-control custom-checkbox custom-checkbox-danger mb-3"><input type="checkbox" data-id="' + v.id + '" data-category="' + d.data.attribute[i].category + '"  data-name="' + v.name + '" data-parent="' + v.parentProductId + '" data-productprice=' + v.price + ' class="custom-control-input vc-' + d.data.attribute[i].category + '" id="' + v.attrText + '" value="' + v.id + '"><label class="custom-control-label col-md-12" for="' + v.attrText + '" >' + v.attrText + '<span style="float:right;text-align:right" class="col-md-6" >' + v.price + '</span ></label></div>')
+                    $("#" + CSS.escape('v-' + d.data.attribute[i].category + '')).append('<div class= "custom-control custom-checkbox custom-checkbox-danger mb-3"><input type="checkbox" data-id="' + v.id + '" data-category="' + d.data.attribute[i].category + '"  data-name="' + v.attrText + '" data-parent="' + v.parentProductId + '" data-productprice=' + v.price + ' class="custom-control-input vc-' + d.data.attribute[i].category + '" id="' + v.attrText + '" value="' + v.id + '"><label class="custom-control-label col-md-12" for="' + v.attrText + '" >' + v.attrText + '<span style="float:right;text-align:right" class="col-md-6" >' + Number(v.price).toFixed(2) + '</span ></label></div>')
                 });
             }     
         }
@@ -393,16 +393,16 @@ $(document).on("change", ".custom-control-input", function (evt) {
     var price = parseInt($(this).data("productprice"))
     var total = parseInt($('#qtyprice').html())
     if (c.includes("(required)")) {
-        total = total + price
+        total = Number(total + price).toFixed(2)
         $('#qtyprice').html(total)
         $("." + CSS.escape(c)).not(this).prop("checked", false);
     }
     else {
         if (!$(this).is(":checked")) {
-            total = total - price
+            total = Number(total - price).toFixed(2)
         }
         else {
-            total = total + price
+            total = Number(total + price).toFixed(2)
         }
         $('#qtyprice').html(total)
     }
@@ -435,7 +435,7 @@ function DeleteRow($rowToDel) {
         sub = sub - discount;
     }
     tax = parseInt(sub / 10);
-    total = sub + tax;
+    total = Number(sub + tax).toFixed(2);
     $('.tax').val(tax)
     $('.subtotal').val(sub)
     $('.total').val(total)

@@ -5,6 +5,7 @@ using Polo.Core.Repositories.Interfaces;
 using Polo.Infrastructure.Entities;
 using Polo.Infrastructure.Utilities;
 using Microsoft.AspNetCore.Authorization;
+using NuGet.Common;
 
 namespace Polo.Controllers
 {
@@ -47,20 +48,19 @@ namespace Polo.Controllers
             catch (Exception ex)
             {
                 response.Success = false;
-                response.Detail = Message.ErrorMessage;
+                
             }
             return Json(response);
         }
         public JsonResult SaveOrder(SaleOrder orders)
         {
             Response response = new Response();
-
             try
             {
                 if (User.Identity.IsAuthenticated)
                 {
                     string userId = _userManager.GetUserId(User);
-                    response = _ordersRepository.SaveOrder(orders, userId);
+                    response =  _ordersRepository.SaveOrder(orders, userId);
                 }
                 else
                 {

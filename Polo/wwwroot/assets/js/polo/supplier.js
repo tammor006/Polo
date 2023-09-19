@@ -24,7 +24,9 @@ function ClearModel() {
     $("#companyName").val("");
     $("#companyNumber").val("");
     $("#address").val("");
-    $("#isActive").prop("checked", false);
+    $("#isActive").prop("checked", true);
+    $('#createSupplier').parsley().reset();
+    $(".form-group").removeClass('has-error');
 }
 
 function ShowModal(Id) {
@@ -100,8 +102,6 @@ function saveSupplier() {
     Supplier.companyNumber = $("#companyNumber").val();
     Supplier.address = $("#address").val();
     Supplier.isActive = $("#isActive").is(":checked");
-
-
     Post("/Supplier/SaveSupplier", { supplier: Supplier }).then(function (d) {
         debugger;
         if (d.success) {
@@ -111,7 +111,7 @@ function saveSupplier() {
             LoadTable();
             toastr["success"](d.detail);
         } else {
-            toastr["error"](d.detail);
+            toastr["warning"](d.detail);
         }
     });
 }
@@ -164,7 +164,7 @@ function DeleteModal(id) {
                     $("#suppliersDatatable").dataTable().fnDestroy();
                     LoadTable();
                 } else {
-                    toastr["error"](d.detail);
+                    toastr["warning"](d.detail);
                 }
             });
         }

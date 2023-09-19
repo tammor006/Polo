@@ -38,6 +38,8 @@ $(document).on('change', '.product', function (evt) {
     var measure = $('.measure option:selected').val();
     if (qty !== 0.00 && price !== 0.00 && itemName !== "" && measure !== "") {
         $(".validationpurchase").text("");
+        var total = Number(qty * price).toFixed(2)
+        $('.itemtotal').val(total)
     }
 })
 $(document).on('change', '.measure', function (evt) {
@@ -47,6 +49,8 @@ $(document).on('change', '.measure', function (evt) {
     var measure = $('.measure option:selected').val();
     if (qty !== 0.00 && price !== 0.00 && itemName !== "" && measure !== "") {
         $(".validationpurchase").text("");
+        var total = Number(qty * price).toFixed(2)
+        $('.itemtotal').val(total)
     }
 })
 $(document).on('change', '.quantity', function (evt) {
@@ -55,10 +59,26 @@ $(document).on('change', '.quantity', function (evt) {
     var qty = $('.quantity').val() == "" ? 0.00 : Number($('.quantity').val()).toFixed(2)
     var price = $('.price').val() == "" ? 0.00 : Number($('.price').val()).toFixed(2)
     var measure = $('.measure option:selected').val();
-    if (qty !== 0.00 && price !== 0.00 && itemName !== "" && measure !== "") {
+    if (qty == "NaN") {
+        $(this).addClass('iserror');
+        $(".validationqty").text("Please Enter Numbers");
+        return false;
+    }
+    else if (qty !== "NaN") {
+        $(this).removeClass('iserror');
+        $(".validationqty").text("");
+        var total = Number(qty * price).toFixed(2)
+        total = total == "Nan" ? 0.00 : total
+        $('.itemtotal').val(total)
+    }
+    else if (qty !== 0.00 && price !== 0.00 && itemName !== "" && measure !== "") {
         $(".validationpurchase").text("");
         var total = Number(qty * price).toFixed(2)
+        total = total == "Nan" ? 0.00 : total
         $('.itemtotal').val(total)
+    }
+    else {
+        $(this).removeClass('iserror');
     }
 })
 $(document).on('change', '.price', function (evt) {
@@ -67,10 +87,27 @@ $(document).on('change', '.price', function (evt) {
     var qty = $('.quantity').val() == "" ? 0.00 : Number($('.quantity').val()).toFixed(2)
     var price = $('.price').val() == "" ? 0.00 : Number($('.price').val()).toFixed(2)
     var measure = $('.measure option:selected').val();
-    if (qty !== 0.00 && price !== 0.00 && itemName !== "" && measure !== "") {
-        $(".validationpurchase").text("");
+    if (price == "NaN") {
+        $(this).addClass('iserror');
+        $(".validationprice").text("Please Enter Number");
+        return false;
+    }
+    else if ( price !== "NaN") {
+        $(this).removeClass('iserror');
+        $(".validationprice").text("");
         var total = Number(qty * price).toFixed(2)
+        total = total == "Nan" ? 0.00 : total
         $('.itemtotal').val(total)
+    }
+   else if (qty !== 0.00 && price !== 0.00 && itemName !== "" && measure !== "") {
+        $(".validationpurchase").text("");
+        $(this).removeClass('iserror');
+        var total = Number(qty * price).toFixed(2)
+        total = total == "Nan" ? 0.00 : total
+        $('.itemtotal').val(total)
+    }
+    else {
+        $(this).removeClass('iserror');
     }
 })
 $(document).on('click', '.additem', function (evt) {
@@ -81,7 +118,10 @@ $(document).on('click', '.additem', function (evt) {
     var measure = $('.measure option:selected').val();
     var price = $('.price').val() == "" ? 0.00 : Number($('.price').val()).toFixed(2)
     var total = $('.itemtotal').val() == "" ? 0.00 : Number($('.itemtotal').val()).toFixed(2)
-    if (qty == 0.00 && price == 0.00 && itemName == "" && measure=="") {
+    if (qty == "NaN" || price == "NaN") {
+        return false
+    }
+    else if (qty == 0.00 || price == 0.00 || itemName == "" || measure=="") {
         $(".validationpurchase").text("Please Enter All Fields.");
     }
     else {
@@ -317,9 +357,24 @@ function ClearPurchase() {
             "columns": [
                 { "data": "invoiceNo" },
                 { "data": "name" },
-                { "data": "subTotal" },
-                { "data": "tax" },
-                { "data": "total" },
+                {
+                    "data": "subTotal",
+                    render: function (data, type, row) {
+                        return Number(data).toFixed(2)
+                    }
+                },
+                {
+                    "data": "tax",
+                    render: function (data, type, row) {
+                        return Number(data).toFixed(2)
+                    }
+                },
+                {
+                    "data": "total",
+                    render: function (data, type, row) {
+                        return Number(data).toFixed(2)
+                    }
+                },
                 {
                     "data": 'id',
                     "render": function (data, type, row) {

@@ -14,12 +14,14 @@
                                     </div>
                                     <div class="form-group col-lg-2">
                                         <label for="itemqty">Qty</label><input type="text" placeholder="0.00" id="itemqty" class="form-control quantity" />
+                                        <div class="validationqty" style="color: red;"></div>
                                     </div>
                                     <div class="form-group col-lg-2">
                                         <label for="itemmeasure" class="control-label">Measure By</label><select class="form-control select2 measure" id="itemmeasure"><option value="" selected hidden>Select</option><option value="Kg"> In Kilograms</option><option value="Number">In Number</option></select>
                                     </div>
                                     <div class="form-group col-lg-2">
                                         <label for="itemprice">Price</label><input type="text" placeholder="0.00" id="itemprice" class="form-control price" />
+                                        <div class="validationprice" style="color: red;"></div>
                                     </div>
                                     <div class="form-group col-lg-2">
                                         <label for="itemtotal">Total</label><input type="text" placeholder="0.00" readonly id="itemtotal" class="form-control itemtotal" />
@@ -60,7 +62,7 @@
                                 </div>
                                 <div class="col-md-2">
                                     <div class="form-group">
-                                        <select class=" form-control selectname" id="suppliername">
+                                        <select class="form-control selectname" id="suppliername">
                                             <option value="" selected hidden>Select Supplier</option>
                                         </select>
                                     </div>

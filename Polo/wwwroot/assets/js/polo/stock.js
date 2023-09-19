@@ -24,6 +24,8 @@ function ClearModel() {
     $("#date").val("");
     $("#quantity").val("");
     $('#productselect').val("");
+    $('#createStock').parsley().reset();
+    $(".form-group").removeClass('has-error');
 }
 function ShowModal(Id) {
     ClearModel();
@@ -32,7 +34,7 @@ function ShowModal(Id) {
             if (d.success) {
                 Stock.id = d.data.stock.id;
                 Stock.name = d.data.stock.name;
-                Stock.quantity = d.data.stock.quantity;
+                Stock.quantity = Number(d.data.stock.quantity).toFixed(2);
                 $("#measure").val(d.data.stock.measureQuantity);
                 $("#quantity").val(Stock.quantity);
                 $('#productselect').val(Stock.name);
@@ -46,6 +48,7 @@ function ShowModal(Id) {
 function saveStock() {
     debugger
     var parsleyForm = $('#createStock').parsley();
+    Stock.quantity = $('#quantity').val() == "" ? 0.00 : Number($('#quantity').val()).toFixed(2);
     parsleyForm.validate();
     if (!parsleyForm.isValid()) {
         $('.parsley-error').each(function () {
@@ -53,8 +56,13 @@ function saveStock() {
         });
         return false;
     }
+    else if (Stock.quantity == "NaN") {
+        return false
+    }
     else {
         $(this).parents(".form-group").removeClass('has-error');
+        $('#quantity').removeClass('iserror')
+        $(".validationqty").text("");
     }
     Stock.strLastUpdate = $("#date").val();
     Stock.quantity = $("#quantity").val();
@@ -86,7 +94,12 @@ function LoadTable() {
         },
         "columns": [
             { "data": "name" },
-            { "data": "quantity" },
+            {
+                "data": "quantity",
+                render:function(data, type, row) {
+                    return Number(data).toFixed(2)
+                }
+            },
             { "data": "measureQuantity" },
             { "data": "strLastUpdated" },
             {
@@ -129,3 +142,16 @@ $(document).ready(function () {
     LoadTable();
     PreBind();
 });
+function checkQuantity() {
+    debugger
+    var qty = $('#quantity').val() == "" ? 0.00 : Number($('#quantity').val()).toFixed(2)
+    if (qty == "NaN") {
+        $('#quantity').addClass('iserror')
+        $(".validationqty").text("Please Enter Numbers");
+        return false;
+    }
+    else {
+        $('#quantity').removeClass('iserror')
+        $(".validationqty").text("");
+    }
+}

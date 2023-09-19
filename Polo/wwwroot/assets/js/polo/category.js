@@ -5,14 +5,16 @@
 }
 function ClearModel() {
     $("#categoryname").val("");
-    $("#isActive").prop("checked", false);
+    $("#isActive").prop("checked", true);
+    $('#createCategory').parsley().reset();
+    $(".form-group").removeClass('has-error');
 }
 function ShowModal(Id) {
     debugger;
     ClearModel();
     if (Id == 0) {
         $("#modal").modal('show');
-        $("#myLargeModalLabel").text("Add Category");
+        $("#mySmallModalLabel").text("Add Category");
     }
     else {
         Get("/Categories/GetCategoryById?id=" + Id).then(function (d) {
@@ -29,7 +31,7 @@ function ShowModal(Id) {
                     $("#isActive").val(Category.isActive);
                 }
                 $("#modal").modal('show');
-                $("#myLargeModalLabel").text("Edit Category");
+                $("#mySmallModalLabel").text("Edit Category");
             }
         })
     }
@@ -76,7 +78,17 @@ function LoadTable() {
         },
         "columns": [
             { "data": "name" },
-            { "data": "isActive" },
+            {
+                "data": "isActive",
+                "render": function (data, type, row) {
+                    if (data) {
+                        return '<span class="badge badge-pill badge-soft-success font-size-12">Active</span>'
+                    }
+                    else {
+                        return '<span class="badge badge-pill badge-soft-danger font-size-12">InActive</span>'
+                    }
+                }
+            },
             {
                 "data": 'id',
                 "render": function (data, type, row) {

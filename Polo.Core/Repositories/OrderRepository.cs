@@ -1,4 +1,7 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
+﻿using Azure.Core;
+using Humanizer;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using Polo.Core.Repositories.Interfaces;
 using Polo.Core.ViewModels;
@@ -9,9 +12,13 @@ using Polo.Infrastructure.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Reflection;
+using System.Resources;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Http;
 using System.Web.WebPages;
 
 namespace Polo.Core.Repositories
@@ -62,22 +69,21 @@ namespace Polo.Core.Repositories
         public Response SaveOrder(SaleOrder orders, string userId)
         {
             Response response = new Response();
-            try
-            {
+            response.httpCode = HttpStatusCode.OK;
                 var orderList = new List<SaleItemAtrributes>();
                 List<Stock> stocks = new List<Stock>();
                 orders.CreatedDate = DateTime.Now;
                 orders.CreatedBy = userId.ToString();
-                int time=0;
+                int time = 0;
                 if (orders.DeliveryType == "As_Soon_As")
                 {
                     orders.AvailableTime = orders.CreatedDate.AddMinutes(40);
                 }
                 else
                 {
-                    orders.AvailableTime =Convert.ToDateTime(orders.StrAvailableTime);
-                    TimeSpan? dateDiff = orders.AvailableTime-orders.CreatedDate;
-                     time = dateDiff.Value.Minutes;
+                    orders.AvailableTime = Convert.ToDateTime(orders.StrAvailableTime);
+                    TimeSpan? dateDiff = orders.AvailableTime - orders.CreatedDate;
+                    time = dateDiff.Value.Minutes;
                 }
                 _db.Add(orders);
                 if (orders.SaleOrderItem != null && orders.SaleOrderItem.Count > 0)
@@ -88,7 +94,7 @@ namespace Polo.Core.Repositories
                         x.InvoiceNumber = orders.InvoiceNumber;
                         x.Product = _db.Product.FirstOrDefault(y => y.Id == x.ProductId);
                         List<ProductItem> productItems = _db.ProductItem.Where(p => p.ProductId == x.ProductId).ToList();
-                        if(productItems !=null && productItems.Count > 0) 
+                        if (productItems != null && productItems.Count > 0 && response.httpCode == HttpStatusCode.OK)
                         {
                             foreach (var p in productItems)
                             {
@@ -97,22 +103,46 @@ namespace Polo.Core.Repositories
                                 {
                                     response.Success = false;
                                     response.Detail = p.Name + " not exist in stock";
-                                    break;
+                                    response.httpCode = HttpStatusCode.NotFound;
                                 }
+                                else if (foundStock.MeasureQuantity == "Kg")
+                                {
+                                    float qty = Convert.ToInt64(x.Quantity) * p.Qty;
+                                    float totalQty = foundStock.Quantity * 1000;
+                                    if (qty > totalQty)
+                                    {
+                                        response.Success = false;
+                                        response.Detail = "Quantity is limited than stock. ";
+                                        response.httpCode = HttpStatusCode.NotFound;
+                                    }
+                                }
+                                else if (foundStock.MeasureQuantity == "Number")
+                                {
+                                    float totalQty = Convert.ToInt64(x.Quantity) * p.Qty;
+                                    if (totalQty > foundStock.Quantity)
+                                    {
+                                        response.Success = false;
+                                        response.Detail = "Quantity is limited than stock. ";
+                                        response.httpCode = HttpStatusCode.NotFound;
+                                    }
+                                }
+
                                 else
                                 {
-                                    if (foundStock.MeasureQuantity == "Kg" && foundStock.Quantity != 0)
+                                    if (foundStock.MeasureQuantity == "Kg" && foundStock.Quantity != 0 && response.httpCode == HttpStatusCode.OK)
                                     {
-                                        float TotalQty = foundStock.Quantity * 1000;
-                                        foundStock.Quantity = (TotalQty - p.Qty) / 1000;
+                                        float qty = Convert.ToInt64(x.Quantity) * p.Qty;
+                                        float totalQty = foundStock.Quantity * 1000;
+                                        foundStock.Quantity = (totalQty - qty) / 1000;
                                         foundStock.LastUpdate = DateTime.Now;
                                         foundStock.UpdatedDate = DateTime.Now;
                                         foundStock.UpdatedBy = userId.ToString();
                                         stocks.Add(foundStock);
                                     }
-                                    else if (foundStock.MeasureQuantity == "Number" && foundStock.Quantity != 0)
+                                    else if (foundStock.MeasureQuantity == "Number" && foundStock.Quantity != 0 && response.httpCode == HttpStatusCode.OK)
                                     {
-                                        foundStock.Quantity = foundStock.Quantity - p.Qty;
+                                        float totalqQty = Convert.ToInt64(x.Quantity) * p.Qty;
+                                        foundStock.Quantity = foundStock.Quantity - totalqQty;
                                         foundStock.LastUpdate = DateTime.Now;
                                         foundStock.UpdatedDate = DateTime.Now;
                                         foundStock.UpdatedBy = userId.ToString();
@@ -122,7 +152,7 @@ namespace Polo.Core.Repositories
                                     {
                                         response.Success = false;
                                         response.Detail = foundStock.Name + " stock is zero";
-                                        break;
+                                        response.httpCode = HttpStatusCode.NotFound;
                                     }
                                 }
                             }
@@ -131,50 +161,88 @@ namespace Polo.Core.Repositories
                         {
                             response.Success = false;
                             response.Detail = "Stock is not found";
-                            return;
+                            response.httpCode = HttpStatusCode.NotFound;
+                            // throw new StockNotFound("rftg", "cfvv");
+
+                            //await Task.Delay(5000);
+                            //if(token.IsCancellationRequested)
+                            //token.ThrowIfCancellationRequested();
+
                         }
-               
-                        if (x.SaleItemAtrributes != null)
+
+                        if (x.SaleItemAtrributes != null && x.SaleItemAtrributes.Count > 0 && response.httpCode == HttpStatusCode.OK)
                         {
                             x.SaleItemAtrributes.ToList().ForEach(y =>
                            {
                                y.SaleOrderItemId = x.Id;
                                List<ProductItem> productItems = _db.ProductItem.Where(z => z.ProductId == y.ParentProductId).ToList();
-                               foreach (var p in productItems)
+                               if (productItems != null && productItems.Count > 0 && response.httpCode == HttpStatusCode.OK)
                                {
-                                   Stock foundStock = _db.Stock.FirstOrDefault(x => x.Name == p.Name);
-                                   if (foundStock == null)
+                                   foreach (var p in productItems)
                                    {
-                                       response.Success = false;
-                                       response.Detail = p.Name + " not exist in stock";
-                                       break;
-                                   }
-                                   else
-                                   {
-                                       if (foundStock.MeasureQuantity == "Kg" && foundStock.Quantity != 0)
+                                       Stock foundStock = _db.Stock.FirstOrDefault(x => x.Name == p.Name);
+                                       if (foundStock == null)
                                        {
-                                           float TotalQty = foundStock.Quantity * 1000;
-                                           foundStock.Quantity = (TotalQty - p.Qty)/100;
-                                           foundStock.LastUpdate = DateTime.Now;
-                                           foundStock.UpdatedDate = DateTime.Now;
-                                           foundStock.UpdatedBy = userId.ToString();
-                                           stocks.Add(foundStock);
+                                           response.Success = false;
+                                           response.Detail = p.Name + " not exist in stock";
+                                           response.httpCode = HttpStatusCode.NotFound;
                                        }
-                                       else if (foundStock.MeasureQuantity == "Number" && foundStock.Quantity != 0)
+                                       else if (foundStock.MeasureQuantity == "Kg")
                                        {
-                                           foundStock.Quantity = foundStock.Quantity - p.Qty;
-                                           foundStock.LastUpdate = DateTime.Now;
-                                           foundStock.UpdatedDate = DateTime.Now;
-                                           foundStock.UpdatedBy = userId.ToString();
-                                           stocks.Add(foundStock);
+                                           float qty = Convert.ToInt64(x.Quantity) * p.Qty;
+                                           float totalQty = foundStock.Quantity * 1000;
+                                           if (qty > totalQty)
+                                           {
+                                               response.Success = false;
+                                               response.Detail = "Quantity is limited than stock. ";
+                                               response.httpCode = HttpStatusCode.NotFound;
+                                           }
+                                       }
+                                       else if (foundStock.MeasureQuantity == "Number")
+                                       {
+                                           float totalQty = Convert.ToInt64(x.Quantity) * p.Qty;
+                                           if (totalQty > foundStock.Quantity)
+                                           {
+                                               response.Success = false;
+                                               response.Detail = "Quantity is limited than stock. ";
+                                               response.httpCode = HttpStatusCode.NotFound;
+                                           }
                                        }
                                        else
                                        {
-                                           response.Success = false;
-                                           response.Detail = foundStock.Name + " stock is zero";
-                                           break;
+                                           if (foundStock.MeasureQuantity == "Kg" && foundStock.Quantity != 0)
+                                           {
+                                               float qty = Convert.ToInt64(x.Quantity) * p.Qty;
+                                               float totalQty = foundStock.Quantity * 1000;
+                                               foundStock.Quantity = (totalQty - qty) / 1000;
+                                               foundStock.LastUpdate = DateTime.Now;
+                                               foundStock.UpdatedDate = DateTime.Now;
+                                               foundStock.UpdatedBy = userId.ToString();
+                                               stocks.Add(foundStock);
+                                           }
+                                           else if (foundStock.MeasureQuantity == "Number" && foundStock.Quantity != 0)
+                                           {
+                                               float totalqQty = Convert.ToInt64(x.Quantity) * p.Qty;
+                                               foundStock.Quantity = foundStock.Quantity - totalqQty;
+                                               foundStock.LastUpdate = DateTime.Now;
+                                               foundStock.UpdatedDate = DateTime.Now;
+                                               foundStock.UpdatedBy = userId.ToString();
+                                               stocks.Add(foundStock);
+                                           }
+                                           else
+                                           {
+                                               response.Success = false;
+                                               response.Detail = foundStock.Name + " stock is zero";
+                                               response.httpCode = HttpStatusCode.NotFound;
+                                           }
                                        }
                                    }
+                               }
+                               else
+                               {
+                                   response.Success = false;
+                                   response.Detail = "Stock is not found";
+                                   response.httpCode = HttpStatusCode.NotFound;
                                }
                            });
                             orderList.AddRange(x.SaleItemAtrributes);
@@ -182,34 +250,24 @@ namespace Polo.Core.Repositories
                         _db.Add(x);
                         if (x.SaleItemAtrributes != null)
                             _db.SaleItemAtrributes.AddRange(x.SaleItemAtrributes);
-                    });     
+                    });
+                    if (response.httpCode == HttpStatusCode.OK)
+                    {
+                        _db.SaveChanges();
+                        response.Success = true;
+                    }
+                    response.data = new
+                    {
+                        Customer = _db.Customer.FirstOrDefault(x => x.Id == orders.CustomerId),
+                        Orders = orders,
+                        strAvailableTime = orders.AvailableTime.ToString("dd MMM, H:mm"),
+                        strCreatedDate = orders.CreatedDate.ToString("dd MMM, H:mm"),
+                        orderTime = time,
+
+                    };
                 }
-
-                _db.SaveChanges();
-                response.Success = true;
-
-                response.data = new
-                {
-                    Customer = _db.Customer.FirstOrDefault(x => x.Id == orders.CustomerId),
-                    Orders = orders,
-                    strAvailableTime = orders.AvailableTime.ToString("dd MMM, H:mm"),
-                    strCreatedDate = orders.CreatedDate.ToString("dd MMM, H:mm"),
-                    orderTime= time,
-
-                };
-                
-            }
-            catch (Exception ex)
-            {
-                response.Success = false;
-                response.Detail = Message.ErrorMessage;
-            }
+            
          return response;
-        }
-        private void ManageException(Exception ex)
-        {
-            //log or whatever
-            throw new Exception("See inner exception", ex);
         }
     }
 }

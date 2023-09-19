@@ -37,6 +37,12 @@ function ClearModel() {
     $('#categoryselect').val("");
     $('input[type=file]').val('');
     document.getElementById("preview").src = 'https://placehold.it/120x80';
+    $('a.nav-link[data-mode="Product"]').addClass('active')
+    $('a.nav-link[data-mode="Product Items"]').removeClass('active')
+    $('a.nav-link[data-mode="Product Attributes"]').removeClass('active')
+    $('div.tab-pane[id="product"]').addClass('active')
+    $('div.tab-pane[id="items"]').removeClass('active')
+    $('div.tab-pane[id="attributes"]').removeClass('active')
     $('#createProduct').parsley().reset();
     $(".form-group").removeClass('has-error');
 }
@@ -375,7 +381,12 @@ function LoadTable() {
             { "data": "barCode" },
             { "data": "name" },
             { "data": "categoryName" },
-            { "data": "price" },
+            {
+                "data": "price",
+                render: function (data, type, row) {
+                    return Number(data).toFixed(2)
+                }
+            },
             {
                 "data": 'id',
                 "render": function (data, type, row) {

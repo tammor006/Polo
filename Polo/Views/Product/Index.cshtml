@@ -68,6 +68,6 @@
     </div>
     <!-- End Page-content -->
 </div>
-@Html.Partial("~/Views/Product/_AddorEdit.cshtml")
+@await Html.PartialAsync("~/Views/Product/_AddorEdit.cshtml")
 <script src="~/assets/js/polo/product.js?vs=@DateTime.Now.Ticks"></script>
 

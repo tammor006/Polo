@@ -17,6 +17,10 @@ namespace Polo.Infrastructure.Utilities
         public string Detail { get; set; }
         public static string DeleteError = "009 Unable to processe this request.";
         public dynamic data { get; set; }
+        public HttpStatusCode httpCode { get; set; }
+        [System.Text.Json.Serialization.JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
+        public bool isValidated { get { return this.httpCode == HttpStatusCode.OK ? true : false; } }
     }
     public class Message
     {
