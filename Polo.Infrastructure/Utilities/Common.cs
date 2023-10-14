@@ -26,7 +26,9 @@ namespace Polo.Infrastructure.Utilities
     {
         public static string ErrorMessage = "Oops, we hit a snag!";
         public static string SuccessMessage = "Request processed successfully";
+        public bool Success = true;
         public static string AccountCreationMessage = "Registered successfully";
+        public string Detail = "Request processed successfully";
     }
     public class SelectList
     {
@@ -41,5 +43,29 @@ namespace Polo.Infrastructure.Utilities
         public string StrStartTime { get; set; }
         public string StrEndTime { get; set; }
         public string Comments { get; set; }
+    }
+    public class Paging
+    {
+        public int Draw { get; set; }
+        public int DisplayStart { get; set; }
+        public int DisplayLength { get; set; }
+        public int SortColumn { get; set; }
+        public string? SortOrder { get; set; }
+        public string? Search { get; set; }
+        public string? Description { get; set; }
+        public string? SearchJson { get; set; }
+    }
+    public class CallBackData
+    {
+        public Message msg = new Message();
+
+        public JqueryDataTable Data = new JqueryDataTable();
+    }
+    public class JqueryDataTable
+    {
+        public int draw { get; set; }
+        public int recordsTotal { get; set; }
+        public Nullable<int> recordsFiltered { get; set; }
+        public dynamic data { get; set; }
     }
 }

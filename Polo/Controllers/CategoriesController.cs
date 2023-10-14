@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Polo.Core.Repositories;
 using Polo.Infrastructure.Entities;
 using Microsoft.AspNetCore.Authorization;
+using Polo.Core;
 
 namespace Polo.Controllers
 {
@@ -26,18 +27,8 @@ namespace Polo.Controllers
 
         public JsonResult GetAllCategories()
         {
-            Response response = new Response();
-            try
-            {
-                response = _categoriesRepository.GetAllCategories();
-            }
-            catch (Exception ex)
-            {
-                response.Success = false;
-                response.Detail = Message.ErrorMessage;
-            }
 
-            return Json(response);
+            return Json(_categoriesRepository.GetAllCategories(Request.HttpContext.FetchPaging()));
         }
         public JsonResult SaveCategory(Categories categories)
         {

@@ -27,13 +27,25 @@
                         <div class="card-body">
                             <div class="row mb-2">
                                 <div class="col-sm-4">
+                                    
+                                        <div class="input-group">
+                                            <input type="text" id="catSearch" class="form-control" placeholder="Search Category By Name...">
+                                            <div class="input-group-append">
+                                            <button class="btn btn-secondary" type="button" onclick="LoadTable()">
+                                                    <i class="fa fa-search"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    
+                                </div>
+                                <div class="col-sm-4">
                                     <div class="search-box mr-2 mb-2 d-inline-block">
                                         <div class="position-relative">
-                                            <button onclick ="ShowModal(0)" type="button" class="btn btn-success btn-rounded waves-effect waves-light mb-2 mr-2"><i class="mdi mdi-plus mr-1"></i> Add New Categories</button>
+                                            <button onclick ="ShowModal(0)" type="button" class="btn btn-success waves-effect waves-light mb-2 mr-2"><i class="mdi mdi-plus mr-1"></i> Add New Categories</button>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-sm-8">
+                                <div class="col-sm-4">
                                     <div class="text-sm-right">
                                     </div>
                                 </div><!-- end col-->

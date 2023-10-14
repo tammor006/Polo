@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Polo.Core.Repositories.Interfaces;
 using Polo.Infrastructure;
+using Polo.Infrastructure.DTO;
 using Polo.Infrastructure.Entities;
 using Polo.Infrastructure.Utilities;
 using System;
@@ -20,13 +22,33 @@ namespace Polo.Core.Repositories
         {
             _db = db;
         }
-        public Response GetAllCategories()
+        public CallBackData GetAllCategories(Paging paging)
         {
-            Response response = new Response();
-            List<Categories> getallcategories = new List<Categories>();
-            getallcategories = _db.Categories.ToList(); ;
-            response.data = getallcategories;
-            return response;
+            CallBackData callBackData = new CallBackData();
+            try
+            {
+                Categories cat = paging.SearchJson.deserialize<Categories>();
+                List<Categories> catList = new List<Categories>();
+                string StoredProc = "EXEC [dbo].[sp_FetchCategories] " +
+                "@DisplayLength = " + paging.DisplayLength + "," +
+                "@DisplayStart = '" + paging.DisplayStart + "'," +
+                "@SortCol= '" + paging.SortColumn + "'," +
+                "@SortOrder= '" + paging.SortOrder + "'," +
+                "@Search= '" + cat.Search + "'";
+
+                catList = _db.Categories.FromSqlRaw(StoredProc).ToList();
+                // catList = _db.FetchCategories(paging.DisplayLength, paging.DisplayStart, paging.SortColumn, paging.SortOrder,cat.Search).ToList();
+                callBackData = catList.ToDataTable(paging);
+                callBackData.msg.Success = true;
+            }
+            catch(Exception ex)
+            {
+                callBackData.msg.Success = true;
+                callBackData.msg.Detail = Message.ErrorMessage;
+
+            }
+            
+            return callBackData ;
         }
         public Response SaveProduct(Categories category, string userId)
         {

@@ -9,6 +9,9 @@ function ClearModel() {
     $('#createCategory').parsley().reset();
     $(".form-group").removeClass('has-error');
 }
+var catSearch = {
+    Search:""
+}
 function ShowModal(Id) {
     debugger;
     ClearModel();
@@ -63,20 +66,19 @@ function saveCategory() {
             toastr["success"](d.detail);
         }
         else {
-            toastr["error"](d.detail)
+            toastr["warning"](d.detail)
 
         }
     });
 
 }
 function LoadTable() {
-    $("#categoriesDatatable").DataTable({
-        'ajax': {
-            'url': '/Categories/GetAllCategories',
-            "type": "GET",
-            "dataType": 'json',
-        },
-        "columns": [
+    debugger
+    catSearch.Search = $('#catSearch').val();
+    $("#categoriesDatatable").advancedDataTable({
+        url: "/Categories/GetAllCategories",
+        postData: catSearch,
+        bindingData: [
             { "data": "name" },
             {
                 "data": "isActive",
@@ -102,9 +104,14 @@ function LoadTable() {
                         '</td>';
                 }
             },
-        ]
-    });
+        ],
 
+        disableSorting: [{
+            "bSortable": false,
+            "aTargets": [2],
+
+        }]
+    });
 }
 function DeleteModal(id) {
     swal.fire({

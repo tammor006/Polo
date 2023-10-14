@@ -11,7 +11,7 @@ namespace Polo.Core.Repositories.Interfaces
 {
 	public interface ICategoriesRepository
 	{
-        Response GetAllCategories();
+        CallBackData GetAllCategories(Paging paging);
         Response SaveProduct(Categories categories, string userId);
         Response GetCategoryById(int id);
         Response DeleteCategory(int id);

@@ -8,6 +8,8 @@
     });
 }
 var errorMsg = "Something went wrong. Please try again";
+var jqueryDatatable, isNumeric, isFieldEdit = false;
+
 function SuccessMessage(msg) {
 }
 function ErrorMessage(msg) {
@@ -223,3 +225,123 @@ $(function ($) {
     // #EndRegion of Date Range
   //  $('.select').select2();
 });
+$.fn.advancedDataTable = function (options) {
+    debugger
+    $("#" + $(this).attr("id")).parent("div").hide();
+    //if ($.fn.dataTable.isDataTable(this))
+    //    $(this).dataTable().fnPageChange($(this).dataTable().fnPagingInfo().iPage);
+    //else {
+        $(this).dataTable().fnDestroy();
+        jqueryDatatable = $(this).DataTable({
+            "processing": true,
+            "bSort": false,
+            "bFilter": options.filter,
+            "bDeferRender": true,
+            //"order": [], 
+            //dom: 'Bfrtip',
+            //lengthMenu: [
+            //    [10, 25, 50, -1],
+            //    ['10 rows', '25 rows', '50 rows', 'Show all']
+            //],
+            //buttons: [
+            //    'pageLength'
+            //],
+            "pagingType": "full_numbers",
+            //"info": "_TOTAL_ entries",
+            "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, 'All']],
+
+            "oLanguage": {
+                
+                "sSearch": "",
+                "sSearchPlaceholder": "Search...",
+                "sProcessing": '<img src="/assets/images/loaderDatatable.gif" style="width: 50px;" />',
+                "sLengthMenu": "_MENU_",
+                //"oPaginate":
+                //{
+                //    "sNext": '<span class="material-icons">keyboard_arrow_right</span>',
+                //    "sLast": '',
+                //    "sFirst": '',
+                //    "sPrevious": '<span class="material-icons">keyboard_arrow_left</span>'
+                //},
+                "sZeroRecords": 'No matching records found',
+                "sInfo": '_START_-_END_ OF _TOTAL_',
+                "sEmptyTable": 'No data found ',
+                "sInfoEmpty": '0-0 OF 0',
+                "sInfoFiltered": '',
+            },
+            "initComplete": function (settings, json) {
+                debugger
+                //$(".manual-dropdown").empty()
+                //$("[name=" + $(this).attr("id") + "_length]").addClass("form-control pull-right");
+                //$("[name=" + $(this).attr("id") + "_length]").detach().prependTo(".manual-dropdown");
+                // $(".manual-dropdown").html($(".manual-dropdown").html())
+                // $(".dataTables_length").remove();
+
+                //$("#" + $(this).attr("id") + "_filter > label > input").addClass("form-control");
+                //$("#" + $(this).attr("id") + "_filter > label > input").detach().prependTo(".claimdocumenttable-filter");
+                //$(".dataTables_filter").remove();
+                //$(".remove-it").remove();
+                //$(".paginate_button.active").remove();
+                //$(".dataTables_info").prependTo($(".dataTables_paginate").parent("div"))
+                ////$(".dataTables_info").parent("div").addClass("d-flex align-items-center justify-content-end mb-3");
+                //$(".dataTables_info").parent("div").addClass("pagination mb-3");
+                //// $(".dataTables_length label").addClass("dataTables_lengths");
+                //$(".dataTables_length label").prependTo($(".dataTables_paginate").parent("div"));
+                $(".dataTables_length").append("<span class='remove-it' style='color: rgba(0, 0, 0, 0.6);font-size: 12px;padding-bottom:0;margin-left:10px;'>Items per page:</span>");
+                /*$(".dataTables_info").after(). append("<span class='remove-it' style='margin-left:10px;'>Total Records</span>");*/
+                $(".pagination .first").hide();
+                $(".pagination .last").hide();
+                $("<span class='remove-it' style='margin-right:5px;'>Total Records:</span>").prependTo(".dataTables_info");
+
+                //$("select[name='" + $(this).attr("id") + "_length']").parent("div").addClass("pb-0");
+                //$("select[name='" + $(this).attr("id") + "_length']").parent("div").append('<span class="remove-it material-icons" style="margin-left: -22px;">arrow_drop_down</span>')
+                $("#" + $(this).attr("id") + "_wrapper").parent("div").slideDown(300);
+
+
+               
+               
+            },
+            "serverSide": true,
+            "ajaxSource": options.url,
+            //fnServerData method used to inject the parameters into the AJAX call sent to the server-side
+            "fnServerData": function (sSource, aoData, fnCallback, oSettings) {
+                debugger
+
+                aoData.push({ "name": "SearchJson", "value": JSON.stringify(options.postData) }); // Add some extra data to the sender
+
+                $.getJSON(sSource, aoData, function (d) {
+                    debugger
+                    $.ajaxSetup({ cache: false });
+                    if (!d.msg.success)
+                        toastr["warning"](d.msg.detail);
+                    else
+                        fnCallback(d.data);
+                });
+                //}).error(function (d, c, dd, t) {
+                //    if (d.status == 200)
+                //        AccessDenied();
+                //    else
+                //        ErrorMessage('Something went wrong, please try again');
+                //});
+            },
+            "bResetDisplay": false,
+            "bLengthChange": true,
+            "aaSorting": [],
+            "ordering": true,
+            "createdRow": options.createdRow,
+            "drawCallback": function (settings, r, er, err) {
+                //$('.i-checks').iCheck({
+                //    checkboxClass: 'icheckbox_square-blue',
+                //    radioClass: 'iradio_square-blue'
+                //});
+                $("#" + $(this).attr("id")).parent("div").slideDown(300);
+            },
+            "columns": options.bindingData,
+            "aoColumnDefs": options.disableSorting,
+            "rowCallback": function (row, data, index) {
+
+                debugger
+            }
+        });
+    
+};

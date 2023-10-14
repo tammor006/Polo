@@ -14,8 +14,9 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using Polo.Infrastructure.Utilities;
 
-namespace Polo.Infrastructure.Utilities
+namespace Polo.Core
 {
     public static class Extension
     {
@@ -195,6 +196,38 @@ namespace Polo.Infrastructure.Utilities
                 return string.Format("{0:" + format + " HH:mm}", date);
 
             return string.Format("{0:" + format + "}", date);
+        }
+        public static CallBackData ToDataTable<T>(this List<T> list, Paging paging)
+        {
+            CallBackData callBackData = new CallBackData();
+            callBackData.Data.data = list;
+            callBackData.Data.draw = paging.Draw;
+            callBackData.Data.recordsTotal = callBackData.Data.data.Count;
+            callBackData.Data.recordsFiltered= callBackData.Data.data.Count;
+           // callBackData.Data.recordsFiltered =  (int)callBackData.Data.data[0].GetType().GetProperty("Total").GetValue(callBackData.Data.data[0], null);
+
+            return callBackData;
+        }
+        public static Paging FetchPaging(this HttpContext request)
+        {
+            Paging paging = new Paging();
+
+            try
+            {
+                ;
+                paging.Draw = Convert.ToInt32(request.Request.Query["sEcho"]);
+                paging.SearchJson = Convert.ToString(request.Request.Query["SearchJson"]);
+                paging.DisplayLength = Convert.ToInt32(request.Request.Query["iDisplayLength"]);
+                paging.DisplayStart = Convert.ToInt32(request.Request.Query["iDisplayStart"]);
+                paging.SortColumn = Convert.ToInt32(request.Request.Query["iSortCol_0"]);
+                paging.Search = Convert.ToString(request.Request.Query["sSearch"]);
+                paging.SortOrder = Convert.ToString(request.Request.Query["sSortDir_0"]);
+
+            }
+
+            catch { }
+
+            return paging;
         }
         public static string ViewDate(this DateTime? date, bool viewTimewithDate = false, string format = "dd/MM/yyyy")
         {

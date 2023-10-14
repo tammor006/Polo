@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Polo.Infrastructure.Entities
 {
-	public class Categories
+	public partial class Categories
 	{
 		[Key]
 		public int Id { get; set; }
@@ -17,6 +18,12 @@ namespace Polo.Infrastructure.Entities
 		public DateTime CreatedDate { get; set; }
 		public string? UpdatedBy { get; set; }
 		public DateTime UpdatedDate { get; set;}
+		[NotMapped]
+        public Nullable<long> RowNo { get; set; }
+        [NotMapped]
+        public Nullable<int> Total { get; set; }
+        [NotMapped]
+        public string? Search { get; set; }
 
-	}
+    }
 }
